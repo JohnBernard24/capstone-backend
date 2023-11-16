@@ -59,5 +59,39 @@ namespace capstone_backend.Controllers
 				return StatusCode(500, "An error occurred while retrieving log in credentials.");
 			}
 		}
+
+
+		[HttpPost("register")]
+        public async Task<IActionResult> AddUser([FromBody] User user)
+        {
+            if (user == null)
+            {
+                return BadRequest();
+            }
+
+            await _context.User.AddAsync(user);
+            await _context.SaveChangesAsync();
+
+            return Ok();
+        }
+
+        // GET: api/Users
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<User>>> GetUser()
+        {
+            if (_context.User == null)
+            {
+                return NotFound();
+            }
+            return await _context.User.ToListAsync();
+        }
+
+
+
+        private bool UserExists(Guid id)
+        {
+            return (_context.User?.Any(e => e.Id == id)).GetValueOrDefault();
+        }
 	}
+
 }
