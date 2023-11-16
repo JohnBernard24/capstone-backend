@@ -5,7 +5,7 @@ namespace capstone_backend.Models
     public class User
     {
         [Key]
-        public int Id { get; set; }
+        public Guid Id { get; set; }
 
         [Required]
         public string FirstName { get; set; } = null!;
@@ -18,10 +18,10 @@ namespace capstone_backend.Models
         public string Email { get; set; } = null!;
 
         [Required]
-        public string Password { get; set; } = null!;
+        public string PasswordHash { get; set; } = null!;
 
         [Required]
-        public DateTime Birthday { get; set; }
+        public DateTime Birthdate { get; set; }
 
         [Required]
         public string Sex { get; set; } = null!;

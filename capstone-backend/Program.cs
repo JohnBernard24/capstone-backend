@@ -1,3 +1,8 @@
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
+using capstone_backend.Data;
+using System;
+
 namespace capstone_backend
 {
 	public class Program
@@ -5,6 +10,7 @@ namespace capstone_backend
 		public static void Main(string[] args)
 		{
 			var builder = WebApplication.CreateBuilder(args);
+			
 
 			// Add services to the container.
 
@@ -12,6 +18,11 @@ namespace capstone_backend
 			// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 			builder.Services.AddEndpointsApiExplorer();
 			builder.Services.AddSwaggerGen();
+
+
+			string connectionString = "Server=localhost;port=3306;Database=pastebookDb;User=root;";
+			builder.Services.AddDbContext<capstone_backendContext>(options => options.UseMySQL(connectionString));
+
 
 			var app = builder.Build();
 
