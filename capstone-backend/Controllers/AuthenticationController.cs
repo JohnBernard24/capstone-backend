@@ -28,40 +28,34 @@ namespace capstone_backend.Controllers
 			_passwordHasher = passwordHasher;
 		}
 
-
 		[HttpPost("login")]
-		public ActionResult<LoginResponse> Login(UserLoginDTO userLoginDTO)
+		public async Task<IActionResult> Login([FromBody] UserLoginDTO userLoginDTO)
 		{
-			try
+			if (!ModelState.IsValid)
 			{
-				var user = _context.User.FirstOrDefault(u => u.Email == userLoginDTO.Email);
-
-				if (user == null)
-				{
-					return NotFound(new { result = "user_not_found" });
-				}
-
-				bool isCorrectPassword = _passwordHasher.VerifyPassword(userLoginDTO.Password, user.HashedPassword);
-				if (!isCorrectPassword)
-				{
-					return Unauthorized();
-				}
-
-
-				var loginResponse = new LoginResponse
-				{
-					Email = user.Email,
-					Token = "haha"
-				};
-
-				return Ok(loginResponse);
-
+				return BadRequest("invalid_passed_user_login_");
 			}
-			catch (Exception ex)
+
+			User? user = await _userRepository.GetUserByEmail(userLoginDTO.Email);
+			if(user == null)
 			{
-				Console.WriteLine("Error retrieving log in credentials: " + ex.Message);
-				return StatusCode(500, "An error occurred while retrieving log in credentials.");
+				return Unauthorized("no_user_found");
 			}
+
+			bool isCorrectPassword = _passwordHasher.VerifyPassword(userLoginDTO.Password, user.HashedPassword);
+			if (!isCorrectPassword)
+			{
+				return Unauthorized("invalid_credentials");
+			}
+
+			var loginResponse = new LoginResponse
+			{
+				Email = user.Email,
+				Token = "haha"
+			};
+
+			return Ok(loginResponse);
+
 		}
 
 		[HttpPost("register")]

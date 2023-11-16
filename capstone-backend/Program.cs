@@ -47,7 +47,7 @@ namespace capstone_backend
 			app.MapControllers();
 
 			var context = app.Services.CreateScope().ServiceProvider.GetRequiredService<ApplicationDbContext>();
-			/*DataSeeder.SeedDatabase(context);*/
+			DataSeeder.SeedDatabase(context);
 
 			app.Run();
 		}

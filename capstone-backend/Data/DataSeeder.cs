@@ -6,7 +6,7 @@ namespace capstone_backend.Data
 	public class DataSeeder
 	{
 
-		/*public static void SeedDatabase(ApplicationDbContext context)
+		public static void SeedDatabase(ApplicationDbContext context)
 		{
 			context.Database.Migrate();
 
@@ -20,17 +20,37 @@ namespace capstone_backend.Data
 						FirstName = "John Bernard",
 						LastName = "Tinio",
 						Email = "bernard.tinio@pointwest.com.ph",
-						PasswordHash = "$2a$12$.0YFntkwK219DLxXK9LXsuaajQzKO98umjrd/fIMqkErT52l.mldq",
-						Birthdate = DateTime.Now,
+						HashedPassword = "$2a$12$.0YFntkwK219DLxXK9LXsuaajQzKO98umjrd/fIMqkErT52l.mldq",
+						BirthDate = DateTime.Now,
 						Sex = "Male",
-						MobileNumber = "09069141416",
-						AboutMe = "hahahaha"
+						PhoneNumber = "09069141416"
+					},
+					new User
+					{
+						Id = new Guid(),
+						FirstName = "Blessie",
+						LastName = "Balagtas",
+						Email = "blessie.balagtas@pointwest.com.ph",
+						HashedPassword = "$2a$12$.0YFntkwK219DLxXK9LXsuaajQzKO98umjrd/fIMqkErT52l.mldq",
+						BirthDate = DateTime.Now,
+						Sex = "Female",
+						PhoneNumber = "09069141416"
+					},
+					new User
+					{
+						Id = new Guid(),
+						FirstName = "Tim",
+						LastName = "Dy",
+						Email = "tim.dy@pointwest.com.ph",
+						HashedPassword = "$2a$12$.0YFntkwK219DLxXK9LXsuaajQzKO98umjrd/fIMqkErT52l.mldq",
+						BirthDate = DateTime.Now,
+						Sex = "Male",
+						PhoneNumber = "09069141416"
 					}
-
-				) ;
+				);
 
 				context.SaveChanges();
 			}
-		}*/
+		}
 	}
 }
