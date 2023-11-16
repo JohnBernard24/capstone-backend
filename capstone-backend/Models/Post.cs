@@ -4,19 +4,16 @@ namespace capstone_backend.Models
 {
     public class Post
     {
-        [Key]
         public int Id { get; set; }
 
-        [Required]
         public string PostTitle { get; set; } = null!;
 
-        [Required]
-        public string ImageUrl { get; set; } = null!;
+        public int photoId { get; set; }
+        public Photo photo { get; set; }
 
-        [Required]
         public int UserId { get; set; }
+        public User User { get; set; }
 
-        [Required]
         public DateTime DatePosted { get; set; }
     }
 }

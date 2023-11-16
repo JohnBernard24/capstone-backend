@@ -4,19 +4,16 @@ namespace capstone_backend.Models
 {
     public class Notification
     {
-        [Key]
         public int Id { get; set; }
 
-        [Required]
         public int UserId { get; set; }
+        public User User { get; set; }
 
-        [Required]
         public string NotificationType { get; set; } = null!;
 
-        [Required]
+        //this is for the id of the notification (comment/post/friend)
         public int ContextId { get; set; }
 
-        [Required]
         public bool IsRead { get; set; }
     }
 }

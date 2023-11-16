@@ -20,7 +20,7 @@ namespace capstone_backend
 			builder.Services.AddSwaggerGen();
 
 
-			string connectionString = "Server=localhost;port=3306;Database=pastebookDb;User=root;";
+			string connectionString = "Server=localhost;port=3306;Database=pastebookdb;User=root;";
 			builder.Services.AddDbContext<capstone_backendContext>(options => options.UseMySQL(connectionString));
 
 
@@ -39,6 +39,9 @@ namespace capstone_backend
 
 
 			app.MapControllers();
+
+			var context = app.Services.CreateScope().ServiceProvider.GetRequiredService<capstone_backendContext>();
+			DataSeeder.SeedDatabase(context);
 
 			app.Run();
 		}

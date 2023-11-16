@@ -4,13 +4,11 @@ namespace capstone_backend.Models
 {
     public class Comment
     {
-        [Key]
         public int Id { get; set; }
 
-        [Required]
         public int PostId { get; set; }
+        public Post Post { get; set; }
 
-        [Required]
-        public string CommentContext { get; set; } = null!;
+        public string CommentContent { get; set; } = null!;
     }
 }

@@ -7,19 +7,19 @@ using capstone_backend.Models;
 
 namespace capstone_backend.Data
 {
-    public class capstone_backendContext : DbContext
-    {
-        
+	public class capstone_backendContext : DbContext
+	{
+		
 
-        public DbSet<User> User { get; set; } = default!;
-        public DbSet<Timeline> TimeLine { get; set; } = default!;
-        public DbSet<Post> Post { get; set; } = default!;
-        public DbSet<Photo> Photo { get; set; } = default!;
-        public DbSet<Like> Like { get; set; } = default!;
-        public DbSet<Comment> Comment { get; set; } = default!;
-        public DbSet<Friend> Friend { get; set; } = default!;
-        public DbSet<Album> Album { get; set; } = default!;
-        public DbSet<Notification> Notification { get; set; } = default!;
+		public DbSet<User> User { get; set; } = default!;
+		public DbSet<Timeline> TimeLine { get; set; } = default!;
+		public DbSet<Post> Post { get; set; } = default!;
+		public DbSet<Photo> Photo { get; set; } = default!;
+		public DbSet<Like> Like { get; set; } = default!;
+		public DbSet<Comment> Comment { get; set; } = default!;
+		public DbSet<Friend> Friend { get; set; } = default!;
+		public DbSet<Album> Album { get; set; } = default!;
+		public DbSet<Notification> Notification { get; set; } = default!;
 
 
 		public capstone_backendContext(DbContextOptions<capstone_backendContext> options)
