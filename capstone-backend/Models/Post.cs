@@ -5,7 +5,7 @@ namespace capstone_backend.Models
     public class Post
     {
         [Key]
-        public int PostId { get; set; }
+        public int Id { get; set; }
 
         [Required]
         public string PostTitle { get; set; } = null!;

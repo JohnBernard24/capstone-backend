@@ -5,7 +5,7 @@ namespace capstone_backend.Models
     public class Like
     {
         [Key]
-        public int LikeId { get; set; }
+        public int Id { get; set; }
 
         [Required]
         public int PostId { get; set; }

@@ -5,7 +5,7 @@ namespace capstone_backend.Models
     public class User
     {
         [Key]
-        public int UserId { get; set; }
+        public int Id { get; set; }
 
         [Required]
         public string FirstName { get; set; } = null!;

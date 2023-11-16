@@ -6,7 +6,7 @@ namespace capstone_backend.Models
     public class Friend
     {
         [Key]
-        public int FriendId { get; set; }
+        public int Id { get; set; }
 
         [Required]
         public int RecieverId { get; set; }

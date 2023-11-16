@@ -5,7 +5,7 @@ namespace capstone_backend.Models
     public class Timeline
     {
         [Key]
-        public int TimelineId { get; set; }
+        public int Id { get; set; }
 
         [Required]
         public int UserId { get; set; }

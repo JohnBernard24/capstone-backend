@@ -5,7 +5,7 @@ namespace capstone_backend.Models
     public class Album
     {
         [Key]
-        public int AlbumId { get; set; }
+        public int Id { get; set; }
 
         [Required]
         public string AlbumName { get; set; } = null!;

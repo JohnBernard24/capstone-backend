@@ -5,7 +5,7 @@ namespace capstone_backend.Models
     public class Photo
     {
         [Key]
-        public int PhotoId { get; set; }
+        public int Id { get; set; }
 
         [Required]
         public string PhotoUrl { get; set; } = null!;

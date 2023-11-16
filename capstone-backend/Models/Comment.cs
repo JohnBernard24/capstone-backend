@@ -5,7 +5,7 @@ namespace capstone_backend.Models
     public class Comment
     {
         [Key]
-        public int CommentId { get; set; }
+        public int Id { get; set; }
 
         [Required]
         public int PostId { get; set; }
