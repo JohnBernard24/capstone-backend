@@ -2,6 +2,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using capstone_backend.Data;
 using System;
+using capstone_backend.Service;
+using Microsoft.AspNetCore.Identity;
 
 namespace capstone_backend
 {
@@ -18,6 +20,8 @@ namespace capstone_backend
 			// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 			builder.Services.AddEndpointsApiExplorer();
 			builder.Services.AddSwaggerGen();
+
+			builder.Services.AddSingleton<BcryptPasswordHasher>();
 
 
 			string connectionString = "Server=localhost;port=3306;Database=pastebookdb;User=root;";

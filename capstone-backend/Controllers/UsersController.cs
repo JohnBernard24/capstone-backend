@@ -7,118 +7,57 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using capstone_backend.Data;
 using capstone_backend.Models;
+using capstone_backend.Service;
+using NuGet.Protocol.Plugins;
 
 namespace capstone_backend.Controllers
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    public class UsersController : ControllerBase
-    {
-        private readonly capstone_backendContext _context;
+	[Route("api/[controller]")]
+	[ApiController]
+	public class UsersController : ControllerBase
+	{
+		private readonly capstone_backendContext _context;
+		private readonly BcryptPasswordHasher _passwordHasher;
 
-        public UsersController(capstone_backendContext context)
-        {
-            _context = context;
-        }
+		public UsersController(capstone_backendContext context, BcryptPasswordHasher passwordHasher)
+		{
+			_context = context;
+			_passwordHasher = passwordHasher;
+		}
 
-        // GET: api/Users
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<User>>> GetUser()
-        {
-          if (_context.User == null)
-          {
-              return NotFound();
-          }
-            return await _context.User.ToListAsync();
-        }
+		[HttpPost("login")]
+		public ActionResult<LoginResponse> Login(UserloginDTO userLoginDto)
+		{
+			try
+			{
+				var user = _context.User.FirstOrDefault(u => u.Email == userLoginDto.Email);
 
-        // GET: api/Users/5
-        [HttpGet("{id}")]
-        public async Task<ActionResult<User>> GetUser(Guid id)
-        {
-          if (_context.User == null)
-          {
-              return NotFound();
-          }
-            var user = await _context.User.FindAsync(id);
+				if (user == null)
+				{
+					return NotFound(new { result = "user_not_found" });
+				}
 
-            if (user == null)
-            {
-                return NotFound();
-            }
+				bool isCorrectPassword = _passwordHasher.VerifyPassword(userLoginDto.Password, user.PasswordHash);
+				if (!isCorrectPassword)
+				{
+					return Unauthorized();
+				}
 
-            return user;
-        }
 
-        // PUT: api/Users/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutUser(Guid id, User user)
-        {
-            if (id != user.Id)
-            {
-                return BadRequest();
-            }
+				var loginResponse = new LoginResponse
+				{
+					email = user.Email,	
+					token = 123
+				};
 
-            _context.Entry(user).State = EntityState.Modified;
+				return Ok(loginResponse);
 
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!UserExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return NoContent();
-        }
-
-        // POST: api/Users
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPost]
-        public async Task<ActionResult<User>> PostUser(User user)
-        {
-          if (_context.User == null)
-          {
-              return Problem("Entity set 'capstone_backendContext.User'  is null.");
-          }
-            _context.User.Add(user);
-            await _context.SaveChangesAsync();
-
-            return CreatedAtAction("GetUser", new { id = user.Id }, user);
-        }
-
-        // DELETE: api/Users/5
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteUser(Guid id)
-        {
-            if (_context.User == null)
-            {
-                return NotFound();
-            }
-            var user = await _context.User.FindAsync(id);
-            if (user == null)
-            {
-                return NotFound();
-            }
-
-            _context.User.Remove(user);
-            await _context.SaveChangesAsync();
-
-            return NoContent();
-        }
-
-        private bool UserExists(Guid id)
-        {
-            return (_context.User?.Any(e => e.Id == id)).GetValueOrDefault();
-        }
-    }
+			}
+			catch (Exception ex)
+			{
+				Console.WriteLine("Error retrieving log in credentials: " + ex.Message);
+				return StatusCode(500, "An error occurred while retrieving log in credentials.");
+			}
+		}
+	}
 }

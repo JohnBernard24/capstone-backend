@@ -20,7 +20,7 @@ namespace capstone_backend.Data
 						FirstName = "John Bernard",
 						LastName = "Tinio",
 						Email = "bernard.tinio@pointwest.com.ph",
-						PasswordHash = "hiafhiaiyiwqbriq9fbjfhufebjkfhuksbdfkewubfjsd",
+						PasswordHash = "$2a$12$.0YFntkwK219DLxXK9LXsuaajQzKO98umjrd/fIMqkErT52l.mldq",
 						Birthdate = DateTime.Now,
 						Sex = "Male",
 						MobileNumber = "09069141416",

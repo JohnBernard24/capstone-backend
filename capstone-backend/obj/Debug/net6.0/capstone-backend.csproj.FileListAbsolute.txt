@@ -255,3 +255,4 @@ C:\Users\User\Desktop\CAPSTONE\capstone-backend\capstone-backend\bin\Debug\net6.
 C:\Users\User\Desktop\CAPSTONE\capstone-backend\capstone-backend\bin\Debug\net6.0\Mono.TextTemplating.dll
 C:\Users\User\Desktop\CAPSTONE\capstone-backend\capstone-backend\bin\Debug\net6.0\BouncyCastle.Crypto.dll
 C:\Users\User\Desktop\CAPSTONE\capstone-backend\capstone-backend\bin\Debug\net6.0\System.CodeDom.dll
+C:\Users\User\Desktop\CAPSTONE\capstone-backend\capstone-backend\bin\Debug\net6.0\BCrypt.Net-Next.dll
