@@ -3,18 +3,23 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace capstone_backend.Models
 {
-    public class Friend
-    {
-        public int Id { get; set; }
+	public class Friend
+	{
+		public int Id { get; set; }
 
-        public int RecieverId { get; set; }
+		public int ReceiverId { get; set; }
 
-        public int RequesterId { get; set; }
+		public User Receiver { get; set; } = null!;
 
-        public DateTime DateOfFriend { get; set; }
+		public int SenderId { get; set; }
 
-        public bool IsFriend { get; set; }
+		public User Sender { get; set; } = null!;
+
+		[DataType(DataType.Date)]
+		public DateTime? FriendshipDate { get; set; }
+
+		public bool isFriend { get; set; }
 
 
-    }
+	}
 }

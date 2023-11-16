@@ -25,7 +25,9 @@ namespace capstone_backend
 
 
 			string connectionString = "Server=localhost;port=3306;Database=pastebookdb;User=root;";
-			builder.Services.AddDbContext<capstone_backendContext>(options => options.UseMySQL(connectionString));
+			builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseMySQL(connectionString));
+
+			builder.Services.AddScoped<UserRepository>();
 
 
 			var app = builder.Build();
@@ -44,8 +46,8 @@ namespace capstone_backend
 
 			app.MapControllers();
 
-			var context = app.Services.CreateScope().ServiceProvider.GetRequiredService<capstone_backendContext>();
-			DataSeeder.SeedDatabase(context);
+			var context = app.Services.CreateScope().ServiceProvider.GetRequiredService<ApplicationDbContext>();
+			/*DataSeeder.SeedDatabase(context);*/
 
 			app.Run();
 		}

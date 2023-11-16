@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\richard.delacruz\\Documents\\case-study\\capstone-backend\\capstone-backend\\capstone-backend.csproj": {}
+    "C:\\Users\\User\\Desktop\\CAPSTONE\\capstone-backend\\capstone-backend\\capstone-backend.csproj": {}
   },
   "projects": {
-    "C:\\Users\\richard.delacruz\\Documents\\case-study\\capstone-backend\\capstone-backend\\capstone-backend.csproj": {
+    "C:\\Users\\User\\Desktop\\CAPSTONE\\capstone-backend\\capstone-backend\\capstone-backend.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\richard.delacruz\\Documents\\case-study\\capstone-backend\\capstone-backend\\capstone-backend.csproj",
+        "projectUniqueName": "C:\\Users\\User\\Desktop\\CAPSTONE\\capstone-backend\\capstone-backend\\capstone-backend.csproj",
         "projectName": "capstone-backend",
-        "projectPath": "C:\\Users\\richard.delacruz\\Documents\\case-study\\capstone-backend\\capstone-backend\\capstone-backend.csproj",
-        "packagesPath": "C:\\Users\\richard.delacruz\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\richard.delacruz\\Documents\\case-study\\capstone-backend\\capstone-backend\\obj\\",
+        "projectPath": "C:\\Users\\User\\Desktop\\CAPSTONE\\capstone-backend\\capstone-backend\\capstone-backend.csproj",
+        "packagesPath": "C:\\Users\\User\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\User\\Desktop\\CAPSTONE\\capstone-backend\\capstone-backend\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\richard.delacruz\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\User\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -22,6 +22,7 @@
         ],
         "sources": {
           "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "C:\\Program Files\\dotnet\\sdk\\7.0.302\\Sdks\\Microsoft.NET.Sdk.Web\\library-packs": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
@@ -96,7 +97,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.402\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.302\\RuntimeIdentifierGraph.json"
         }
       }
     }

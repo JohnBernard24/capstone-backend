@@ -2,15 +2,14 @@
 
 namespace capstone_backend.Models
 {
-    public class Photo
-    {
-        public int Id { get; set; }
+	public class Photo
+	{
+		public int Id { get; set; }
+		public byte[] PhotoImage { get; set; } = null!;
+		public int AlbumId { get; set; }
+		public Album Album { get; set; } = null!;
 
-        public byte[] PhotoImage { get; set; }
-
-        public int AlbumId { get; set; }
-        public Album Album { get; set; }
-
-        public DateTime UploadDate { get; set; }
-    }
+		[DataType(DataType.Date)]
+		public DateTime UploadDate { get; set; }
+	}
 }

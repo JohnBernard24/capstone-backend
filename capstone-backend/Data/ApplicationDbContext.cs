@@ -7,10 +7,8 @@ using capstone_backend.Models;
 
 namespace capstone_backend.Data
 {
-	public class capstone_backendContext : DbContext
-	{
-		
-
+	public class ApplicationDbContext : DbContext
+	{	
 		public DbSet<User> User { get; set; } = default!;
 		public DbSet<Timeline> TimeLine { get; set; } = default!;
 		public DbSet<Post> Post { get; set; } = default!;
@@ -22,7 +20,7 @@ namespace capstone_backend.Data
 		public DbSet<Notification> Notification { get; set; } = default!;
 
 
-		public capstone_backendContext(DbContextOptions<capstone_backendContext> options)
+		public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
 			: base(options)
 		{
 		}

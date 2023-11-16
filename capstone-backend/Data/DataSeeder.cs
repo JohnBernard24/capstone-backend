@@ -6,7 +6,7 @@ namespace capstone_backend.Data
 	public class DataSeeder
 	{
 
-		public static void SeedDatabase(capstone_backendContext context)
+		/*public static void SeedDatabase(ApplicationDbContext context)
 		{
 			context.Database.Migrate();
 
@@ -31,6 +31,6 @@ namespace capstone_backend.Data
 
 				context.SaveChanges();
 			}
-		}
+		}*/
 	}
 }
