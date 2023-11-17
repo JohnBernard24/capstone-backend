@@ -23,6 +23,16 @@ namespace capstone_backend
 
 			builder.Services.AddSingleton<BcryptPasswordHasher>();
 
+			builder.Services.AddCors(options =>
+			{
+				options.AddPolicy("AllowAllOrigins",
+					builder =>
+					{
+						builder.AllowAnyOrigin()
+							   .AllowAnyMethod()
+							   .AllowAnyHeader();
+					});
+			});
 
 			string connectionString = "Server=localhost;port=3306;Database=pastebookdb;User=root;";
 			builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseMySQL(connectionString));
@@ -40,6 +50,10 @@ namespace capstone_backend
 			}
 
 			app.UseHttpsRedirection();
+
+			// Enable CORS
+			app.UseCors("AllowAllOrigins");
+
 
 			app.UseAuthorization();
 
