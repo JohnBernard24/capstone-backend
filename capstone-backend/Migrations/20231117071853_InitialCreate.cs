@@ -55,7 +55,8 @@ namespace capstone_backend.Migrations
                 name: "User",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "char(36)", nullable: false),
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("MySQL:ValueGenerationStrategy", MySQLValueGenerationStrategy.IdentityColumn),
                     FirstName = table.Column<string>(type: "longtext", nullable: false),
                     LastName = table.Column<string>(type: "longtext", nullable: false),
                     Email = table.Column<string>(type: "longtext", nullable: false),
@@ -85,9 +86,7 @@ namespace capstone_backend.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("MySQL:ValueGenerationStrategy", MySQLValueGenerationStrategy.IdentityColumn),
                     ReceiverId = table.Column<int>(type: "int", nullable: false),
-                    ReceiverId1 = table.Column<Guid>(type: "char(36)", nullable: false),
                     SenderId = table.Column<int>(type: "int", nullable: false),
-                    SenderId1 = table.Column<Guid>(type: "char(36)", nullable: false),
                     FriendshipDate = table.Column<DateTime>(type: "datetime(6)", nullable: true),
                     isFriend = table.Column<bool>(type: "tinyint(1)", nullable: false)
                 },
@@ -95,14 +94,14 @@ namespace capstone_backend.Migrations
                 {
                     table.PrimaryKey("PK_Friend", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Friend_User_ReceiverId1",
-                        column: x => x.ReceiverId1,
+                        name: "FK_Friend_User_ReceiverId",
+                        column: x => x.ReceiverId,
                         principalTable: "User",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Friend_User_SenderId1",
-                        column: x => x.SenderId1,
+                        name: "FK_Friend_User_SenderId",
+                        column: x => x.SenderId,
                         principalTable: "User",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -116,7 +115,6 @@ namespace capstone_backend.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("MySQL:ValueGenerationStrategy", MySQLValueGenerationStrategy.IdentityColumn),
                     UserId = table.Column<int>(type: "int", nullable: false),
-                    UserId1 = table.Column<Guid>(type: "char(36)", nullable: false),
                     NotificationType = table.Column<string>(type: "longtext", nullable: false),
                     ContextId = table.Column<int>(type: "int", nullable: false),
                     IsRead = table.Column<bool>(type: "tinyint(1)", nullable: false)
@@ -125,8 +123,8 @@ namespace capstone_backend.Migrations
                 {
                     table.PrimaryKey("PK_Notification", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Notification_User_UserId1",
-                        column: x => x.UserId1,
+                        name: "FK_Notification_User_UserId",
+                        column: x => x.UserId,
                         principalTable: "User",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -139,15 +137,14 @@ namespace capstone_backend.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("MySQL:ValueGenerationStrategy", MySQLValueGenerationStrategy.IdentityColumn),
-                    UserId = table.Column<int>(type: "int", nullable: false),
-                    UserId1 = table.Column<Guid>(type: "char(36)", nullable: false)
+                    UserId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_TimeLine", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_TimeLine_User_UserId1",
-                        column: x => x.UserId1,
+                        name: "FK_TimeLine_User_UserId",
+                        column: x => x.UserId,
                         principalTable: "User",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -161,11 +158,10 @@ namespace capstone_backend.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("MySQL:ValueGenerationStrategy", MySQLValueGenerationStrategy.IdentityColumn),
                     PostTitle = table.Column<string>(type: "longtext", nullable: false),
-                    PhotoId = table.Column<int>(type: "int", nullable: false),
+                    PhotoId = table.Column<int>(type: "int", nullable: true),
                     Description = table.Column<string>(type: "longtext", nullable: false),
                     TimelineId = table.Column<int>(type: "int", nullable: false),
                     UserId = table.Column<int>(type: "int", nullable: false),
-                    UserId1 = table.Column<Guid>(type: "char(36)", nullable: true),
                     DatePosted = table.Column<DateTime>(type: "datetime(6)", nullable: false)
                 },
                 constraints: table =>
@@ -175,8 +171,7 @@ namespace capstone_backend.Migrations
                         name: "FK_Post_Photo_PhotoId",
                         column: x => x.PhotoId,
                         principalTable: "Photo",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_Post_TimeLine_TimelineId",
                         column: x => x.TimelineId,
@@ -184,10 +179,11 @@ namespace capstone_backend.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Post_User_UserId1",
-                        column: x => x.UserId1,
+                        name: "FK_Post_User_UserId",
+                        column: x => x.UserId,
                         principalTable: "User",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 })
                 .Annotation("MySQL:Charset", "utf8mb4");
 
@@ -219,8 +215,7 @@ namespace capstone_backend.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("MySQL:ValueGenerationStrategy", MySQLValueGenerationStrategy.IdentityColumn),
                     PostId = table.Column<int>(type: "int", nullable: false),
-                    UserId = table.Column<int>(type: "int", nullable: false),
-                    UserId1 = table.Column<Guid>(type: "char(36)", nullable: false)
+                    UserId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -232,8 +227,8 @@ namespace capstone_backend.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Like_User_UserId1",
-                        column: x => x.UserId1,
+                        name: "FK_Like_User_UserId",
+                        column: x => x.UserId,
                         principalTable: "User",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -246,14 +241,14 @@ namespace capstone_backend.Migrations
                 column: "PostId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Friend_ReceiverId1",
+                name: "IX_Friend_ReceiverId",
                 table: "Friend",
-                column: "ReceiverId1");
+                column: "ReceiverId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Friend_SenderId1",
+                name: "IX_Friend_SenderId",
                 table: "Friend",
-                column: "SenderId1");
+                column: "SenderId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Like_PostId",
@@ -261,14 +256,14 @@ namespace capstone_backend.Migrations
                 column: "PostId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Like_UserId1",
+                name: "IX_Like_UserId",
                 table: "Like",
-                column: "UserId1");
+                column: "UserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Notification_UserId1",
+                name: "IX_Notification_UserId",
                 table: "Notification",
-                column: "UserId1");
+                column: "UserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Photo_AlbumId",
@@ -286,14 +281,14 @@ namespace capstone_backend.Migrations
                 column: "TimelineId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Post_UserId1",
+                name: "IX_Post_UserId",
                 table: "Post",
-                column: "UserId1");
+                column: "UserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_TimeLine_UserId1",
+                name: "IX_TimeLine_UserId",
                 table: "TimeLine",
-                column: "UserId1");
+                column: "UserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_User_PhotoId",

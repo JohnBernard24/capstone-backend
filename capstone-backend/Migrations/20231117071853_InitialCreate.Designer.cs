@@ -11,7 +11,7 @@ using capstone_backend.Data;
 namespace capstone_backend.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20231116162903_InitialCreate")]
+    [Migration("20231117071853_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -69,23 +69,17 @@ namespace capstone_backend.Migrations
                     b.Property<int>("ReceiverId")
                         .HasColumnType("int");
 
-                    b.Property<Guid>("ReceiverId1")
-                        .HasColumnType("char(36)");
-
                     b.Property<int>("SenderId")
                         .HasColumnType("int");
-
-                    b.Property<Guid>("SenderId1")
-                        .HasColumnType("char(36)");
 
                     b.Property<bool>("isFriend")
                         .HasColumnType("tinyint(1)");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ReceiverId1");
+                    b.HasIndex("ReceiverId");
 
-                    b.HasIndex("SenderId1");
+                    b.HasIndex("SenderId");
 
                     b.ToTable("Friend");
                 });
@@ -102,14 +96,11 @@ namespace capstone_backend.Migrations
                     b.Property<int>("UserId")
                         .HasColumnType("int");
 
-                    b.Property<Guid>("UserId1")
-                        .HasColumnType("char(36)");
-
                     b.HasKey("Id");
 
                     b.HasIndex("PostId");
 
-                    b.HasIndex("UserId1");
+                    b.HasIndex("UserId");
 
                     b.ToTable("Like");
                 });
@@ -133,12 +124,9 @@ namespace capstone_backend.Migrations
                     b.Property<int>("UserId")
                         .HasColumnType("int");
 
-                    b.Property<Guid>("UserId1")
-                        .HasColumnType("char(36)");
-
                     b.HasKey("Id");
 
-                    b.HasIndex("UserId1");
+                    b.HasIndex("UserId");
 
                     b.ToTable("Notification");
                 });
@@ -179,7 +167,7 @@ namespace capstone_backend.Migrations
                         .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.Property<int>("PhotoId")
+                    b.Property<int?>("PhotoId")
                         .HasColumnType("int");
 
                     b.Property<string>("PostTitle")
@@ -192,16 +180,13 @@ namespace capstone_backend.Migrations
                     b.Property<int>("UserId")
                         .HasColumnType("int");
 
-                    b.Property<Guid?>("UserId1")
-                        .HasColumnType("char(36)");
-
                     b.HasKey("Id");
 
                     b.HasIndex("PhotoId");
 
                     b.HasIndex("TimelineId");
 
-                    b.HasIndex("UserId1");
+                    b.HasIndex("UserId");
 
                     b.ToTable("Post");
                 });
@@ -215,21 +200,18 @@ namespace capstone_backend.Migrations
                     b.Property<int>("UserId")
                         .HasColumnType("int");
 
-                    b.Property<Guid>("UserId1")
-                        .HasColumnType("char(36)");
-
                     b.HasKey("Id");
 
-                    b.HasIndex("UserId1");
+                    b.HasIndex("UserId");
 
                     b.ToTable("TimeLine");
                 });
 
             modelBuilder.Entity("capstone_backend.Models.User", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("char(36)");
+                        .HasColumnType("int");
 
                     b.Property<string>("AboutMe")
                         .HasColumnType("longtext");
@@ -287,13 +269,13 @@ namespace capstone_backend.Migrations
                 {
                     b.HasOne("capstone_backend.Models.User", "Receiver")
                         .WithMany()
-                        .HasForeignKey("ReceiverId1")
+                        .HasForeignKey("ReceiverId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("capstone_backend.Models.User", "Sender")
                         .WithMany()
-                        .HasForeignKey("SenderId1")
+                        .HasForeignKey("SenderId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -312,7 +294,7 @@ namespace capstone_backend.Migrations
 
                     b.HasOne("capstone_backend.Models.User", "User")
                         .WithMany()
-                        .HasForeignKey("UserId1")
+                        .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -325,7 +307,7 @@ namespace capstone_backend.Migrations
                 {
                     b.HasOne("capstone_backend.Models.User", "User")
                         .WithMany()
-                        .HasForeignKey("UserId1")
+                        .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -347,9 +329,7 @@ namespace capstone_backend.Migrations
                 {
                     b.HasOne("capstone_backend.Models.Photo", "Photo")
                         .WithMany()
-                        .HasForeignKey("PhotoId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("PhotoId");
 
                     b.HasOne("capstone_backend.Models.Timeline", "Timeline")
                         .WithMany()
@@ -359,7 +339,9 @@ namespace capstone_backend.Migrations
 
                     b.HasOne("capstone_backend.Models.User", "User")
                         .WithMany()
-                        .HasForeignKey("UserId1");
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Photo");
 
@@ -372,7 +354,7 @@ namespace capstone_backend.Migrations
                 {
                     b.HasOne("capstone_backend.Models.User", "User")
                         .WithMany()
-                        .HasForeignKey("UserId1")
+                        .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

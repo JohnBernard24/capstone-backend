@@ -20,7 +20,7 @@ namespace capstone_backend.Service
 			return Task.FromResult(_context.User.ToList());
 		}
 
-		public Task<User?> GetUserById(Guid id)
+		public Task<User?> GetUserById(int id)
 		{
 			return Task.FromResult(_context.User.FirstOrDefault(u => u.Id == id));
 		}
@@ -32,7 +32,7 @@ namespace capstone_backend.Service
 
 		public void InsertUser(User user)
 		{
-			user.Id = new Guid();
+			
 			_context.User.Add(user);
 			_context.SaveChanges();
 		}
