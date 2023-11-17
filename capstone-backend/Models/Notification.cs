@@ -7,7 +7,7 @@ namespace capstone_backend.Models
         public int Id { get; set; }
 
         public int UserId { get; set; }
-        public User User { get; set; }
+        public User User { get; set; } = null!;
 
         public string NotificationType { get; set; } = null!;
 
