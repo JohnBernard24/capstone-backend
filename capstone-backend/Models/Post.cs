@@ -6,8 +6,8 @@ namespace capstone_backend.Models
 	{
 		public int Id { get; set; }
 		public string PostTitle { get; set; } = null!;
-		public int PhotoId { get; set; }
-		public Photo Photo { get; set; } = null!;
+		public int? PhotoId { get; set; }
+		public Photo? Photo { get; set; }
 		public string Description { get; set; } = null!;
 		public int TimelineId { get; set; }
 		public Timeline Timeline { get; set; } = null!;
@@ -16,4 +16,23 @@ namespace capstone_backend.Models
 		[DataType(DataType.Date)]
 		public DateTime DatePosted { get; set; }
 	}
+
+	/*public class PostAddDTO
+	{
+		[Required]
+		public string PostTitle { get; set; } = null!;
+
+		[Required]
+		public string Description { get; set; } = null!;
+
+		[Required]
+		public int UserId { get; set; }
+
+		public int PhotoId { get; set; }
+
+		public Pho
+
+		
+		
+	}*/
 }

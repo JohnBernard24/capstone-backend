@@ -5,6 +5,7 @@ namespace capstone_backend.Data
 {
 	public class DataSeeder
 	{
+	
 
 		public static void SeedDatabase(ApplicationDbContext context)
 		{
@@ -16,7 +17,6 @@ namespace capstone_backend.Data
 				context.User.AddRange(
 					new User
 					{
-						Id = new Guid(),
 						FirstName = "John Bernard",
 						LastName = "Tinio",
 						Email = "bernard.tinio@pointwest.com.ph",
@@ -27,7 +27,7 @@ namespace capstone_backend.Data
 					},
 					new User
 					{
-						Id = new Guid(),
+						
 						FirstName = "Blessie",
 						LastName = "Balagtas",
 						Email = "blessie.balagtas@pointwest.com.ph",
@@ -38,7 +38,7 @@ namespace capstone_backend.Data
 					},
 					new User
 					{
-						Id = new Guid(),
+						
 						FirstName = "Tim",
 						LastName = "Dy",
 						Email = "tim.dy@pointwest.com.ph",
@@ -51,6 +51,25 @@ namespace capstone_backend.Data
 
 				context.SaveChanges();
 			}
+
+			/*if (!context.TimeLine.Any())
+			{
+
+
+
+				context.TimeLine.AddRange(
+					new Timeline(
+						from u in context.User
+						join t in context.TimeLine on u.Id equals t.UserId
+						select new
+						{
+							Id = t.Id,
+
+						}
+						)
+
+					); 
+			}*/
 		}
 	}
 }
