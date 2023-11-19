@@ -6,7 +6,7 @@ namespace capstone_backend.Models
 	{
 		public int Id { get; set; }
 		public string CommentContent { get; set; } = null!;
-
+		public DateTime DateCommented { get; set; } = DateTime.Now;
 
 
 		public int PostId { get; set; }

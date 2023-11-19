@@ -14,32 +14,31 @@ namespace capstone_backend.Controllers
 	public class PostController : Controller
 	{
 		private readonly UserRepository _userRepository;
-		private readonly ApplicationDbContext _context;
 		private readonly PostRepository _postRepository;
+		private readonly TimelineRepository _timelineRepository;
 
-
-		public PostController(ApplicationDbContext context, UserRepository userRepository, PostRepository postRepository)
+		public PostController( UserRepository userRepository, PostRepository postRepository, TimelineRepository timelineRepository)
 		{
-			_context = context;
 			_userRepository = userRepository;
 			_postRepository = postRepository;
+			_timelineRepository = timelineRepository;
 		}
 
 		[HttpPost("add-post/{userId}")]
-		public IActionResult AddPost(int userId, [FromBody] PostAddDTO postAddDTO)
+		public async Task<IActionResult> AddPost(int userId, [FromBody] PostDTO postDTO)
 		{
 			if (!ModelState.IsValid)
 			{
 				return BadRequest("invalid_post");
 			}
 
-
-			User? poster = _context.User?.FirstOrDefault(u => u.Id == postAddDTO.PosterId);
+			User? poster = await _userRepository.GetUserById(postDTO.PosterId);
 			if(poster == null)
 			{
 				return BadRequest("invalid_user_id");
 			}
-			var timeline = _context.TimeLine?.FirstOrDefault(t => t.UserId == userId);
+
+			Timeline? timeline = await _timelineRepository.GetTimelineByUserId(userId);
 			if (timeline == null)
 			{
 				return BadRequest("timeline_not_found");
@@ -47,25 +46,67 @@ namespace capstone_backend.Controllers
 
 			Post post = new Post
 			{
-				PostTitle = postAddDTO.PostTitle,
-				Description = postAddDTO.Description,
-				DatePosted = postAddDTO.DatePosted,
+				PostTitle = postDTO.PostTitle,
+				Description = postDTO.Description,
 				TimelineId = timeline.Id,
 				Timeline = timeline,
-				PhotoId = postAddDTO.Photo?.Id,
-				Photo = postAddDTO.Photo,
+				PhotoId = postDTO.Photo?.Id,
+				Photo = postDTO.Photo,
 				PosterId = poster.Id,
 				Poster = poster
 			};
 
 			_postRepository.InsertPost(post);
 
-			return Ok(new { result = "post_added_successfully" });
+		var postResponse = new PostViewResponse
+			{
+				PostId = post.Id,
+				PostTitle = post.PostTitle,
+				Description = post.Description,
+				DatePosted = DateTime.Now,
+				Photo = post.Photo,
+				Poster = post.Poster,
+				Timeline = post.Timeline
+			};
+
+			return Ok(postResponse);
 
 		}
 
+		[HttpPut("update-post/{postId}")]
+		public async Task<IActionResult> UpdatePost(int postId, [FromBody] PostDTO postDTO)
+		{
+			if (!ModelState.IsValid)
+			{
+				return BadRequest("invalid_post");
+			}
 
-		
+			Post? existingPost = await _postRepository.GetPostById(postId);
+
+			if (existingPost == null)
+			{
+				return NotFound("Post not found");
+			}
+
+			existingPost.PostTitle = postDTO.PostTitle;
+			existingPost.Description = postDTO.Description;
+			existingPost.Photo = postDTO.Photo;
+
+			_postRepository.UpdatePost(existingPost);
+
+			var postResponse = new PostViewResponse
+			{
+				PostId = existingPost.Id,
+				PostTitle = existingPost.PostTitle,
+				Description = existingPost.Description,
+				DatePosted = existingPost.DatePosted,
+				Photo = existingPost.Photo,
+				Poster = existingPost.Poster,
+				Timeline = existingPost.Timeline
+			};
+
+			return Ok(postResponse);
+		}
 
 
 	}

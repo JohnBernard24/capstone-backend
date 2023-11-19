@@ -22,7 +22,7 @@ namespace capstone_backend.Service
 
 		public Task<User?> GetUserById(int id)
 		{
-			return Task.FromResult(_context.User.FirstOrDefault(u => u.Id == id));
+			return Task.FromResult(_context.User?.FirstOrDefault(u => u.Id == id));
 		}
 
 		public Task<User?> GetUserByEmail(string email)
