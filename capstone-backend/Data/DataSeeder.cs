@@ -24,10 +24,10 @@ namespace capstone_backend.Data
 						BirthDate = DateTime.Now,
 						Sex = "Male",
 						PhoneNumber = "09069141416"
+
 					},
 					new User
 					{
-						
 						FirstName = "Blessie",
 						LastName = "Balagtas",
 						Email = "blessie.balagtas@pointwest.com.ph",
@@ -38,7 +38,6 @@ namespace capstone_backend.Data
 					},
 					new User
 					{
-						
 						FirstName = "Tim",
 						LastName = "Dy",
 						Email = "tim.dy@pointwest.com.ph",
@@ -49,27 +48,33 @@ namespace capstone_backend.Data
 					}
 				);
 
+
 				context.SaveChanges();
-			}
-
-			/*if (!context.TimeLine.Any())
-			{
-
 
 
 				context.TimeLine.AddRange(
-					new Timeline(
-						from u in context.User
-						join t in context.TimeLine on u.Id equals t.UserId
-						select new
-						{
-							Id = t.Id,
+					new Timeline
+					{
+						UserId = 1,
+						User = context.User.FirstOrDefault(u => u.Id == 1)
+					},
+					new Timeline
+					{
+						UserId = 2,
+						User = context.User.FirstOrDefault(u => u.Id == 2)
+					},
+					new Timeline
+					{
+						UserId = 3,
+						User = context.User.FirstOrDefault(u => u.Id == 3)
+					}
 
-						}
-						)
+				);
 
-					); 
-			}*/
+				context.SaveChanges();
+			}
+
+			
 		}
 	}
 }

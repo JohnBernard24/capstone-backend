@@ -84,6 +84,15 @@ namespace capstone_backend.Controllers
 				PhoneNumber = userRegisterDTO.PhoneNumber
 			};
 
+			var newTimeline = new Timeline
+			{
+				UserId = newUser.Id,
+				User = newUser
+			};
+
+			_context.TimeLine.Add(newTimeline);
+			_context.SaveChanges();
+
 			_userRepository.InsertUser(newUser);
 			return Ok(new {result = "user_registered_successfully"});
 		}

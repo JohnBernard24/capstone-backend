@@ -13,11 +13,13 @@ namespace capstone_backend.Models
 		[DataType(DataType.Date)]
 		public DateTime BirthDate { get; set; }
 		public string? Sex { get; set; }
-
 		public string? PhoneNumber { get; set; }
+		public string? AboutMe { get; set; }
+
+
+
 		public int? ProfileImageId { get; set; }
 		public Photo? Photo { get; set; }
-		public string? AboutMe { get; set; }
 	}
 
 	public class UserRegisterDTO

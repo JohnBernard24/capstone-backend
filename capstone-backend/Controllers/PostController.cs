@@ -9,45 +9,64 @@ using NuGet.Protocol.Plugins;
 
 namespace capstone_backend.Controllers
 {
-    [Route("api/post")]
-    [ApiController]
-    public class PostController : Controller
-    {
-        private readonly UserRepository _userRepository;
-        private readonly ApplicationDbContext _context;
-        private readonly PostRepository _postRepository;
+	[Route("api/post")]
+	[ApiController]
+	public class PostController : Controller
+	{
+		private readonly UserRepository _userRepository;
+		private readonly ApplicationDbContext _context;
+		private readonly PostRepository _postRepository;
 
 
-        public PostController(ApplicationDbContext context, UserRepository userRepository, PostRepository postRepository)
-        {
-            _context = context;
-            _userRepository = userRepository;
-            _postRepository = postRepository;
-        }
+		public PostController(ApplicationDbContext context, UserRepository userRepository, PostRepository postRepository)
+		{
+			_context = context;
+			_userRepository = userRepository;
+			_postRepository = postRepository;
+		}
 
-        [HttpPost("add-post")]
-        public IActionResult AddPost([FromBody] Post post)
-        {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest("invalid_post");
-            }
-
-            _postRepository.InsertPost(post);
-
-            return Ok(new { result = "post_added_successfully" });
-
-            
-        }
+		[HttpPost("add-post/{userId}")]
+		public IActionResult AddPost(int userId, [FromBody] PostAddDTO postAddDTO)
+		{
+			if (!ModelState.IsValid)
+			{
+				return BadRequest("invalid_post");
+			}
 
 
-        //URL should be "websitename/firstNlastNdisambiguator/timeline/update-post"?
-        /*[HttpPut("update-post")]
-        public async Task<IActionResult> UpdatePostByPostId(int id)
-        {
+			User? poster = _context.User?.FirstOrDefault(u => u.Id == postAddDTO.PosterId);
+			if(poster == null)
+			{
+				return BadRequest("invalid_user_id");
+			}
+			var timeline = _context.TimeLine?.FirstOrDefault(t => t.UserId == userId);
+			if (timeline == null)
+			{
+				return BadRequest("timeline_not_found");
+			}
 
-        }**/
+			Post post = new Post
+			{
+				PostTitle = postAddDTO.PostTitle,
+				Description = postAddDTO.Description,
+				DatePosted = postAddDTO.DatePosted,
+				TimelineId = timeline.Id,
+				Timeline = timeline,
+				PhotoId = postAddDTO.Photo?.Id,
+				Photo = postAddDTO.Photo,
+				PosterId = poster.Id,
+				Poster = poster
+			};
+
+			_postRepository.InsertPost(post);
+
+			return Ok(new { result = "post_added_successfully" });
+
+		}
 
 
-    }
+		
+
+
+	}
 }

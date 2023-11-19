@@ -38,6 +38,7 @@ namespace capstone_backend
 			builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseMySQL(connectionString));
 
 			builder.Services.AddScoped<UserRepository>();
+			builder.Services.AddScoped<PostRepository>();
 
 
 			var app = builder.Build();
