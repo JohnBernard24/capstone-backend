@@ -56,6 +56,8 @@ namespace capstone_backend.Controllers
 				Poster = poster
 			};
 
+			System.Diagnostics.Debug.WriteLine(poster);
+
 			_postRepository.InsertPost(post);
 
 			var postResponse = new PostViewResponse
@@ -106,12 +108,6 @@ namespace capstone_backend.Controllers
 			};
 
 			return Ok(postResponse);
-		}
-
-		[HttpDelete("archive-post/{postId}")]
-		public async Task<IActionResult> ArchivePost(int postId)
-		{
-			return null;
 		}
 
 		[HttpDelete("delete-post/{postId}")]
