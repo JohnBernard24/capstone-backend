@@ -56,8 +56,6 @@ namespace capstone_backend.Controllers
 				Poster = poster
 			};
 
-			System.Diagnostics.Debug.WriteLine(poster);
-
 			_postRepository.InsertPost(post);
 
 			var postResponse = new PostViewResponse
@@ -75,6 +73,7 @@ namespace capstone_backend.Controllers
 
 		}
 
+
 		[HttpPut("update-post/{postId}")]
 		public async Task<IActionResult> UpdatePost(int postId, [FromBody] PostDTO postDTO)
 		{
@@ -87,7 +86,7 @@ namespace capstone_backend.Controllers
 
 			if (existingPost == null)
 			{
-				return NotFound("Post not found");
+				return NotFound("post_not_found");
 			}
 
 			existingPost.PostTitle = postDTO.PostTitle;
@@ -110,6 +109,7 @@ namespace capstone_backend.Controllers
 			return Ok(postResponse);
 		}
 
+		
 		[HttpDelete("delete-post/{postId}")]
 		public async Task<IActionResult> DeletePost(int postId)
 		{
@@ -117,12 +117,68 @@ namespace capstone_backend.Controllers
 
 			if (existingPost == null)
 			{
-				return NotFound("Post not found");
+				return NotFound("post_not_found");
 			}
 
 			_postRepository.DeletePost(existingPost);
 
 			return Ok(new {result = "post_deleted"});
+		}
+
+
+		[HttpPost("like-post")]
+		public async Task<IActionResult> LikePost([FromBody] LikeDTO likeDTO)
+		{
+			if (!ModelState.IsValid)
+			{
+				return BadRequest("invalid_like_to_post");
+			}
+
+			Post? post = await _postRepository.GetPostById(likeDTO.PostId);
+			if(post == null)
+			{
+				return NotFound("post_not_found");
+			}
+
+			User? liker = await _userRepository.GetUserById(likeDTO.LikerId);
+
+			if(liker == null)
+			{
+				return NotFound("user_not_found");
+			}
+
+			Like like = new Like
+			{
+				PostId = likeDTO.PostId,
+				Post = post,
+				LikerId = likeDTO.LikerId,
+				Liker = liker
+			};
+
+
+			_postRepository.InsertLike(like);
+
+			return Ok("like_added");
+		}
+
+
+		[HttpDelete("remove-like")]
+		public async Task<IActionResult> UnlikePost([FromBody] LikeDTO likeDTO)
+		{
+			if (!ModelState.IsValid)
+			{
+				return BadRequest("invalid_unlike_to_post");
+			}
+
+			Like? existingLike = await _postRepository.getLikeByPostIdAndUserId(likeDTO.PostId, likeDTO.LikerId);
+
+			if(existingLike == null)
+			{
+				return NotFound("like_not_found");
+			}
+			_postRepository.RemoveLike(existingLike);
+			return Ok(new { result = "like_deleted" });
+
 		}
 	}
 }

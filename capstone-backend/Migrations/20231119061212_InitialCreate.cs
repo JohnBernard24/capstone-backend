@@ -213,7 +213,7 @@ namespace capstone_backend.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("MySQL:ValueGenerationStrategy", MySQLValueGenerationStrategy.IdentityColumn),
                     PostId = table.Column<int>(type: "int", nullable: false),
-                    UserId = table.Column<int>(type: "int", nullable: false)
+                    LikerId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -225,8 +225,8 @@ namespace capstone_backend.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Like_User_UserId",
-                        column: x => x.UserId,
+                        name: "FK_Like_User_LikerId",
+                        column: x => x.LikerId,
                         principalTable: "User",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -249,14 +249,14 @@ namespace capstone_backend.Migrations
                 column: "SenderId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Like_LikerId",
+                table: "Like",
+                column: "LikerId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Like_PostId",
                 table: "Like",
                 column: "PostId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Like_UserId",
-                table: "Like",
-                column: "UserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Notification_UserId",

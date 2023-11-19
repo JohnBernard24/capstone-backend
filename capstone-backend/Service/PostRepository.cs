@@ -20,6 +20,10 @@ namespace capstone_backend.Service
 			return Task.FromResult(_context.Post.FirstOrDefault(x => x.Id == id));
 		}
 
+		public Task<Like?> getLikeByPostIdAndUserId(int postId, int likerId)
+		{
+			return Task.FromResult(_context.Like.FirstOrDefault(l => l.PostId == postId && l.LikerId == likerId));
+		}
 
 		public void InsertPost(Post post)
 		{
@@ -39,8 +43,19 @@ namespace capstone_backend.Service
 			_context.SaveChanges();
 		}
 
+		public void InsertLike(Like like)
+		{
+			_context.Like.Add(like);
+			_context.SaveChanges();
+		}
 
+		public void RemoveLike(Like like)
+		{
+			_context.Like.Remove(like);
+			_context.SaveChanges();
+		}
 
+		
 
 	}
 }
