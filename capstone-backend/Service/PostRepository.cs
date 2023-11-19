@@ -21,8 +21,6 @@ namespace capstone_backend.Service
 		}
 
 
-
-
 		public void InsertPost(Post post)
 		{
 			_context.Post.Add(post);

@@ -17,7 +17,7 @@ namespace capstone_backend.Controllers
 		private readonly PostRepository _postRepository;
 		private readonly TimelineRepository _timelineRepository;
 
-		public PostController( UserRepository userRepository, PostRepository postRepository, TimelineRepository timelineRepository)
+		public PostController(UserRepository userRepository, PostRepository postRepository, TimelineRepository timelineRepository)
 		{
 			_userRepository = userRepository;
 			_postRepository = postRepository;
@@ -33,7 +33,7 @@ namespace capstone_backend.Controllers
 			}
 
 			User? poster = await _userRepository.GetUserById(postDTO.PosterId);
-			if(poster == null)
+			if (poster == null)
 			{
 				return BadRequest("invalid_user_id");
 			}
@@ -58,7 +58,7 @@ namespace capstone_backend.Controllers
 
 			_postRepository.InsertPost(post);
 
-		var postResponse = new PostViewResponse
+			var postResponse = new PostViewResponse
 			{
 				PostId = post.Id,
 				PostTitle = post.PostTitle,
@@ -108,6 +108,25 @@ namespace capstone_backend.Controllers
 			return Ok(postResponse);
 		}
 
+		[HttpDelete("archive-post/{postId}")]
+		public async Task<IActionResult> ArchivePost(int postId)
+		{
+			return null;
+		}
 
+		[HttpDelete("delete-post/{postId}")]
+		public async Task<IActionResult> DeletePost(int postId)
+		{
+			Post? existingPost = await _postRepository.GetPostById(postId);
+
+			if (existingPost == null)
+			{
+				return NotFound("Post not found");
+			}
+
+			_postRepository.DeletePost(existingPost);
+
+			return Ok(new {result = "post_deleted"});
+		}
 	}
 }
