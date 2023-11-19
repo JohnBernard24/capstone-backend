@@ -40,6 +40,7 @@ namespace capstone_backend
 			builder.Services.AddScoped<UserRepository>();
 			builder.Services.AddScoped<PostRepository>();
 			builder.Services.AddScoped<TimelineRepository>();
+			builder.Services.AddScoped<CommentRepository>();
 
 
 			var app = builder.Build();

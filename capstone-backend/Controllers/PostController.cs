@@ -147,38 +147,28 @@ namespace capstone_backend.Controllers
 				return NotFound("user_not_found");
 			}
 
-			Like like = new Like
-			{
-				PostId = likeDTO.PostId,
-				Post = post,
-				LikerId = likeDTO.LikerId,
-				Liker = liker
-			};
-
-
-			_postRepository.InsertLike(like);
-
-			return Ok("like_added");
-		}
-
-
-		[HttpDelete("remove-like")]
-		public async Task<IActionResult> UnlikePost([FromBody] LikeDTO likeDTO)
-		{
-			if (!ModelState.IsValid)
-			{
-				return BadRequest("invalid_unlike_to_post");
-			}
-
 			Like? existingLike = await _postRepository.getLikeByPostIdAndUserId(likeDTO.PostId, likeDTO.LikerId);
 
-			if(existingLike == null)
+			if (existingLike == null)
 			{
-				return NotFound("like_not_found");
+				Like like = new Like
+				{
+					PostId = likeDTO.PostId,
+					Post = post,
+					LikerId = likeDTO.LikerId,
+					Liker = liker
+				};
+
+
+				_postRepository.InsertLike(like);
+
+				return Ok("like_added");
 			}
+
 			_postRepository.RemoveLike(existingLike);
 			return Ok(new { result = "like_deleted" });
 
 		}
+
 	}
 }
