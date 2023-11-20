@@ -15,4 +15,13 @@ namespace capstone_backend.Models
 		public int? AlbumId { get; set; }
 		public Album? Album { get; set; }
 	}
+
+	public class PhotoDTO
+	{
+        public byte[] PhotoImage { get; set; } = null!;
+
+        public int? AlbumId { get; set; }
+
+
+    }
 }

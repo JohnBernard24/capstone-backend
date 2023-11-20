@@ -41,6 +41,8 @@ namespace capstone_backend
 			builder.Services.AddScoped<PostRepository>();
 			builder.Services.AddScoped<TimelineRepository>();
 			builder.Services.AddScoped<CommentRepository>();
+			builder.Services.AddScoped<AlbumRepository>();
+			builder.Services.AddScoped<PhotoRepository>();
 
 
 			var app = builder.Build();
