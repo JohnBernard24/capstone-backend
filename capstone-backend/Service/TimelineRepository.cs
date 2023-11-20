@@ -29,35 +29,6 @@ namespace capstone_backend.Service
 				.Include(post => post.Poster)
 				.Include(post => post.Timeline)
 				.Include(post => post.Photo)
-				/*.Select(post => new Post
-				{
-					Id = post.Id,
-					PostTitle = post.PostTitle,
-					PhotoId = post.PhotoId,
-					Photo = post.Photo,
-					Description = post.Description,
-					DatePosted = post.DatePosted,
-					Comments = post.Comments,
-					TimelineId = post.TimelineId,
-					Timelines= = new Timeline
-					{
-						Id = post.Timeline.Id,
-						UserId = post.Timeline.UserId,
-						User = new User
-						{
-							Id = post.Timeline.User.Id,
-							FirstName = post.Timeline.User.FirstName,
-							LastName = post.Timeline.User.LastName,
-							Email = post.Timeline.User.Email,
-							BirthDate = post.Timeline.User.BirthDate,
-							Sex = post.Timeline.User.Sex,
-							PhoneNumber = post.Timeline.User.PhoneNumber,
-							AboutMe = post.Timeline.User.AboutMe,
-							ProfileImageId = post.Timeline.User.ProfileImageId,
-							Photo = post.Timeline.User.Photo
-						}
-					}
-				})*/
 				.ToList());
 		}
 

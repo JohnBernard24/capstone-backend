@@ -1,5 +1,6 @@
 ﻿using capstone_backend.Data;
 using capstone_backend.Models;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Threading.Tasks;
 
@@ -16,7 +17,6 @@ namespace capstone_backend.Service
 
 		public Task<List<User>> GetAllUser()
 		{
-			Console.WriteLine("userrepo: line 20");
 			return Task.FromResult(_context.User.ToList());
 		}
 
