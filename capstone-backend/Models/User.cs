@@ -62,4 +62,71 @@ namespace capstone_backend.Models
 		public string? Email { get; set; }
 		public string? Token { get; set; }
 	}
+
+
+
+	public class ProfileDTO
+	{
+        public string FirstName { get; set; } = null!;
+        public string LastName { get; set; } = null!;
+
+        [DataType(DataType.Date)]
+        public DateTime BirthDate { get; set; }
+
+        public string? Sex { get; set; }
+
+        public string? PhoneNumber { get; set; }
+
+        public string? AboutMe { get; set; }
+    }
+
+	public class EditEmailDTO
+	{
+		public string Email { get; set; } = null!;
+        
+    }
+
+
+	public class EditPasswordDTO
+	{
+        public string Password { get; set; } = null!;
+    }
+
+	public class ProfilePictureDTO
+	{
+        public int? ProfileImageId { get; set; }
+        public Photo? Photo { get; set; }
+    }
+
+
+
+	public class ProfileViewResponse
+	{
+
+
+        public int UserId { get; set; }
+
+        public string FirstName { get; set; } = null!;
+
+        
+        public string LastName { get; set; } = null!;
+
+        
+        public string Email { get; set; } = null!;
+
+        
+        [DataType(DataType.Date)]
+        public DateTime BirthDate { get; set; }
+
+        public string? Sex { get; set; }
+
+        public string? PhoneNumber { get; set; }
+
+        public string? AboutMe { get; set; }
+
+
+
+        public int? ProfileImageId { get; set; }
+        public Photo? Photo { get; set; }
+    }
 }

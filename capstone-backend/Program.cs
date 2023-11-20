@@ -41,9 +41,11 @@ namespace capstone_backend
 			builder.Services.AddScoped<PostRepository>();
 			builder.Services.AddScoped<TimelineRepository>();
 			builder.Services.AddScoped<CommentRepository>();
+			builder.Services.AddScoped<NotificationRepository>();
 
 
-			var app = builder.Build();
+
+            var app = builder.Build();
 
 			// Configure the HTTP request pipeline.
 			if (app.Environment.IsDevelopment())
