@@ -25,6 +25,13 @@ namespace capstone_backend.Service
 			return Task.FromResult(_context.Like.FirstOrDefault(l => l.PostId == postId && l.LikerId == likerId));
 		}
 
+		public Task<Like?> GetLikeByPostId(int postId)
+		{
+			return Task.FromResult(_context.Like.FirstOrDefault(l => l.PostId == postId));
+		}
+
+
+
 		public void InsertPost(Post post)
 		{
 			_context.Post.Add(post);

@@ -45,8 +45,16 @@ namespace capstone_backend.Controllers
         [HttpGet("get-notification-context/{userId}")]
         public async Task<IActionResult> GetNotificationContext(Notification notification)
         {
-            if (notification.NotificationType.Equals("like") || notification.NotificationType.Equals("comment"))
+
+
+            if (notification.NotificationType.Equals("like"))
             {
+                Like? like = _postRepository.getLike
+
+
+
+
+
                 Post? post = await _postRepository.GetPostById(notification.ContextId);
                 return Ok(post);
             }
