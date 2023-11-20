@@ -16,12 +16,14 @@ namespace capstone_backend.Controllers
 		private readonly UserRepository _userRepository;
 		private readonly PostRepository _postRepository;
 		private readonly TimelineRepository _timelineRepository;
+		private readonly NotificationRepository _notificationRepository;
 
-		public PostController(UserRepository userRepository, PostRepository postRepository, TimelineRepository timelineRepository)
+		public PostController(UserRepository userRepository, PostRepository postRepository, TimelineRepository timelineRepository, NotificationRepository notificationRepository)
 		{
 			_userRepository = userRepository;
 			_postRepository = postRepository;
 			_timelineRepository = timelineRepository;
+			_notificationRepository = notificationRepository;
 		}
 
 		[HttpPost("add-post/{userId}")]
@@ -55,6 +57,8 @@ namespace capstone_backend.Controllers
 				PosterId = poster.Id,
 				Poster = poster
 			};
+
+			
 
 			_postRepository.InsertPost(post);
 
@@ -159,8 +163,18 @@ namespace capstone_backend.Controllers
 					Liker = liker
 				};
 
+				var likeNotif = new Notification
+				{
+					NotificationType = "like",
+					UserId = post.PosterId,
+					User = post.Poster,
+					ContextId = like.Id,
+					IsRead = false
+				};
 
-				_postRepository.InsertLike(like);
+				_notificationRepository.InsertNotification(likeNotif);
+
+                _postRepository.InsertLike(like);
 
 				return Ok("like_added");
 			}
