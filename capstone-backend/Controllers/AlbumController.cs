@@ -46,6 +46,9 @@ namespace capstone_backend.Controllers
 			return Ok(album);
 		}
 
+		/*[HttpPost("update-album")]
+		public async */
+
 		[HttpGet("get-all-albums{userId}")]
 		public async Task<ActionResult<IEnumerable<Album>>> GetAllAlbumsByUserId(int userId)
 		{

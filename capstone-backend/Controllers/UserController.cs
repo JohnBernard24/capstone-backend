@@ -10,19 +10,15 @@ namespace capstone_backend.Controllers
 
     [Route("api/profile")]
     [ApiController]
-    public class ProfileController : Controller
+    public class UserController : Controller
     {
         private readonly UserRepository _userRepository;
-        private readonly PostRepository _postRepository;
         private readonly BcryptPasswordHasher _passwordHasher;
 
-
-        public ProfileController(UserRepository userRepository, PostRepository postRepository, BcryptPasswordHasher passwordHasher)
+        public UserController(UserRepository userRepository, BcryptPasswordHasher passwordHasher)
         {
             _userRepository = userRepository;
-            _postRepository = postRepository;
             _passwordHasher = passwordHasher;
-
         }
 
 
@@ -42,13 +38,7 @@ namespace capstone_backend.Controllers
             }
 
             return Ok(checkingForUser);
-
-
         }
-
-
-
-
 
         [HttpPut("edit-profile/{userId}")]
         public async Task<IActionResult> EditProfile(int userId, [FromBody] ProfileDTO profileDTO)
@@ -75,16 +65,6 @@ namespace capstone_backend.Controllers
 
             _userRepository.UpdateUser(existingUser);
 
-            /*var profileResponse = new ProfileViewResponse
-            {
-                UserId = existingUser.Id,
-                FirstName = existingUser.FirstName,
-                LastName = existingUser.LastName,
-                BirthDate = existingUser.BirthDate,
-                Sex = existingUser.Sex,
-                PhoneNumber = existingUser.PhoneNumber,
-                AboutMe = existingUser.AboutMe
-            };*/
 
             return Ok(existingUser);
         }

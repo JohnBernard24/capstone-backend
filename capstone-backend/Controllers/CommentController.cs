@@ -45,6 +45,8 @@ namespace capstone_backend.Controllers
 				Post = post
 			};
 
+			_commentRepository.InsertComment(comment);
+
 
 			return Ok(new { result = "comment_added"});
 		}
