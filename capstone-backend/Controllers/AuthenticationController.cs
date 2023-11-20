@@ -51,6 +51,7 @@ namespace capstone_backend.Controllers
 
 			var loginResponse = new LoginResponse
 			{
+				UserId = user.Id,
 				Email = user.Email,
 				Token = "haha"
 			};
