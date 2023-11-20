@@ -49,8 +49,8 @@ namespace capstone_backend.Controllers
 
             if (notification.NotificationType.Equals("like"))
             {
-                Like? like = _postRepository.getLike
-
+                /*Like? like = _postRepository.getLike
+*/
 
 
 

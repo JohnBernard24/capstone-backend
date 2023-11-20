@@ -83,6 +83,11 @@ namespace capstone_backend.Controllers
 				return BadRequest("friend_id_invalid");
 			}
 
+			if (friendRequest.isFriend)
+			{
+				return BadRequest("friend_already_accepted");
+			}
+
 			friendRequest.isFriend = true;
 			friendRequest.FriendshipDate = DateTime.UtcNow;
 
@@ -99,7 +104,7 @@ namespace capstone_backend.Controllers
 
 			if (friendRequest == null)
 			{
-				return BadRequest("friend_id_invalid");
+				return BadRequest("friend_request_id_invalid");
 			}
 
 			_friendRepository.DeleteFriend(friendRequest);

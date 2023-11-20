@@ -19,10 +19,7 @@ namespace capstone_backend.Service
 		{
 			var friendIds = await _context.Friend
 				.Where(f => (f.ReceiverId == userId || f.SenderId == userId) && f.isFriend == true)
-				.Select(f => f.ReceiverId)
-				.Concat(_context.Friend
-					.Where(f => (f.ReceiverId == userId || f.SenderId == userId) && f.isFriend == true)
-					.Select(f => f.SenderId))
+				.Select(f => f.SenderId)
 				.Distinct()
 				.ToListAsync();
 

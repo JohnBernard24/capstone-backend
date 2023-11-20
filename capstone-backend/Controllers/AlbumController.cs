@@ -21,7 +21,7 @@ namespace capstone_backend.Controllers
             _albumRepository = albumRepository;
         }
 
-        [HttpPost]
+        [HttpPost("add-album")]
         public async Task<IActionResult> AddAlbum(int userId, [FromBody] AlbumDTO albumDTO)
         {
             if (!ModelState.IsValid)

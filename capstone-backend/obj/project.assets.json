@@ -1342,10 +1342,10 @@
           }
         }
       },
-      "Microsoft.EntityFrameworkCore.Tools/6.0.23": {
+      "Microsoft.EntityFrameworkCore.Tools/7.0.5": {
         "type": "package",
         "dependencies": {
-          "Microsoft.EntityFrameworkCore.Design": "6.0.23"
+          "Microsoft.EntityFrameworkCore.Design": "7.0.5"
         },
         "compile": {
           "lib/net6.0/_._": {}
@@ -5350,17 +5350,17 @@
         "microsoft.entityframeworkcore.relational.nuspec"
       ]
     },
-    "Microsoft.EntityFrameworkCore.Tools/6.0.23": {
-      "sha512": "SHxDbhoNuomnHaIppyjeEjOhT030DDwtMZsnIxRo6kBdFEv8eFwJtl6c+8a91V9nWm9YMNIoWNqlWkvw+JfuUA==",
+    "Microsoft.EntityFrameworkCore.Tools/7.0.5": {
+      "sha512": "OV/PUGBVSbQVd2daTeXoMBoao2qtfBgT2TuaYo48xRYUS2gH++f8OFiZc6zwASqkMKgs1/t5uVlxgKl18m/1Fw==",
       "type": "package",
-      "path": "microsoft.entityframeworkcore.tools/6.0.23",
+      "path": "microsoft.entityframeworkcore.tools/7.0.5",
       "hasTools": true,
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
         "Icon.png",
         "lib/net6.0/_._",
-        "microsoft.entityframeworkcore.tools.6.0.23.nupkg.sha512",
+        "microsoft.entityframeworkcore.tools.7.0.5.nupkg.sha512",
         "microsoft.entityframeworkcore.tools.nuspec",
         "tools/EntityFrameworkCore.PS2.psd1",
         "tools/EntityFrameworkCore.PS2.psm1",
@@ -10839,7 +10839,7 @@
       "BCrypt.Net-Next >= 4.0.3",
       "Microsoft.EntityFrameworkCore >= 7.0.5",
       "Microsoft.EntityFrameworkCore.Design >= 7.0.5",
-      "Microsoft.EntityFrameworkCore.Tools >= 6.0.23",
+      "Microsoft.EntityFrameworkCore.Tools >= 7.0.5",
       "Microsoft.VisualStudio.Web.CodeGeneration.Design >= 6.0.16",
       "MySql.Data >= 8.0.33",
       "MySql.EntityFrameworkCore >= 7.0.2",
@@ -10847,34 +10847,19 @@
     ]
   },
   "packageFolders": {
-<<<<<<< HEAD
-    "C:\\Users\\luigi.capinpuyan\\.nuget\\packages\\": {}
-=======
-    "C:\\Users\\richard.delacruz\\.nuget\\packages\\": {}
->>>>>>> origin/rich
+    "C:\\Users\\User\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-<<<<<<< HEAD
-      "projectUniqueName": "C:\\Users\\luigi.capinpuyan\\Documents\\pointwest\\FinalGroupCapstone\\capstone-backend\\capstone-backend\\capstone-backend.csproj",
+      "projectUniqueName": "C:\\Users\\User\\Desktop\\CAPSTONE\\capstone-backend\\capstone-backend\\capstone-backend.csproj",
       "projectName": "capstone-backend",
-      "projectPath": "C:\\Users\\luigi.capinpuyan\\Documents\\pointwest\\FinalGroupCapstone\\capstone-backend\\capstone-backend\\capstone-backend.csproj",
-      "packagesPath": "C:\\Users\\luigi.capinpuyan\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\luigi.capinpuyan\\Documents\\pointwest\\FinalGroupCapstone\\capstone-backend\\capstone-backend\\obj\\",
+      "projectPath": "C:\\Users\\User\\Desktop\\CAPSTONE\\capstone-backend\\capstone-backend\\capstone-backend.csproj",
+      "packagesPath": "C:\\Users\\User\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\User\\Desktop\\CAPSTONE\\capstone-backend\\capstone-backend\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "C:\\Users\\luigi.capinpuyan\\AppData\\Roaming\\NuGet\\NuGet.Config",
-=======
-      "projectUniqueName": "C:\\Users\\richard.delacruz\\Documents\\case-study\\capstone-backend\\capstone-backend\\capstone-backend.csproj",
-      "projectName": "capstone-backend",
-      "projectPath": "C:\\Users\\richard.delacruz\\Documents\\case-study\\capstone-backend\\capstone-backend\\capstone-backend.csproj",
-      "packagesPath": "C:\\Users\\richard.delacruz\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\richard.delacruz\\Documents\\case-study\\capstone-backend\\capstone-backend\\obj\\",
-      "projectStyle": "PackageReference",
-      "configFilePaths": [
-        "C:\\Users\\richard.delacruz\\AppData\\Roaming\\NuGet\\NuGet.Config",
->>>>>>> origin/rich
+        "C:\\Users\\User\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
@@ -10882,6 +10867,7 @@
       ],
       "sources": {
         "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+        "C:\\Program Files\\dotnet\\sdk\\7.0.302\\Sdks\\Microsoft.NET.Sdk.Web\\library-packs": {},
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {
@@ -10918,7 +10904,7 @@
             "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
             "suppressParent": "All",
             "target": "Package",
-            "version": "[6.0.23, )"
+            "version": "[7.0.5, )"
           },
           "Microsoft.VisualStudio.Web.CodeGeneration.Design": {
             "target": "Package",
@@ -10956,11 +10942,7 @@
             "privateAssets": "all"
           }
         },
-<<<<<<< HEAD
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.401\\RuntimeIdentifierGraph.json"
-=======
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.402\\RuntimeIdentifierGraph.json"
->>>>>>> origin/rich
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.302\\RuntimeIdentifierGraph.json"
       }
     }
   }
