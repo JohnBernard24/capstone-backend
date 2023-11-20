@@ -18,8 +18,16 @@ namespace capstone_backend.Models
 		[DataType(DataType.Date)]
 		public DateTime? FriendshipDate { get; set; }
 
-		public bool isFriend { get; set; }
+		public bool isFriend { get; set; } = false;
+	}
 
 
+	public class FriendDTO
+	{
+		public int ReceiverId { get; set; }
+		public int SenderId { get; set; }
+
+		[DataType(DataType.Date)]
+		public DateTime? FriendshipDate { get; set; } = DateTime.Now;
 	}
 }
