@@ -113,7 +113,7 @@ namespace capstone_backend.Controllers
 			return Ok(postResponse);
 		}
 
-		
+
 		[HttpDelete("delete-post/{postId}")]
 		public async Task<IActionResult> DeletePost(int postId)
 		{
@@ -126,7 +126,7 @@ namespace capstone_backend.Controllers
 
 			_postRepository.DeletePost(existingPost);
 
-			return Ok(new {result = "post_deleted"});
+			return Ok(new { result = "post_deleted" });
 		}
 
 
@@ -139,14 +139,14 @@ namespace capstone_backend.Controllers
 			}
 
 			Post? post = await _postRepository.GetPostById(likeDTO.PostId);
-			if(post == null)
+			if (post == null)
 			{
 				return NotFound("post_not_found");
 			}
 
 			User? liker = await _userRepository.GetUserById(likeDTO.LikerId);
 
-			if(liker == null)
+			if (liker == null)
 			{
 				return NotFound("user_not_found");
 			}

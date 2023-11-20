@@ -10847,11 +10847,16 @@
     ]
   },
   "packageFolders": {
+<<<<<<< HEAD
     "C:\\Users\\luigi.capinpuyan\\.nuget\\packages\\": {}
+=======
+    "C:\\Users\\richard.delacruz\\.nuget\\packages\\": {}
+>>>>>>> origin/rich
   },
   "project": {
     "version": "1.0.0",
     "restore": {
+<<<<<<< HEAD
       "projectUniqueName": "C:\\Users\\luigi.capinpuyan\\Documents\\pointwest\\FinalGroupCapstone\\capstone-backend\\capstone-backend\\capstone-backend.csproj",
       "projectName": "capstone-backend",
       "projectPath": "C:\\Users\\luigi.capinpuyan\\Documents\\pointwest\\FinalGroupCapstone\\capstone-backend\\capstone-backend\\capstone-backend.csproj",
@@ -10860,6 +10865,16 @@
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\luigi.capinpuyan\\AppData\\Roaming\\NuGet\\NuGet.Config",
+=======
+      "projectUniqueName": "C:\\Users\\richard.delacruz\\Documents\\case-study\\capstone-backend\\capstone-backend\\capstone-backend.csproj",
+      "projectName": "capstone-backend",
+      "projectPath": "C:\\Users\\richard.delacruz\\Documents\\case-study\\capstone-backend\\capstone-backend\\capstone-backend.csproj",
+      "packagesPath": "C:\\Users\\richard.delacruz\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\richard.delacruz\\Documents\\case-study\\capstone-backend\\capstone-backend\\obj\\",
+      "projectStyle": "PackageReference",
+      "configFilePaths": [
+        "C:\\Users\\richard.delacruz\\AppData\\Roaming\\NuGet\\NuGet.Config",
+>>>>>>> origin/rich
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
@@ -10941,7 +10956,11 @@
             "privateAssets": "all"
           }
         },
+<<<<<<< HEAD
         "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.401\\RuntimeIdentifierGraph.json"
+=======
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.402\\RuntimeIdentifierGraph.json"
+>>>>>>> origin/rich
       }
     }
   }

@@ -43,6 +43,9 @@ namespace capstone_backend
 			builder.Services.AddScoped<CommentRepository>();
 			builder.Services.AddScoped<FriendRepository>();
 			builder.Services.AddScoped<NotificationRepository>();
+			builder.Services.AddScoped<AlbumRepository>();
+			builder.Services.AddScoped<PhotoRepository>();
+
 
 
 

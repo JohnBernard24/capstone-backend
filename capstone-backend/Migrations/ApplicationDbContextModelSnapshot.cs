@@ -29,7 +29,12 @@ namespace capstone_backend.Migrations
                         .IsRequired()
                         .HasColumnType("longtext");
 
+                    b.Property<int?>("UserId")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("Album");
                 });
@@ -50,9 +55,14 @@ namespace capstone_backend.Migrations
                     b.Property<int>("PostId")
                         .HasColumnType("int");
 
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
                     b.HasIndex("PostId");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("Comment");
                 });
@@ -254,6 +264,15 @@ namespace capstone_backend.Migrations
                     b.ToTable("User");
                 });
 
+            modelBuilder.Entity("capstone_backend.Models.Album", b =>
+                {
+                    b.HasOne("capstone_backend.Models.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId");
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("capstone_backend.Models.Comment", b =>
                 {
                     b.HasOne("capstone_backend.Models.Post", "Post")
@@ -261,6 +280,14 @@ namespace capstone_backend.Migrations
                         .HasForeignKey("PostId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.HasOne("capstone_backend.Models.User", "Commenter")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Commenter");
 
                     b.Navigation("Post");
                 });
