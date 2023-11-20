@@ -5,67 +5,86 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace capstone_backend.Controllers
 {
-    [Route("api/album")]
-    [ApiController]
-    public class AlbumController : ControllerBase
-    {
-        private readonly UserRepository _userRepository;
-        private readonly ApplicationDbContext _context;
-        private readonly AlbumRepository _albumRepository;
+	[Route("api/album")]
+	[ApiController]
+	public class AlbumController : ControllerBase
+	{
+		private readonly UserRepository _userRepository;
+		private readonly ApplicationDbContext _context;
+		private readonly AlbumRepository _albumRepository;
 
 
-        public AlbumController(ApplicationDbContext context, UserRepository userRepository, AlbumRepository albumRepository)
-        {
-            _context = context;
-            _userRepository = userRepository;
-            _albumRepository = albumRepository;
-        }
+		public AlbumController(ApplicationDbContext context, UserRepository userRepository, AlbumRepository albumRepository)
+		{
+			_context = context;
+			_userRepository = userRepository;
+			_albumRepository = albumRepository;
+		}
 
-        [HttpPost("add-album")]
-        public async Task<IActionResult> AddAlbum(int userId, [FromBody] AlbumDTO albumDTO)
-        {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest("invalid_album");
-            }
+		[HttpPost("add-album")]
+		public async Task<IActionResult> AddAlbum(int userId, [FromBody] AlbumDTO albumDTO)
+		{
+			if (!ModelState.IsValid)
+			{
+				return BadRequest("invalid_album");
+			}
 
-            User? poster = await _userRepository.GetUserById(userId);
-            if (poster == null)
-            {
-                return BadRequest("invalid_user_id");
-            }
+			User? user = await _userRepository.GetUserById(userId);
+			if (user == null)
+			{
+				return BadRequest("invalid_user_id");
+			}
 
-            var album = new Album
-            {
-                AlbumName = albumDTO.AlbumName,
-                UserId = poster.Id
-            };
+			var album = new Album
+			{
+				AlbumName = albumDTO.AlbumName,
+				UserId = user.Id
+			};
 
-            _albumRepository.InsertAlbum(album);
+			_albumRepository.InsertAlbum(album);
 
-            return Ok(album);
-        }
+			return Ok(album);
+		}
 
+		[HttpGet("get-all-albums{userId}")]
+		public async Task<ActionResult<IEnumerable<Album>>> GetAllAlbumsByUserId(int userId)
+		{
+			var user = await _userRepository.GetUserById(userId);
+			if(user == null)
+			{
+				return BadRequest("user_id_invalid");
+			}
 
-        [HttpGet("get-all-photos/{albumId}")]
-        public async Task<ActionResult<IEnumerable<Photo>>> GetAllPhotos(int userId)
-        {
-            Album? album = await _albumRepository.GetAlbumByUserId(userId);
+			List<Album>? albums = await _albumRepository.GetAlbumsByUserId(userId);
 
-            if (album == null)
-            {
-                return BadRequest("user_invalid");
-            }
+			if(albums == null)
+			{
+				return BadRequest("no_albums_found");
+			}
 
-            List<Photo>? photos = await _albumRepository.GetPhotosByAlbumId(album.Id);
+			return Ok(albums);
 
-            if (photos == null)
-            {
-                return NotFound("no_photos_found");
-            }
+		}
 
-            return photos;
-        }
+		[HttpGet("get-all-photos/{albumId}")]
+		public async Task<ActionResult<IEnumerable<Photo>>> GetAllPhotos(int albumId)
+		{
+			Album? album = await _albumRepository.GetAlbumByUserId(albumId);
 
-    }
+			if (album == null)
+			{
+				return BadRequest("album_invalid");
+			}
+
+			List<Photo>? photos = await _albumRepository.GetPhotosByAlbumId(album.Id);
+
+			if (photos == null)
+			{
+				return NotFound("no_photos_found");
+			}
+
+			return Ok(photos);
+		}
+
+	}
 }
