@@ -6,8 +6,20 @@ namespace capstone_backend.Models
 	{
 		public int Id { get; set; }
 		public int PostId { get; set; }
-		public Post Post { get; set; } = null!;
-		public int UserId { get; set; }
-		public User User { get; set; } = null!;
+		public Post? Post { get; set; }
+		public int LikerId { get; set; }
+		public User? Liker { get; set; }
+	}
+
+	public class LikeDTO
+	{
+		public int PostId { get; set; }
+		public int LikerId { get; set; }
+	}
+
+	public class LikeViewResponse
+	{
+		public Post? Post { get; set; }
+		public User? Liker { get; set; }
 	}
 }

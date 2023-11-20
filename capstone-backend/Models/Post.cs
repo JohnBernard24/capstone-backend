@@ -6,18 +6,19 @@ namespace capstone_backend.Models
 	{
 		public int Id { get; set; }
 		public string PostTitle { get; set; } = null!;
+		public string Description { get; set; } = null!;
+		public DateTime DatePosted { get; set; } = DateTime.Now;
+
+
+		public int? TimelineId { get; set; }
+		public Timeline? Timeline { get; set; }
 		public int? PhotoId { get; set; }
 		public Photo? Photo { get; set; }
-		public string Description { get; set; } = null!;
-		public int TimelineId { get; set; }
-		public Timeline Timeline { get; set; } = null!;
-		public int UserId { get; set; }
-		public User? User { get; set; }
-		[DataType(DataType.Date)]
-		public DateTime DatePosted { get; set; }
+		public int PosterId { get; set; }
+		public User? Poster { get; set; }
 	}
 
-	/*public class PostAddDTO
+	public class PostDTO
 	{
 		[Required]
 		public string PostTitle { get; set; } = null!;
@@ -25,14 +26,21 @@ namespace capstone_backend.Models
 		[Required]
 		public string Description { get; set; } = null!;
 
-		[Required]
-		public int UserId { get; set; }
 
-		public int PhotoId { get; set; }
 
-		public Pho
+		public Photo? Photo { get; set; }
+		public int PosterId { get; set; }
+	}
 
-		
-		
-	}*/
+	public class PostViewResponse
+	{
+		public int PostId { get; set; }
+		public string PostTitle { get; set; } = null!;
+		public string Description { get; set; } = null!;
+		public DateTime DatePosted { get; set; }
+		public Photo? Photo { get; set; }
+		public User? Poster { get; set; }
+		public Timeline? Timeline { get; set; }
+
+	}
 }

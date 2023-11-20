@@ -36,8 +36,8 @@ namespace capstone_backend.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("MySQL:ValueGenerationStrategy", MySQLValueGenerationStrategy.IdentityColumn),
                     PhotoImage = table.Column<byte[]>(type: "longblob", nullable: false),
-                    AlbumId = table.Column<int>(type: "int", nullable: false),
-                    UploadDate = table.Column<DateTime>(type: "datetime(6)", nullable: false)
+                    UploadDate = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                    AlbumId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -46,8 +46,7 @@ namespace capstone_backend.Migrations
                         name: "FK_Photo_Album_AlbumId",
                         column: x => x.AlbumId,
                         principalTable: "Album",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                 })
                 .Annotation("MySQL:Charset", "utf8mb4");
 
@@ -64,9 +63,9 @@ namespace capstone_backend.Migrations
                     BirthDate = table.Column<DateTime>(type: "datetime(6)", nullable: false),
                     Sex = table.Column<string>(type: "longtext", nullable: true),
                     PhoneNumber = table.Column<string>(type: "longtext", nullable: true),
+                    AboutMe = table.Column<string>(type: "longtext", nullable: true),
                     ProfileImageId = table.Column<int>(type: "int", nullable: true),
-                    PhotoId = table.Column<int>(type: "int", nullable: true),
-                    AboutMe = table.Column<string>(type: "longtext", nullable: true)
+                    PhotoId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -137,7 +136,7 @@ namespace capstone_backend.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("MySQL:ValueGenerationStrategy", MySQLValueGenerationStrategy.IdentityColumn),
-                    UserId = table.Column<int>(type: "int", nullable: false)
+                    UserId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -146,8 +145,7 @@ namespace capstone_backend.Migrations
                         name: "FK_TimeLine_User_UserId",
                         column: x => x.UserId,
                         principalTable: "User",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                 })
                 .Annotation("MySQL:Charset", "utf8mb4");
 
@@ -158,11 +156,11 @@ namespace capstone_backend.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("MySQL:ValueGenerationStrategy", MySQLValueGenerationStrategy.IdentityColumn),
                     PostTitle = table.Column<string>(type: "longtext", nullable: false),
-                    PhotoId = table.Column<int>(type: "int", nullable: true),
                     Description = table.Column<string>(type: "longtext", nullable: false),
-                    TimelineId = table.Column<int>(type: "int", nullable: false),
-                    UserId = table.Column<int>(type: "int", nullable: false),
-                    DatePosted = table.Column<DateTime>(type: "datetime(6)", nullable: false)
+                    DatePosted = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                    TimelineId = table.Column<int>(type: "int", nullable: true),
+                    PhotoId = table.Column<int>(type: "int", nullable: true),
+                    PosterId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -176,11 +174,10 @@ namespace capstone_backend.Migrations
                         name: "FK_Post_TimeLine_TimelineId",
                         column: x => x.TimelineId,
                         principalTable: "TimeLine",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                     table.ForeignKey(
-                        name: "FK_Post_User_UserId",
-                        column: x => x.UserId,
+                        name: "FK_Post_User_PosterId",
+                        column: x => x.PosterId,
                         principalTable: "User",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -193,8 +190,9 @@ namespace capstone_backend.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("MySQL:ValueGenerationStrategy", MySQLValueGenerationStrategy.IdentityColumn),
-                    PostId = table.Column<int>(type: "int", nullable: false),
-                    CommentContent = table.Column<string>(type: "longtext", nullable: false)
+                    CommentContent = table.Column<string>(type: "longtext", nullable: false),
+                    DateCommented = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                    PostId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -215,7 +213,7 @@ namespace capstone_backend.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("MySQL:ValueGenerationStrategy", MySQLValueGenerationStrategy.IdentityColumn),
                     PostId = table.Column<int>(type: "int", nullable: false),
-                    UserId = table.Column<int>(type: "int", nullable: false)
+                    LikerId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -227,8 +225,8 @@ namespace capstone_backend.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Like_User_UserId",
-                        column: x => x.UserId,
+                        name: "FK_Like_User_LikerId",
+                        column: x => x.LikerId,
                         principalTable: "User",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -251,14 +249,14 @@ namespace capstone_backend.Migrations
                 column: "SenderId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Like_LikerId",
+                table: "Like",
+                column: "LikerId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Like_PostId",
                 table: "Like",
                 column: "PostId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Like_UserId",
-                table: "Like",
-                column: "UserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Notification_UserId",
@@ -276,14 +274,14 @@ namespace capstone_backend.Migrations
                 column: "PhotoId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Post_PosterId",
+                table: "Post",
+                column: "PosterId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Post_TimelineId",
                 table: "Post",
                 column: "TimelineId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Post_UserId",
-                table: "Post",
-                column: "UserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_TimeLine_UserId",

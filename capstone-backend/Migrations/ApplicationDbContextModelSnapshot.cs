@@ -44,6 +44,9 @@ namespace capstone_backend.Migrations
                         .IsRequired()
                         .HasColumnType("longtext");
 
+                    b.Property<DateTime>("DateCommented")
+                        .HasColumnType("datetime(6)");
+
                     b.Property<int>("PostId")
                         .HasColumnType("int");
 
@@ -87,17 +90,17 @@ namespace capstone_backend.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    b.Property<int>("PostId")
+                    b.Property<int>("LikerId")
                         .HasColumnType("int");
 
-                    b.Property<int>("UserId")
+                    b.Property<int>("PostId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("PostId");
+                    b.HasIndex("LikerId");
 
-                    b.HasIndex("UserId");
+                    b.HasIndex("PostId");
 
                     b.ToTable("Like");
                 });
@@ -134,7 +137,7 @@ namespace capstone_backend.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    b.Property<int>("AlbumId")
+                    b.Property<int?>("AlbumId")
                         .HasColumnType("int");
 
                     b.Property<byte[]>("PhotoImage")
@@ -171,19 +174,19 @@ namespace capstone_backend.Migrations
                         .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.Property<int>("TimelineId")
+                    b.Property<int>("PosterId")
                         .HasColumnType("int");
 
-                    b.Property<int>("UserId")
+                    b.Property<int?>("TimelineId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
                     b.HasIndex("PhotoId");
 
-                    b.HasIndex("TimelineId");
+                    b.HasIndex("PosterId");
 
-                    b.HasIndex("UserId");
+                    b.HasIndex("TimelineId");
 
                     b.ToTable("Post");
                 });
@@ -194,7 +197,7 @@ namespace capstone_backend.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    b.Property<int>("UserId")
+                    b.Property<int?>("UserId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -283,21 +286,21 @@ namespace capstone_backend.Migrations
 
             modelBuilder.Entity("capstone_backend.Models.Like", b =>
                 {
+                    b.HasOne("capstone_backend.Models.User", "Liker")
+                        .WithMany()
+                        .HasForeignKey("LikerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("capstone_backend.Models.Post", "Post")
                         .WithMany()
                         .HasForeignKey("PostId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("capstone_backend.Models.User", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.Navigation("Liker");
 
                     b.Navigation("Post");
-
-                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("capstone_backend.Models.Notification", b =>
@@ -315,9 +318,7 @@ namespace capstone_backend.Migrations
                 {
                     b.HasOne("capstone_backend.Models.Album", "Album")
                         .WithMany()
-                        .HasForeignKey("AlbumId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("AlbumId");
 
                     b.Navigation("Album");
                 });
@@ -328,32 +329,28 @@ namespace capstone_backend.Migrations
                         .WithMany()
                         .HasForeignKey("PhotoId");
 
-                    b.HasOne("capstone_backend.Models.Timeline", "Timeline")
+                    b.HasOne("capstone_backend.Models.User", "Poster")
                         .WithMany()
-                        .HasForeignKey("TimelineId")
+                        .HasForeignKey("PosterId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("capstone_backend.Models.User", "User")
+                    b.HasOne("capstone_backend.Models.Timeline", "Timeline")
                         .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("TimelineId");
 
                     b.Navigation("Photo");
 
-                    b.Navigation("Timeline");
+                    b.Navigation("Poster");
 
-                    b.Navigation("User");
+                    b.Navigation("Timeline");
                 });
 
             modelBuilder.Entity("capstone_backend.Models.Timeline", b =>
                 {
                     b.HasOne("capstone_backend.Models.User", "User")
                         .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("UserId");
 
                     b.Navigation("User");
                 });
