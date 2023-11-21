@@ -6,8 +6,6 @@ using System.Runtime.CompilerServices;
 namespace capstone_backend.Controllers
 {
 
-
-
     [Route("api/profile")]
     [ApiController]
     public class UserController : Controller
@@ -145,6 +143,19 @@ namespace capstone_backend.Controllers
 
 
             return Ok(existingUser);
+        }
+
+        [HttpGet("search-users/{name}")]
+        public async Task<ActionResult<IEnumerable<User>>> GetAllUserBySearch(string name)
+        {
+            List<User> matches = await _userRepository.GetUsersBySearchName(name);
+
+            if(matches == null)
+            {
+                return BadRequest("no_matching_users_found");
+            }
+
+            return Ok(matches);
         }
     }
 }

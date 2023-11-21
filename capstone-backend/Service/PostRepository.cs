@@ -20,17 +20,25 @@ namespace capstone_backend.Service
 			return Task.FromResult(_context.Post.FirstOrDefault(x => x.Id == id));
 		}
 
+		public Task<List<Post>>? GetPostsByUserId(int userId)
+		{
+			return Task.FromResult(_context.Post.Where(p => p.PosterId == userId).ToList());
+		}
+
 		public Task<Like?> getLikeByPostIdAndUserId(int postId, int likerId)
 		{
 			return Task.FromResult(_context.Like.FirstOrDefault(l => l.PostId == postId && l.LikerId == likerId));
 		}
 
-		public Task<Like?> GetLikeByPostId(int postId)
+		public Task<List<Post>> GetAllPostsByUserId(int userId)
 		{
-			return Task.FromResult(_context.Like.FirstOrDefault(l => l.PostId == postId));
+			return Task.FromResult(_context.Post.Where(p => p.PosterId == userId).ToList());
 		}
 
-
+		public Task<List<Like>> GetLikesByPostId(int postId)
+		{
+			return Task.FromResult(_context.Like.Where(l => l.PostId == postId).ToList());
+		}
 
 		public void InsertPost(Post post)
 		{

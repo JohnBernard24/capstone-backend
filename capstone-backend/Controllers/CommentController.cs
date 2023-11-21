@@ -10,16 +10,12 @@ namespace capstone_backend.Controllers
 	public class CommentController : ControllerBase
 	{
 
-		private readonly UserRepository _userRepository;
 		private readonly PostRepository _postRepository;
-		private readonly TimelineRepository _timelineRepository;
 		private readonly CommentRepository _commentRepository;
 
-		public CommentController(UserRepository userRepository, PostRepository postRepository, TimelineRepository timelineRepository, CommentRepository commentRepository)
+		public CommentController(PostRepository postRepository, CommentRepository commentRepository)
 		{
-			_userRepository = userRepository;
 			_postRepository = postRepository;
-			_timelineRepository = timelineRepository;
 			_commentRepository = commentRepository;
 		}
 
@@ -50,7 +46,6 @@ namespace capstone_backend.Controllers
 
 			return Ok(new { result = "comment_added"});
 		}
-
 
 		[HttpPut("update-comment/{commentId}")]
 		public async Task<IActionResult> UpdateComment(int commentId, [FromBody] CommentDTO commentDTO)
@@ -88,6 +83,28 @@ namespace capstone_backend.Controllers
 			_commentRepository.DeleteComment(existingComment);
 
 			return Ok(new { result = "comment_deleted" });
+		}
+
+		[HttpGet("get-post-comments/{postId}")]
+		public async Task<IActionResult> GetCommentsByPostId(int postId)
+		{
+			Post? post = await _postRepository.GetPostById(postId);
+
+			if(post == null)
+			{
+				return NotFound("invalid_post_id");
+			}
+
+			List<Comment> commentList = await _commentRepository.GetAllCommentsByPostId(postId);
+
+			if(commentList == null)
+			{
+				return NotFound("no_comments_found");
+			}
+
+			return Ok(commentList);
+
+
 		}
 
 	}

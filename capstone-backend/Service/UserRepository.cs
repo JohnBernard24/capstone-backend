@@ -30,6 +30,13 @@ namespace capstone_backend.Service
 			return Task.FromResult(_context.User.FirstOrDefault(u => u.Email == email));
 		}
 
+		public Task<List<User>> GetUsersBySearchName(string name)
+		{
+			return Task.FromResult(_context.User
+			   .Where(u => u.FirstName.Contains(name) || u.LastName.Contains(name))
+			   .ToList());
+		}
+
 		public void InsertUser(User user)
 		{
 			

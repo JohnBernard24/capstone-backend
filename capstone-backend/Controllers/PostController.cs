@@ -130,6 +130,33 @@ namespace capstone_backend.Controllers
 		}
 
 
+		[HttpPost("get-post-likes/{postId}")]
+		public async Task<ActionResult<IEnumerable<User>>> GetPostLikesByPostId(int postId)
+		{
+			List<Like> likes = await _postRepository.GetLikesByPostId(postId);
+
+			if(likes == null)
+			{
+				return NotFound("no_post_likes_found");
+			}
+
+			List<User?> users = new List<User?>();
+
+			foreach(Like like in likes)
+			{
+				User? user = await _userRepository.GetUserById(like.LikerId);
+
+				users.Add(user);
+			}
+
+			if(users.Count == 0)
+			{
+				return NotFound("no_likers_found");
+			}
+
+			return Ok(users);
+		}
+
 		[HttpPost("like-post")]
 		public async Task<IActionResult> LikePost([FromBody] LikeDTO likeDTO)
 		{
@@ -174,7 +201,7 @@ namespace capstone_backend.Controllers
 
 				_notificationRepository.InsertNotification(likeNotif);
 
-                _postRepository.InsertLike(like);
+				_postRepository.InsertLike(like);
 
 				return Ok("like_added");
 			}
@@ -183,6 +210,9 @@ namespace capstone_backend.Controllers
 			return Ok(new { result = "like_deleted" });
 
 		}
+
+
+
 
 	}
 }

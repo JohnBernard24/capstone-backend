@@ -116,7 +116,7 @@ namespace capstone_backend.Controllers
 					<body>
 						<h2>Hello! {recipientEmail}</h2>
 						<p>Click the button below to verify your email:</p>
-						<a href=""http://localhost:4200/change-password/{userId}"" style=""display:inline-block;padding:10px 20px;background-color:#007BFF;color:#ffffff;text-decoration:none;border-radius:5px;"">Confirm Email</a>
+						<a href=""http://localhost:4200/forgot-password/{userId}"" style=""display:inline-block;padding:10px 20px;background-color:#007BFF;color:#ffffff;text-decoration:none;border-radius:5px;"">Confirm Email</a>
 					</body>
 					</html>"
 			};

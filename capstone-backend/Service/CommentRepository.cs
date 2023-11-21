@@ -12,6 +12,11 @@ namespace capstone_backend.Service
 			_context = context;
 		}
 
+		public Task<List<Comment>> GetAllCommentsByPostId(int postId)
+		{
+			return Task.FromResult(_context.Comment.Where(c => c.PostId == postId).ToList());
+		}
+
 
 		public Task<Comment?> GetCommentById(int id)
 		{
