@@ -1,5 +1,6 @@
 ﻿using capstone_backend.Data;
 using capstone_backend.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace capstone_backend.Service
 {
@@ -15,6 +16,17 @@ namespace capstone_backend.Service
         public Task<Photo?> GetPhotoById(int id)
         {
             return Task.FromResult(_context.Photo.FirstOrDefault(p => p.Id == id));
+        }
+
+        public async Task<Photo?> GetFirstPhotoForAlbum(int albumId)
+        {
+            // Assuming you have a DbSet<YourPhotoEntity> in YourDbContext
+            // and YourPhotoEntity has properties like Id, AlbumId, and others
+
+            return await _context.Photo
+                .Where(photo => photo.AlbumId == albumId)
+                .OrderBy(photo => photo.Id)
+                .FirstOrDefaultAsync();
         }
 
         public void InsertPhoto(Photo photo)

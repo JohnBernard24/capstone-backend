@@ -12,11 +12,13 @@ namespace capstone_backend.Controllers
     {
         private readonly UserRepository _userRepository;
         private readonly BcryptPasswordHasher _passwordHasher;
+        private readonly FriendRepository _friendRepository;
 
-        public UserController(UserRepository userRepository, BcryptPasswordHasher passwordHasher)
+        public UserController(UserRepository userRepository, BcryptPasswordHasher passwordHasher, FriendRepository friendRepository)
         {
             _userRepository = userRepository;
             _passwordHasher = passwordHasher;
+            _friendRepository = friendRepository;
         }
 
 
@@ -36,6 +38,34 @@ namespace capstone_backend.Controllers
             }
 
             return Ok(checkingForUser);
+        }
+
+        [HttpGet("get-mini-profile/{userId}")]
+        public async Task<IActionResult> GetMiniProfile(int userId)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest("invalid_user");
+            }
+
+            User? checkingForUser = await _userRepository.GetUserById(userId);
+
+            if (checkingForUser == null)
+            {
+                return BadRequest("user_DNE");
+            }
+
+            int friendCount = await _friendRepository.GetFriendCountByUserId(userId);
+
+            var miniProfile = new MiniProfileDTO
+            {
+                FirstName = checkingForUser.FirstName,
+                LastName = checkingForUser.LastName,
+                Photo = checkingForUser.Photo,
+                FriendCount = friendCount
+            };
+                               
+            return Ok(miniProfile);
         }
 
         [HttpPut("edit-profile/{userId}")]
@@ -156,6 +186,30 @@ namespace capstone_backend.Controllers
             }
 
             return Ok(matches);
+        
         }
-    }
+
+        [HttpPut("edit-about-me/{userId}")]
+        public async Task<IActionResult> EditAboutMe(int userId, [FromBody] AboutMeDTO aboutMeDTO)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest("invalid_user");
+            }
+
+            User? existingUser = await _userRepository.GetUserById(userId);
+
+            if (existingUser == null)
+            {
+                return NotFound("user_not_found");
+            }
+
+            existingUser.AboutMe = aboutMeDTO.AboutMe;
+
+
+            _userRepository.UpdateUser(existingUser);
+
+
+            return Ok(existingUser);
+        }
 }

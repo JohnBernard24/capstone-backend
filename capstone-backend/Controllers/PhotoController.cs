@@ -33,7 +33,7 @@ namespace capstone_backend.Controllers
                 return BadRequest("invalid_user_id");
             }
 
-            Album? album = await _albumRepository.GetAlbumByUserId(userId);
+            Album? album = await _albumRepository.GetAlbumByAlbumId(userId);
             if (album == null)
             {
                 return BadRequest("album_not_found");
@@ -48,6 +48,21 @@ namespace capstone_backend.Controllers
             _photoRepository.InsertPhoto(photo);
 
             return Ok(photo);
+        }
+
+        [HttpDelete("delete-photo/{photoId}")]
+        public async Task<IActionResult> DeletePhoto(int photoId)
+        {
+            Photo? existingPhoto = await _photoRepository.GetPhotoById(photoId);
+
+            if (existingPhoto == null)
+            {
+                return NotFound("photo_not_found");
+            }
+
+            _photoRepository.DeletePhoto(existingPhoto);
+
+            return Ok(new { result = "photo_deleted" });
         }
     }
 }
