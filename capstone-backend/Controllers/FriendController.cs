@@ -3,6 +3,7 @@ using capstone_backend.Service;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Hosting;
 using NuGet.Protocol.Plugins;
 using Org.BouncyCastle.Asn1.Ocsp;
 
@@ -14,11 +15,13 @@ namespace capstone_backend.Controllers
 	{
 		private readonly UserRepository _userRepository;
 		private readonly FriendRepository _friendRepository;
+		private readonly NotificationRepository _notificationRepository;
 
-		public FriendController(UserRepository userRepository, FriendRepository friendRepository)
+		public FriendController(UserRepository userRepository, FriendRepository friendRepository, NotificationRepository notificationRepository)
 		{
 			_userRepository = userRepository;
 			_friendRepository = friendRepository;
+			_notificationRepository = notificationRepository;
 		}
 
 
@@ -84,7 +87,19 @@ namespace capstone_backend.Controllers
 				FriendshipDate = null
 			};
 
-			_friendRepository.InsertFriend(friendRequest);
+            _friendRepository.InsertFriend(friendRequest);
+
+
+            var friendNotif = new Notification
+            {
+                NotificationType = "add-friend-request",
+                NotifiedUserId = friendRequest.ReceiverId,
+                NotifiedUser = friendRequest.Receiver,
+                ContextId = friendRequest.Id,
+                IsRead = false
+            };
+
+            _notificationRepository.InsertNotification(friendNotif);
 
 			return Ok(new { result = "friend_request_successfully" });
 
@@ -110,7 +125,20 @@ namespace capstone_backend.Controllers
 
 			_friendRepository.UpdateFriend(friendRequest);
 
-			return Ok(new { result = "friend_request_accepted" });
+
+            var friendNotif = new Notification
+            {
+                NotificationType = "accept-friend-request",
+                NotifiedUserId = friendRequest.SenderId,
+                NotifiedUser = friendRequest.Sender,
+                ContextId = friendRequest.Id,
+                IsRead = false
+            };
+
+            _notificationRepository.InsertNotification(friendNotif);
+
+
+            return Ok(new { result = "friend_request_accepted" });
 		}
 
 

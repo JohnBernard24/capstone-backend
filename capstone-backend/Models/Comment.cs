@@ -11,7 +11,7 @@ namespace capstone_backend.Models
 
 		public int PostId { get; set; }
 		public Post? Post { get; set; }
-		public int UserId { get; set; }
+		public int CommenterId { get; set; }
 		public User? Commenter { get; set; }
 
 	}
@@ -22,5 +22,7 @@ namespace capstone_backend.Models
 		public DateTime DateCommented { get; set; } = DateTime.Now;
 
 		public int PostId { get; set; }
+
+		public int CommenterId { get; set; }
 	}
 }

@@ -43,28 +43,42 @@ namespace capstone_backend.Controllers
         }
 
         [HttpGet("get-notification-context/{userId}")]
-        public async Task<IActionResult> GetNotificationContext(Notification notification)
+        public async Task<ActionResult<Object>> GetNotificationContext(int notificationId)
         {
+            Notification? notification = await _notificationRepository.GetNotificationByNotificationId(notificationId);
+
+
+            if(notification == null)
+            {
+                return BadRequest("no_notification_found");
+            }
 
 
             if (notification.NotificationType.Equals("like"))
             {
-                /*Like? like = _postRepository.getLike
-*/
-
-
-
-
-                Post? post = await _postRepository.GetPostById(notification.ContextId);
-                return Ok(post);
+                // Looks for the like the notification is connected to using the contextId.
+                var like = await _notificationRepository.GetLikeByContextId(notification.ContextId);
+                
+                // Returns the Post the like is from (the "liked post")
+                return Ok(like?.Post);
             }
 
-            /*else if (notification.NotificationType.Equals("friend request"))
+            else if (notification.NotificationType.Equals("comment"))
             {
-                churva
-            }*/
+                var comment = await _notificationRepository.GetCommentByContextId(notification.ContextId);
 
-            return BadRequest("context_id_invalid");
+                return Ok(comment?.Post);
+            }
+
+            else if (notification.NotificationType.Equals("add-friend-request") || notification.NotificationType.Equals("accept-friend-request"))
+            {
+                var friend = await _notificationRepository.GetFriendRequestByContextId(notification.ContextId);
+
+                return Ok(friend);
+            }
+            
+
+            return BadRequest("notification_type_invalid");
 
             
 

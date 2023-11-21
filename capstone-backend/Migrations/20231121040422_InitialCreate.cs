@@ -114,7 +114,7 @@ namespace capstone_backend.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("MySQL:ValueGenerationStrategy", MySQLValueGenerationStrategy.IdentityColumn),
-                    UserId = table.Column<int>(type: "int", nullable: false),
+                    NotifiedUserId = table.Column<int>(type: "int", nullable: false),
                     NotificationType = table.Column<string>(type: "longtext", nullable: false),
                     ContextId = table.Column<int>(type: "int", nullable: false),
                     IsRead = table.Column<bool>(type: "tinyint(1)", nullable: false)
@@ -123,8 +123,8 @@ namespace capstone_backend.Migrations
                 {
                     table.PrimaryKey("PK_Notification", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Notification_User_UserId",
-                        column: x => x.UserId,
+                        name: "FK_Notification_User_NotifiedUserId",
+                        column: x => x.NotifiedUserId,
                         principalTable: "User",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -194,7 +194,7 @@ namespace capstone_backend.Migrations
                     CommentContent = table.Column<string>(type: "longtext", nullable: false),
                     DateCommented = table.Column<DateTime>(type: "datetime(6)", nullable: false),
                     PostId = table.Column<int>(type: "int", nullable: false),
-                    UserId = table.Column<int>(type: "int", nullable: false)
+                    CommenterId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -206,8 +206,8 @@ namespace capstone_backend.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Comment_User_UserId",
-                        column: x => x.UserId,
+                        name: "FK_Comment_User_CommenterId",
+                        column: x => x.CommenterId,
                         principalTable: "User",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -247,14 +247,14 @@ namespace capstone_backend.Migrations
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Comment_CommenterId",
+                table: "Comment",
+                column: "CommenterId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Comment_PostId",
                 table: "Comment",
                 column: "PostId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Comment_UserId",
-                table: "Comment",
-                column: "UserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Friend_ReceiverId",
@@ -277,9 +277,9 @@ namespace capstone_backend.Migrations
                 column: "PostId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Notification_UserId",
+                name: "IX_Notification_NotifiedUserId",
                 table: "Notification",
-                column: "UserId");
+                column: "NotifiedUserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Photo_AlbumId",

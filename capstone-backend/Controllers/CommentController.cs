@@ -2,6 +2,7 @@
 using capstone_backend.Service;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using NuGet.Protocol.Plugins;
 
 namespace capstone_backend.Controllers
 {
@@ -14,13 +15,15 @@ namespace capstone_backend.Controllers
 		private readonly PostRepository _postRepository;
 		private readonly TimelineRepository _timelineRepository;
 		private readonly CommentRepository _commentRepository;
+		private readonly NotificationRepository _notificationRepository;
 
-		public CommentController(UserRepository userRepository, PostRepository postRepository, TimelineRepository timelineRepository, CommentRepository commentRepository)
+		public CommentController(UserRepository userRepository, PostRepository postRepository, TimelineRepository timelineRepository, CommentRepository commentRepository, NotificationRepository notificationRepository)
 		{
 			_userRepository = userRepository;
 			_postRepository = postRepository;
 			_timelineRepository = timelineRepository;
 			_commentRepository = commentRepository;
+			_notificationRepository = notificationRepository;
 		}
 
 		[HttpPost("add-comment")]
@@ -38,14 +41,32 @@ namespace capstone_backend.Controllers
 				return BadRequest("invalid_post_id");
 			}
 
+			User? commenter = await _userRepository.GetUserById(commentDTO.CommenterId);
+
 			Comment comment = new Comment
 			{
 				CommentContent = commentDTO.CommentContent,
 				PostId = commentDTO.PostId,
-				Post = post
+				Post = post,
+				CommenterId = commentDTO.CommenterId,
+				Commenter = commenter
 			};
 
-			_commentRepository.InsertComment(comment);
+            _commentRepository.InsertComment(comment);
+			
+			
+			var commentNotif = new Notification
+			{
+				NotificationType = "comment",
+				NotifiedUserId = comment.Post.PosterId,
+				NotifiedUser = comment.Post.Poster,
+                ContextId = comment.Id,
+                IsRead = false
+            };
+
+            _notificationRepository.InsertNotification(commentNotif);
+
+            
 
 
 			return Ok(new { result = "comment_added"});

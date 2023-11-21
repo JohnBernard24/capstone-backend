@@ -163,18 +163,18 @@ namespace capstone_backend.Controllers
 					Liker = liker
 				};
 
-				var likeNotif = new Notification
+                _postRepository.InsertLike(like);
+
+                var likeNotif = new Notification
 				{
 					NotificationType = "like",
-					UserId = post.PosterId,
-					User = post.Poster,
+					NotifiedUserId = post.PosterId,
+					NotifiedUser = post.Poster,
 					ContextId = like.Id,
 					IsRead = false
 				};
 
 				_notificationRepository.InsertNotification(likeNotif);
-
-                _postRepository.InsertLike(like);
 
 				return Ok("like_added");
 			}

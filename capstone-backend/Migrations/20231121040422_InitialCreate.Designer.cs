@@ -11,7 +11,7 @@ using capstone_backend.Data;
 namespace capstone_backend.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20231120040419_InitialCreate")]
+    [Migration("20231121040422_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -52,20 +52,20 @@ namespace capstone_backend.Migrations
                         .IsRequired()
                         .HasColumnType("longtext");
 
+                    b.Property<int>("CommenterId")
+                        .HasColumnType("int");
+
                     b.Property<DateTime>("DateCommented")
                         .HasColumnType("datetime(6)");
 
                     b.Property<int>("PostId")
                         .HasColumnType("int");
 
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
 
-                    b.HasIndex("PostId");
+                    b.HasIndex("CommenterId");
 
-                    b.HasIndex("UserId");
+                    b.HasIndex("PostId");
 
                     b.ToTable("Comment");
                 });
@@ -134,12 +134,12 @@ namespace capstone_backend.Migrations
                         .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.Property<int>("UserId")
+                    b.Property<int>("NotifiedUserId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("UserId");
+                    b.HasIndex("NotifiedUserId");
 
                     b.ToTable("Notification");
                 });
@@ -278,15 +278,15 @@ namespace capstone_backend.Migrations
 
             modelBuilder.Entity("capstone_backend.Models.Comment", b =>
                 {
-                    b.HasOne("capstone_backend.Models.Post", "Post")
+                    b.HasOne("capstone_backend.Models.User", "Commenter")
                         .WithMany()
-                        .HasForeignKey("PostId")
+                        .HasForeignKey("CommenterId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("capstone_backend.Models.User", "Commenter")
+                    b.HasOne("capstone_backend.Models.Post", "Post")
                         .WithMany()
-                        .HasForeignKey("UserId")
+                        .HasForeignKey("PostId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -335,13 +335,13 @@ namespace capstone_backend.Migrations
 
             modelBuilder.Entity("capstone_backend.Models.Notification", b =>
                 {
-                    b.HasOne("capstone_backend.Models.User", "User")
+                    b.HasOne("capstone_backend.Models.User", "NotifiedUser")
                         .WithMany()
-                        .HasForeignKey("UserId")
+                        .HasForeignKey("NotifiedUserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("User");
+                    b.Navigation("NotifiedUser");
                 });
 
             modelBuilder.Entity("capstone_backend.Models.Photo", b =>
