@@ -154,7 +154,16 @@ namespace capstone_backend.Controllers
 
 			_friendRepository.DeleteFriend(friendRequest);
 
-			return Ok(new { result = "friend_request_rejected"});
+            Notification? notification = await _notificationRepository.GetNotificationByContextIdAndNotificationType(requestId, "add-friend-request");
+
+            if (notification == null)
+            {
+                return NotFound("notification_not_found");
+            }
+
+            _notificationRepository.DeleteNotification(notification);
+
+            return Ok(new { result = "friend_request_rejected"});
 
 		}
 	}

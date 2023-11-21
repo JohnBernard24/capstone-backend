@@ -27,6 +27,11 @@ namespace capstone_backend.Service
         {
             return Task.FromResult(_context.Notification.FirstOrDefault(n => n.Id == notifId));
         }
+        
+        public Task<Notification?> GetNotificationByContextIdAndNotificationType(int contextId, string type)
+        {
+            return Task.FromResult(_context.Notification.FirstOrDefault(n => n.ContextId == contextId && n.NotificationType.Equals(type)));
+        }
 
 
         public Task<Like?> GetLikeByContextId(int contextId)
@@ -50,6 +55,11 @@ namespace capstone_backend.Service
             _context.SaveChanges();
         }
 
+        public void DeleteNotification(Notification notification)
+        {
+            _context.Notification.Remove(notification);
+            _context.SaveChanges();
+        }
 
 
 
