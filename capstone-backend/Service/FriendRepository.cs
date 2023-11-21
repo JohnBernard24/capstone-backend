@@ -55,6 +55,7 @@ namespace capstone_backend.Service
 		{
 			var friendRequests = await _context.Friend
 				.Where(f => f.ReceiverId == userId && f.isFriend == false)
+				.Include(f => f.Receiver)
 				.Include(f => f.Sender)
 				.ToListAsync();
 

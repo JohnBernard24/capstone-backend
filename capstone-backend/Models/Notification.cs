@@ -6,8 +6,9 @@ namespace capstone_backend.Models
     {
         public int Id { get; set; }
 
-        public int UserId { get; set; }
-        public User? User { get; set; } 
+        //Change UserId to "NotifiedUserId" and User to "NotifiedUser"
+        public int NotifiedUserId { get; set; }
+        public User? NotifiedUser { get; set; } 
 
         public string NotificationType { get; set; } = null!;
 
@@ -15,5 +16,11 @@ namespace capstone_backend.Models
         public int ContextId { get; set; }
 
         public bool IsRead { get; set; }
+    }
+
+
+    public class NotificationContextDTO
+    {
+
     }
 }
