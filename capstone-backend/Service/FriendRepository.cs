@@ -30,8 +30,20 @@ namespace capstone_backend.Service
 			return friends;
 		}
 
+        public async Task<int> GetFriendCountByUserId(int userId)
+        {
+            var friendCount = await _context.Friend
+                .Where(f => (f.ReceiverId == userId || f.SenderId == userId) && f.isFriend == true)
+                .Select(f => f.SenderId)
+                .Distinct()
+                .CountAsync();
 
-		public async Task<List<Friend>> GetFriendRequests(int userId)
+            return friendCount;
+        }
+
+
+
+        public async Task<List<Friend>> GetFriendRequests(int userId)
 		{
 			var friendRequests = await _context.Friend
 				.Where(f => f.ReceiverId == userId && f.isFriend == false)

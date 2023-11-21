@@ -48,5 +48,5 @@ namespace capstone_backend.Service
 			_context.User.Remove(user);
 			_context.SaveChanges();
 		}
-	}
+    }
 }

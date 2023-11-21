@@ -81,6 +81,14 @@ namespace capstone_backend.Models
 		public string? AboutMe { get; set; }
 	}
 
+	public class MiniProfileDTO
+	{
+        public string FirstName { get; set; } = null!;
+        public string LastName { get; set; } = null!;
+        public Photo? Photo { get; set; }
+		public int FriendCount { get; set; }
+    }
+
 	public class EditEmailDTO
 	{
 		public string Email { get; set; } = null!;
@@ -99,7 +107,10 @@ namespace capstone_backend.Models
 		public Photo? Photo { get; set; }
 	}
 
-
+	public class AboutMeDTO
+	{
+		public string AboutMe { get; set; } = null!;
+	}
 
 	public class ProfileViewResponse
 	{

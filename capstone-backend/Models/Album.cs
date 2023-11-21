@@ -16,4 +16,10 @@ namespace capstone_backend.Models
 
 		public int UserId { get; set; }
 	}
+
+    public class AlbumWithFirstPhoto
+    {
+        public Album? Album { get; set; }
+        public Photo? FirstPhoto { get; set; }
+    }
 }
