@@ -13,15 +13,11 @@ namespace capstone_backend.Controllers
 	public class FriendController : ControllerBase
 	{
 		private readonly UserRepository _userRepository;
-		private readonly PostRepository _postRepository;
-		private readonly TimelineRepository _timelineRepository;
 		private readonly FriendRepository _friendRepository;
 
-		public FriendController(UserRepository userRepository, PostRepository postRepository, TimelineRepository timelineRepository, FriendRepository friendRepository)
+		public FriendController(UserRepository userRepository, FriendRepository friendRepository)
 		{
 			_userRepository = userRepository;
-			_postRepository = postRepository;
-			_timelineRepository = timelineRepository;
 			_friendRepository = friendRepository;
 		}
 
@@ -31,8 +27,29 @@ namespace capstone_backend.Controllers
 		{
 
 			var friends = await _friendRepository.GetAllFriendsByUserId(userId);
-			return friends;
+
+			if(friends == null)
+			{
+				return BadRequest("no_friends_found");
+			}
+			return Ok(friends);
 		}
+
+
+		[HttpGet("get-all-friend-request/{userId}")]
+		public async Task<ActionResult<IEnumerable<Friend>>> GetAllFriendRequests (int userId)
+		{
+			var friendRequests = await _friendRepository.GetFriendRequests(userId);
+
+			if(friendRequests == null)
+			{
+				return BadRequest("no_friend_requests_found");
+			}
+
+			return Ok(friendRequests);
+		}
+
+		
 
 		[HttpPost("add-friend")]
 		public async Task<IActionResult> AddFriendRequest([FromBody] FriendDTO friendDTO)
@@ -80,7 +97,12 @@ namespace capstone_backend.Controllers
 
 			if (friendRequest == null)
 			{
-				return BadRequest("friend_id_invalid");
+				return BadRequest("request_id_invalid");
+			}
+
+			if (friendRequest.isFriend)
+			{
+				return BadRequest("friend_request_already_accepted");
 			}
 
 			friendRequest.isFriend = true;
@@ -99,7 +121,7 @@ namespace capstone_backend.Controllers
 
 			if (friendRequest == null)
 			{
-				return BadRequest("friend_id_invalid");
+				return BadRequest("friend_request_id_invalid");
 			}
 
 			_friendRepository.DeleteFriend(friendRequest);

@@ -11,7 +11,7 @@
           "BCrypt.Net-Next": "4.0.3",
           "Microsoft.EntityFrameworkCore": "7.0.5",
           "Microsoft.EntityFrameworkCore.Design": "7.0.5",
-          "Microsoft.EntityFrameworkCore.Tools": "6.0.23",
+          "Microsoft.EntityFrameworkCore.Tools": "7.0.5",
           "Microsoft.VisualStudio.Web.CodeGeneration.Design": "6.0.16",
           "MySql.Data": "8.0.33",
           "MySql.EntityFrameworkCore": "7.0.2",
@@ -1164,7 +1164,7 @@
           }
         }
       },
-      "Microsoft.EntityFrameworkCore.Tools/6.0.23": {
+      "Microsoft.EntityFrameworkCore.Tools/7.0.5": {
         "dependencies": {
           "Microsoft.EntityFrameworkCore.Design": "7.0.5"
         }
@@ -3122,12 +3122,12 @@
       "path": "microsoft.entityframeworkcore.relational/7.0.5",
       "hashPath": "microsoft.entityframeworkcore.relational.7.0.5.nupkg.sha512"
     },
-    "Microsoft.EntityFrameworkCore.Tools/6.0.23": {
+    "Microsoft.EntityFrameworkCore.Tools/7.0.5": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-SHxDbhoNuomnHaIppyjeEjOhT030DDwtMZsnIxRo6kBdFEv8eFwJtl6c+8a91V9nWm9YMNIoWNqlWkvw+JfuUA==",
-      "path": "microsoft.entityframeworkcore.tools/6.0.23",
-      "hashPath": "microsoft.entityframeworkcore.tools.6.0.23.nupkg.sha512"
+      "sha512": "sha512-OV/PUGBVSbQVd2daTeXoMBoao2qtfBgT2TuaYo48xRYUS2gH++f8OFiZc6zwASqkMKgs1/t5uVlxgKl18m/1Fw==",
+      "path": "microsoft.entityframeworkcore.tools/7.0.5",
+      "hashPath": "microsoft.entityframeworkcore.tools.7.0.5.nupkg.sha512"
     },
     "Microsoft.Extensions.ApiDescription.Server/3.0.0": {
       "type": "package",

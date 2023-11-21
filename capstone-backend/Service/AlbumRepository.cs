@@ -13,9 +13,14 @@ namespace capstone_backend.Service
             _context = dbContext;
         }
 
-        public Task<Album?> GetAlbumByUserId(int userId)
+        public Task<Album?> GetAlbumByUserId(int albumId)
         {
-            return Task.FromResult(_context.Album.FirstOrDefault(a => a.UserId == userId));
+            return Task.FromResult(_context.Album.FirstOrDefault(a => a.Id == albumId));
+        }
+
+        public Task<List<Album>> GetAlbumsByUserId(int userId)
+        {
+            return Task.FromResult(_context.Album.Where(a => a.UserId == userId).ToList());
         }
 
         public Task<List<Photo>> GetPhotosByAlbumId(int id)

@@ -9,7 +9,8 @@ using capstone_backend.Data;
 using capstone_backend.Models;
 using capstone_backend.Service;
 using NuGet.Protocol.Plugins;
-
+using System.Net;
+using System.Net.Mail;
 
 namespace capstone_backend.Controllers
 {
@@ -50,6 +51,7 @@ namespace capstone_backend.Controllers
 
 			var loginResponse = new LoginResponse
 			{
+				UserId = user.Id,
 				Email = user.Email,
 				Token = "haha"
 			};
@@ -63,10 +65,9 @@ namespace capstone_backend.Controllers
 		{
 			if (!ModelState.IsValid)
 			{
-				return BadRequest("invalid_passed_user_registration");
+				return BadRequest("invalid_user_registration");
 			}
 
-			//need to add user repository
 			User? existingUserByEmail = await _userRepository.GetUserByEmail(userRegisterDTO.Email);
 			if (existingUserByEmail != null)
 			{
@@ -96,6 +97,47 @@ namespace capstone_backend.Controllers
 			_userRepository.InsertUser(newUser);
 			return Ok(new {result = "user_registered_successfully"});
 		}
-		
+
+		[HttpGet("verify-email/{userId}")]
+		public async Task<IActionResult> SendEmail(int userId, string recipientEmail)
+		{
+			var senderEmail = "teametivacpastebook@gmail.com";
+			var senderPassword = "nbci cmzt wqds krbv";
+
+			var message = new MailMessage(senderEmail, recipientEmail)
+			{
+				Subject = $"Verify your email, {recipientEmail}!",
+				IsBodyHtml = true, 
+				Body = $@"
+					<html>
+					<head>
+						<title>Pastebook Email Verification</title>
+					</head>
+					<body>
+						<h2>Hello! {recipientEmail}</h2>
+						<p>Click the button below to verify your email:</p>
+						<a href=""http://localhost:4200/change-password/{userId}"" style=""display:inline-block;padding:10px 20px;background-color:#007BFF;color:#ffffff;text-decoration:none;border-radius:5px;"">Confirm Email</a>
+					</body>
+					</html>"
+			};
+
+			var smtpClient = new SmtpClient("smtp.gmail.com")
+			{
+				Port = 587,
+				Credentials = new NetworkCredential(senderEmail, senderPassword),
+				EnableSsl = true,
+			};
+
+			try
+			{
+				// Send the email
+				await smtpClient.SendMailAsync(message);
+				return Ok("Email sent successfully!");
+			}
+			catch (Exception ex)
+			{
+				return BadRequest($"Error sending email: {ex.Message}");
+			}
+		}
 	}
 }
