@@ -61,7 +61,7 @@ namespace capstone_backend.Controllers
 				return BadRequest("no_friends_found");
 			}
 
-			List<Post> friendsPosts = new List<Post?>();
+			List<Post> friendsPosts = new List<Post>();
 			
 			foreach(Friend friend in friends)
 			{
