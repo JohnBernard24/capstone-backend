@@ -18,9 +18,4 @@ namespace capstone_backend.Models
         public bool IsRead { get; set; }
     }
 
-
-    public class NotificationContextDTO
-    {
-
-    }
 }

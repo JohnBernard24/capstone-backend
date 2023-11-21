@@ -80,9 +80,15 @@ namespace capstone_backend.Controllers
 
             return BadRequest("notification_type_invalid");
 
-            
 
-        } 
+
+        }
+
+
+
+        
+
+
 
 
 
