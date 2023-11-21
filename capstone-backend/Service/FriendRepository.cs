@@ -30,6 +30,14 @@ namespace capstone_backend.Service
 			return friends;
 		}
 
+		public Task<List<Friend>> GetAllFriendsObjectByUserId(int userId)
+		{
+			return Task.FromResult(_context.Friend
+				.Where(f => f.ReceiverId == userId && f.isFriend == true)
+				.ToList());
+		}
+
+
 
 		public async Task<List<Friend>> GetFriendRequests(int userId)
 		{
