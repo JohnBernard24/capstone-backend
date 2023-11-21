@@ -11,11 +11,7 @@ using capstone_backend.Data;
 namespace capstone_backend.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-<<<<<<<< HEAD:capstone-backend/Migrations/20231121014424_InitialCreate.Designer.cs
-    [Migration("20231121014424_InitialCreate")]
-========
-    [Migration("20231121040422_InitialCreate")]
->>>>>>>> jigs-v2:capstone-backend/Migrations/20231121040422_InitialCreate.Designer.cs
+    [Migration("20231121061707_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />

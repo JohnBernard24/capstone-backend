@@ -32,7 +32,7 @@ namespace capstone_backend.Controllers
 
             User? checkingForUser = await _userRepository.GetUserById(userId);
 
-            if(checkingForUser == null)
+            if (checkingForUser == null)
             {
                 return BadRequest("user_DNE");
             }
@@ -64,7 +64,7 @@ namespace capstone_backend.Controllers
                 Photo = checkingForUser.Photo,
                 FriendCount = friendCount
             };
-                               
+
             return Ok(miniProfile);
         }
 
@@ -89,7 +89,7 @@ namespace capstone_backend.Controllers
             existingUser.Sex = profileDTO.Sex;
             existingUser.PhoneNumber = profileDTO.PhoneNumber;
             existingUser.AboutMe = profileDTO.AboutMe;
-            
+
 
             _userRepository.UpdateUser(existingUser);
 
@@ -180,13 +180,13 @@ namespace capstone_backend.Controllers
         {
             List<User> matches = await _userRepository.GetUsersBySearchName(name);
 
-            if(matches == null)
+            if (matches == null)
             {
                 return BadRequest("no_matching_users_found");
             }
 
             return Ok(matches);
-        
+
         }
 
         [HttpPut("edit-about-me/{userId}")]
@@ -212,4 +212,5 @@ namespace capstone_backend.Controllers
 
             return Ok(existingUser);
         }
+    }
 }

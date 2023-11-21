@@ -10847,34 +10847,19 @@
     ]
   },
   "packageFolders": {
-<<<<<<< HEAD
-    "C:\\Users\\richard.delacruz\\.nuget\\packages\\": {}
-=======
-    "C:\\Users\\luigi.capinpuyan\\.nuget\\packages\\": {}
->>>>>>> jigs-v2
+    "C:\\Users\\User\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-<<<<<<< HEAD
-      "projectUniqueName": "C:\\Users\\richard.delacruz\\Documents\\case-study\\capstone-backend\\capstone-backend\\capstone-backend.csproj",
+      "projectUniqueName": "C:\\Users\\User\\Desktop\\CAPSTONE\\capstone-backend\\capstone-backend\\capstone-backend.csproj",
       "projectName": "capstone-backend",
-      "projectPath": "C:\\Users\\richard.delacruz\\Documents\\case-study\\capstone-backend\\capstone-backend\\capstone-backend.csproj",
-      "packagesPath": "C:\\Users\\richard.delacruz\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\richard.delacruz\\Documents\\case-study\\capstone-backend\\capstone-backend\\obj\\",
+      "projectPath": "C:\\Users\\User\\Desktop\\CAPSTONE\\capstone-backend\\capstone-backend\\capstone-backend.csproj",
+      "packagesPath": "C:\\Users\\User\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\User\\Desktop\\CAPSTONE\\capstone-backend\\capstone-backend\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "C:\\Users\\richard.delacruz\\AppData\\Roaming\\NuGet\\NuGet.Config",
-=======
-      "projectUniqueName": "C:\\Users\\luigi.capinpuyan\\Documents\\pointwest\\FinalGroupCapstone\\capstone-backend\\capstone-backend\\capstone-backend.csproj",
-      "projectName": "capstone-backend",
-      "projectPath": "C:\\Users\\luigi.capinpuyan\\Documents\\pointwest\\FinalGroupCapstone\\capstone-backend\\capstone-backend\\capstone-backend.csproj",
-      "packagesPath": "C:\\Users\\luigi.capinpuyan\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\luigi.capinpuyan\\Documents\\pointwest\\FinalGroupCapstone\\capstone-backend\\capstone-backend\\obj\\",
-      "projectStyle": "PackageReference",
-      "configFilePaths": [
-        "C:\\Users\\luigi.capinpuyan\\AppData\\Roaming\\NuGet\\NuGet.Config",
->>>>>>> jigs-v2
+        "C:\\Users\\User\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
@@ -10882,6 +10867,7 @@
       ],
       "sources": {
         "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+        "C:\\Program Files\\dotnet\\sdk\\7.0.302\\Sdks\\Microsoft.NET.Sdk.Web\\library-packs": {},
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {
@@ -10956,11 +10942,7 @@
             "privateAssets": "all"
           }
         },
-<<<<<<< HEAD
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.402\\RuntimeIdentifierGraph.json"
-=======
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.401\\RuntimeIdentifierGraph.json"
->>>>>>> jigs-v2
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.302\\RuntimeIdentifierGraph.json"
       }
     }
   }

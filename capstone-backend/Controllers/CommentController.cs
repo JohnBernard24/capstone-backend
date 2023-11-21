@@ -14,12 +14,14 @@ namespace capstone_backend.Controllers
 		private readonly PostRepository _postRepository;
 		private readonly CommentRepository _commentRepository;
 		private readonly NotificationRepository _notificationRepository;
+		private readonly UserRepository _userRepository;
 
 		public CommentController(UserRepository userRepository, PostRepository postRepository, TimelineRepository timelineRepository, CommentRepository commentRepository, NotificationRepository notificationRepository)
 		{
 			_postRepository = postRepository;
 			_commentRepository = commentRepository;
 			_notificationRepository = notificationRepository;
+			_userRepository = userRepository;
 		}
 
 		[HttpPost("add-comment")]
@@ -48,7 +50,7 @@ namespace capstone_backend.Controllers
 				Commenter = commenter
 			};
 
-            _commentRepository.InsertComment(comment);
+			_commentRepository.InsertComment(comment);
 			
 			
 			var commentNotif = new Notification
@@ -56,13 +58,13 @@ namespace capstone_backend.Controllers
 				NotificationType = "comment",
 				NotifiedUserId = comment.Post.PosterId,
 				NotifiedUser = comment.Post.Poster,
-                ContextId = comment.Id,
-                IsRead = false
-            };
+				ContextId = comment.Id,
+				IsRead = false
+			};
 
-            _notificationRepository.InsertNotification(commentNotif);
+			_notificationRepository.InsertNotification(commentNotif);
 
-            
+			
 
 
 			return Ok(new { result = "comment_added"});
