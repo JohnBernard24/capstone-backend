@@ -11,20 +11,13 @@ namespace capstone_backend.Controllers
     [ApiController]
     public class NotificationController : Controller
     {
-        private readonly UserRepository _userRepository;
-        private readonly ApplicationDbContext _context;
+        
         private readonly NotificationRepository _notificationRepository;
-        private readonly PostRepository _postRepository;
-        private readonly CommentRepository _commentRepository;
+        
 
-        public NotificationController(UserRepository userRepository, ApplicationDbContext context, NotificationRepository notificationRepository, PostRepository postRepository, CommentRepository commentRepository)
+        public NotificationController(NotificationRepository notificationRepository)
         {
-            _userRepository = userRepository;
-            _context = context;
             _notificationRepository = notificationRepository;
-            _postRepository = postRepository;
-            _commentRepository = commentRepository;
-
         }
 
         [HttpGet("get-notifications/{userId}")]
@@ -34,7 +27,7 @@ namespace capstone_backend.Controllers
 
             if (notifications == null)
             {
-                return NotFound("no_notifications_found");
+                return NotFound(new { result = "no_notifications_found" });
             }
 
             return notifications;
@@ -50,7 +43,7 @@ namespace capstone_backend.Controllers
 
             if(notification == null)
             {
-                return BadRequest("no_notification_found");
+                return BadRequest(new { result = "no_notification_found" });
             }
 
 
@@ -78,7 +71,7 @@ namespace capstone_backend.Controllers
             }
             
 
-            return BadRequest("notification_type_invalid");
+            return BadRequest(new { result = "notification_type_invalid" });
 
 
 

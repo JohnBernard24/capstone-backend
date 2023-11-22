@@ -31,19 +31,19 @@ namespace capstone_backend.Controllers
 		{
 			if (!ModelState.IsValid)
 			{
-				return BadRequest("invalid_post");
+				return BadRequest(new { result = "invalid_post" });
 			}
 
 			User? poster = await _userRepository.GetUserById(postDTO.PosterId);
 			if (poster == null)
 			{
-				return BadRequest("invalid_user_id");
+				return BadRequest(new { result = "invalid_user_id" });
 			}
 
 			Timeline? timeline = await _timelineRepository.GetTimelineByUserId(userId);
 			if (timeline == null)
 			{
-				return BadRequest("timeline_not_found");
+				return BadRequest(new { result = "timeline_not_found" });
 			}
 
 			Post post = new Post
@@ -83,14 +83,14 @@ namespace capstone_backend.Controllers
 		{
 			if (!ModelState.IsValid)
 			{
-				return BadRequest("invalid_post");
+				return BadRequest(new { result = "invalid_post" });
 			}
 
 			Post? existingPost = await _postRepository.GetPostById(postId);
 
 			if (existingPost == null)
 			{
-				return NotFound("post_not_found");
+				return NotFound(new { result = "post_not_found" });
 			}
 
 			existingPost.PostTitle = postDTO.PostTitle;
@@ -121,7 +121,7 @@ namespace capstone_backend.Controllers
 
 			if (existingPost == null)
 			{
-				return NotFound("post_not_found");
+				return NotFound(new { result = "post_not_found" });
 			}
 
 			_postRepository.DeletePost(existingPost);
@@ -137,7 +137,7 @@ namespace capstone_backend.Controllers
 
 			if(likes == null)
 			{
-				return NotFound("no_post_likes_found");
+				return NotFound(new { result = "no_post_likes_found" });
 			}
 
 			List<User?> users = new List<User?>();
@@ -151,7 +151,7 @@ namespace capstone_backend.Controllers
 
 			if(users.Count == 0)
 			{
-				return NotFound("no_likers_found");
+				return NotFound(new { result = "no_likers_found" });
 			}
 
 			return Ok(users);
@@ -162,20 +162,20 @@ namespace capstone_backend.Controllers
 		{
 			if (!ModelState.IsValid)
 			{
-				return BadRequest("invalid_like_to_post");
+				return BadRequest(new { result = "invalid_like_to_post" });
 			}
 
 			Post? post = await _postRepository.GetPostById(likeDTO.PostId);
 			if (post == null)
 			{
-				return NotFound("post_not_found");
+				return NotFound(new { result = "post_not_found" });
 			}
 
 			User? liker = await _userRepository.GetUserById(likeDTO.LikerId);
 
 			if (liker == null)
 			{
-				return NotFound("user_not_found");
+				return NotFound(new { result = "user_not_found" });
 			}
 
 			Like? existingLike = await _postRepository.getLikeByPostIdAndUserId(likeDTO.PostId, likeDTO.LikerId);
@@ -203,7 +203,7 @@ namespace capstone_backend.Controllers
 
 				_notificationRepository.InsertNotification(likeNotif);
 
-				return Ok("like_added");
+				return Ok(new { result = "like_added" });
 			}
 
 			_postRepository.RemoveLike(existingLike);
