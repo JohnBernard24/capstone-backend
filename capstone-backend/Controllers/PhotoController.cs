@@ -24,19 +24,19 @@ namespace capstone_backend.Controllers
         {
             if (!ModelState.IsValid)
             {
-                return BadRequest("invalid_photo");
+                return BadRequest(new { result = "invalid_photo" });
             }
 
             User? poster = await _userRepository.GetUserById(userId);
             if (poster == null)
             {
-                return BadRequest("invalid_user_id");
+                return BadRequest(new { result = "invalid_user_id" });
             }
 
             Album? album = await _albumRepository.GetAlbumByAlbumId(userId);
             if (album == null)
             {
-                return BadRequest("album_not_found");
+                return BadRequest(new { result = "album_not_found" });
             }
             var photo = new Photo
             {
@@ -57,7 +57,7 @@ namespace capstone_backend.Controllers
 
             if (existingPhoto == null)
             {
-                return NotFound("photo_not_found");
+                return NotFound(new { result = "photo_not_found" });
             }
 
             _photoRepository.DeletePhoto(existingPhoto);

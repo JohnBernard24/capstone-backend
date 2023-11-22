@@ -28,13 +28,13 @@ namespace capstone_backend.Controllers
 		{
 			if (!ModelState.IsValid)
 			{
-				return BadRequest("invalid_album");
+				return BadRequest(new { result = "invalid_album" });
 			}
 
 			User? user = await _userRepository.GetUserById(userId);
 			if (user == null)
 			{
-				return BadRequest("invalid_user_id");
+				return BadRequest(new { result = "invalid_user_id" });
 			}
 
 			var album = new Album
@@ -57,14 +57,14 @@ namespace capstone_backend.Controllers
 			var user = await _userRepository.GetUserById(userId);
 			if(user == null)
 			{
-				return BadRequest("user_id_invalid");
+				return BadRequest(new { result = "user_id_invalid" });
 			}
 
 			List<Album>? albums = await _albumRepository.GetAlbumsByUserId(userId);
 
 			if(albums == null)
 			{
-				return BadRequest("no_albums_found");
+				return BadRequest(new { result = "no_albums_found" });
 			}
 
 			return Ok(albums);
@@ -78,14 +78,14 @@ namespace capstone_backend.Controllers
 
 			if (album == null)
 			{
-				return BadRequest("album_invalid");
+				return BadRequest(new { result = "album_invalid" });
 			}
 
 			List<Photo>? photos = await _albumRepository.GetPhotosByAlbumId(album.Id);
 
 			if (photos == null)
 			{
-				return NotFound("no_photos_found");
+				return NotFound(new { result = "no_photos_found" });
 			}
 
 			return Ok(photos);
@@ -96,14 +96,14 @@ namespace capstone_backend.Controllers
 		{
 			if (!ModelState.IsValid)
 			{
-				return BadRequest("invalid_album");
+				return BadRequest(new { result = "invalid_album" });
 			}
 
 			Album? existingAlbum= await _albumRepository.GetAlbumByAlbumId(albumId);
 
 			if (existingAlbum== null)
 			{
-				return NotFound("album_not_found");
+				return NotFound(new { result = "album_not_found" });
 			}
 
 			existingAlbum.AlbumName = albumDTO.AlbumName;
@@ -121,7 +121,7 @@ namespace capstone_backend.Controllers
 
 			if (existingAlbum == null)
 			{
-				return NotFound("album_not_found");
+				return NotFound(new { result = "album_not_found" });
 			}
 
 			_albumRepository.DeleteAlbum(existingAlbum);
@@ -138,14 +138,14 @@ namespace capstone_backend.Controllers
 
 			if (user == null)
 			{
-				return BadRequest("user_invalid");
+				return BadRequest(new { result = "user_invalid" });
 			}
 
 			List<Album>? albums = await _albumRepository.LimitBySixAlbums(user.Id);
 
 			if (albums == null)
 			{
-				return NotFound("no_albums_found");
+				return NotFound(new { result = "no_albums_found" });
 			}
 
 			// Create a new list to store AlbumWithFirstPhoto objects

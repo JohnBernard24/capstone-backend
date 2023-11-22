@@ -33,7 +33,7 @@ namespace capstone_backend.Controllers
 
 			if(friends == null)
 			{
-				return BadRequest("no_friends_found");
+				return BadRequest(new { result = "no_friends_found" });
 			}
 			return Ok(friends);
 		}
@@ -46,7 +46,7 @@ namespace capstone_backend.Controllers
 
 			if(friendRequests == null)
 			{
-				return BadRequest("no_friend_requests_found");
+				return BadRequest(new { result = "no_friend_requests_found" });
 			}
 
 			return Ok(friendRequests);
@@ -61,21 +61,21 @@ namespace capstone_backend.Controllers
 
 			if(receiver == null)
 			{
-				return BadRequest("receiver_not_valid");
+				return BadRequest(new { result = "receiver_not_valid" });
 			}
 
 			User? sender = await _userRepository.GetUserById(friendDTO.SenderId);
 
 			if(sender == null)
 			{
-				return BadRequest("sender_not_valid");
+				return BadRequest(new { result = "sender_not_valid" });
 			}
 
 			var exisitingRequest = await _friendRepository.FriendRequestExists(friendDTO.SenderId, friendDTO.ReceiverId);
 
 			if (exisitingRequest)
 			{
-				return BadRequest("request_already_exists");
+				return BadRequest(new { result = "request_already_exists" });
 			}
 
 			var friendRequest = new Friend
@@ -112,12 +112,12 @@ namespace capstone_backend.Controllers
 
 			if (friendRequest == null)
 			{
-				return BadRequest("request_id_invalid");
+				return BadRequest(new { result = "request_id_invalid" });
 			}
 
 			if (friendRequest.isFriend)
 			{
-				return BadRequest("friend_request_already_accepted");
+				return BadRequest(new { result = "friend_request_already_accepted" });
 			}
 
 			friendRequest.isFriend = true;
@@ -149,7 +149,7 @@ namespace capstone_backend.Controllers
 
 			if (friendRequest == null)
 			{
-				return BadRequest("friend_request_id_invalid");
+				return BadRequest(new { result = "friend_request_id_invalid" });
 			}
 
 			_friendRepository.DeleteFriend(friendRequest);
@@ -158,7 +158,7 @@ namespace capstone_backend.Controllers
 
             if (notification == null)
             {
-                return NotFound("notification_not_found");
+                return NotFound(new { result = "notification_not_found" });
             }
 
             _notificationRepository.DeleteNotification(notification);
