@@ -8,13 +8,11 @@ namespace capstone_backend.Controllers
     [ApiController]
     public class PhotoController : ControllerBase
     {
-        private readonly UserRepository _userRepository;
         private readonly PhotoRepository _photoRepository;
         private readonly AlbumRepository _albumRepository;
 
-        public PhotoController(UserRepository userRepository, PhotoRepository photoRepository, AlbumRepository albumRepository)
+        public PhotoController(PhotoRepository photoRepository, AlbumRepository albumRepository)
         {
-            _userRepository = userRepository;
             _photoRepository = photoRepository;
             _albumRepository = albumRepository;
         }

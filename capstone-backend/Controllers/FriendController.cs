@@ -9,7 +9,7 @@ using Org.BouncyCastle.Asn1.Ocsp;
 
 namespace capstone_backend.Controllers
 {
-	[Route("api/[controller]")]
+	[Route("api/friend")]
 	[ApiController]
 	public class FriendController : ControllerBase
 	{

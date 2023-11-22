@@ -6,7 +6,7 @@ using NuGet.Protocol.Plugins;
 
 namespace capstone_backend.Controllers
 {
-	[Route("api/[controller]")]
+	[Route("api/comment")]
 	[ApiController]
 	public class CommentController : ControllerBase
 	{
