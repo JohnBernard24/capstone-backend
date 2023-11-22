@@ -19,35 +19,30 @@ namespace capstone_backend.Controllers
             _albumRepository = albumRepository;
         }
 
-        [HttpPost("add-photo/{userId}")]
-        public async Task<IActionResult> AddPhoto(int userId, [FromBody] PhotoDTO photoDTO)
+        [HttpPost("add-photo")]
+        public async Task<IActionResult> AddPhoto([FromBody] PhotoDTO photoDTO)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(new { result = "invalid_photo" });
             }
 
-            User? poster = await _userRepository.GetUserById(userId);
-            if (poster == null)
-            {
-                return BadRequest(new { result = "invalid_user_id" });
-            }
-
-            Album? album = await _albumRepository.GetAlbumByAlbumId(userId);
+            Album? album = await _albumRepository.GetAlbumByAlbumId(photoDTO.AlbumId);
             if (album == null)
             {
                 return BadRequest(new { result = "album_not_found" });
             }
-            var photo = new Photo
+
+            Photo photo = new Photo
             {
                 PhotoImage = photoDTO.PhotoImage,
-                UploadDate = DateTime.Now,
-                AlbumId = album.Id 
+                AlbumId = album.Id,
+                Album = album
             };
 
             _photoRepository.InsertPhoto(photo);
 
-            return Ok(photo);
+            return Ok(photoDTO);
         }
 
         [HttpDelete("delete-photo/{photoId}")]

@@ -12,14 +12,15 @@ namespace capstone_backend.Models
 
 	public class AlbumDTO
 	{
+		public int? AlbumId { get; set; }
 		public string AlbumName { get; set; } = null!;
 
-		public int UserId { get; set; }
+		public int? UserId { get; set; }
 	}
 
-    public class AlbumWithFirstPhoto
-    {
-        public Album? Album { get; set; }
-        public Photo? FirstPhoto { get; set; }
-    }
+	public class AlbumWithFirstPhoto
+	{
+		public AlbumDTO? AlbumDTO { get; set; }
+		public PhotoDTO? FirstPhoto { get; set; }
+	}
 }

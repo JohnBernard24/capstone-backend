@@ -10,19 +10,18 @@ namespace capstone_backend.Controllers
 	public class AlbumController : ControllerBase
 	{
 		private readonly UserRepository _userRepository;
-		private readonly ApplicationDbContext _context;
 		private readonly AlbumRepository _albumRepository;
 		private readonly PhotoRepository _photoRepository;
 
-
-		public AlbumController(ApplicationDbContext context, UserRepository userRepository, AlbumRepository albumRepository, PhotoRepository photoRepository)
+		public AlbumController(UserRepository userRepository, AlbumRepository albumRepository, PhotoRepository photoRepository)
 		{
-			_context = context;
 			_userRepository = userRepository;
 			_albumRepository = albumRepository;
 			_photoRepository = photoRepository;
 		}
 
+
+		//*******************CRUD FUNCTION START******************************//
 		[HttpPost("add-album")]
 		public async Task<IActionResult> AddAlbum(int userId, [FromBody] AlbumDTO albumDTO)
 		{
@@ -40,68 +39,28 @@ namespace capstone_backend.Controllers
 			var album = new Album
 			{
 				AlbumName = albumDTO.AlbumName,
-				UserId = user.Id
+				UserId = user.Id,
+				User = user
 			};
 
 			_albumRepository.InsertAlbum(album);
 
-			return Ok(album);
+			albumDTO.AlbumId = album.Id;
+
+			return Ok(albumDTO);
 		}
 
-		/*[HttpPost("update-album")]
-		public async */
-
-		[HttpGet("get-all-albums/{userId}")]
-		public async Task<ActionResult<IEnumerable<Album>>> GetAllAlbumsByUserId(int userId)
-		{
-			var user = await _userRepository.GetUserById(userId);
-			if(user == null)
-			{
-				return BadRequest(new { result = "user_id_invalid" });
-			}
-
-			List<Album>? albums = await _albumRepository.GetAlbumsByUserId(userId);
-
-			if(albums == null)
-			{
-				return BadRequest(new { result = "no_albums_found" });
-			}
-
-			return Ok(albums);
-
-		}
-
-		[HttpGet("get-all-photos/{albumId}")]
-		public async Task<ActionResult<IEnumerable<Photo>>> GetAllPhotos(int albumId)
-		{
-			Album? album = await _albumRepository.GetAlbumByAlbumId(albumId);
-
-			if (album == null)
-			{
-				return BadRequest(new { result = "album_invalid" });
-			}
-
-			List<Photo>? photos = await _albumRepository.GetPhotosByAlbumId(album.Id);
-
-			if (photos == null)
-			{
-				return NotFound(new { result = "no_photos_found" });
-			}
-
-			return Ok(photos);
-		}
-
-		[HttpPut("update-album/{albumId}")]
-		public async Task<IActionResult> UpdateAlbum(int albumId, [FromBody] AlbumDTO albumDTO)
+		[HttpPut("update-album")]
+		public async Task<IActionResult> UpdateAlbum([FromBody] AlbumDTO albumDTO)
 		{
 			if (!ModelState.IsValid)
 			{
 				return BadRequest(new { result = "invalid_album" });
 			}
 
-			Album? existingAlbum= await _albumRepository.GetAlbumByAlbumId(albumId);
+			Album? existingAlbum = await _albumRepository.GetAlbumByAlbumId(albumDTO.AlbumId);
 
-			if (existingAlbum== null)
+			if (existingAlbum == null)
 			{
 				return NotFound(new { result = "album_not_found" });
 			}
@@ -110,12 +69,11 @@ namespace capstone_backend.Controllers
 
 			_albumRepository.UpdateAlbum(existingAlbum);
 
-			return Ok(existingAlbum);
+			return Ok(albumDTO);
 		}
 
-
 		[HttpDelete("delete-album/{albumId}")]
-		public async Task<IActionResult> DeletePost(int albumId)
+		public async Task<IActionResult> DeleteAlbum(int albumId)
 		{
 			Album? existingAlbum = await _albumRepository.GetAlbumByAlbumId(albumId);
 
@@ -128,10 +86,69 @@ namespace capstone_backend.Controllers
 
 			return Ok(new { result = "album_deleted" });
 		}
+		//*******************CRUD FUNCTION END******************************//
 
-		// This method is for the Mini Album
-		// Boss JB please add the limit function for this method
-		[HttpGet("get-mini-album")]
+
+		//*******************ALBUM GETTER START******************************//
+		[HttpGet("get-all-albums/{userId}")]
+		public async Task<ActionResult<IEnumerable<AlbumDTO>>> GetAllAlbumsByUserId(int userId)
+		{
+			User? user = await _userRepository.GetUserById(userId);
+			if (user == null)
+			{
+				return BadRequest(new { result = "user_id_invalid" });
+			}
+
+			List<Album>? albums = await _albumRepository.GetAlbumsByUserId(user.Id);
+			if (albums == null)
+			{
+				return BadRequest(new { result = "no_albums_found" });
+			}
+
+			List<AlbumDTO>? albumsDTO = new List<AlbumDTO>();
+			foreach(Album album in albums)
+			{
+				albumsDTO.Add(new AlbumDTO
+				{
+					AlbumId = album.Id,
+					AlbumName = album.AlbumName,
+					UserId = album.UserId
+				});
+			}
+
+			return Ok(albumsDTO);
+		}
+		[HttpGet("get-all-photos/{albumId}")]
+		public async Task<ActionResult<IEnumerable<PhotoDTO>>> GetAllPhotos(int albumId)
+		{
+			Album? album = await _albumRepository.GetAlbumByAlbumId(albumId);
+			if (album == null)
+			{
+				return BadRequest(new { result = "album_invalid" });
+			}
+
+			List<Photo>? photos = await _albumRepository.GetPhotosByAlbumId(album.Id);
+
+			if (photos == null)
+			{
+				return NotFound(new { result = "no_photos_found" });
+			}
+
+			List<PhotoDTO> photoDTOs = new List<PhotoDTO>();
+			foreach(Photo photo in photos)
+			{
+				photoDTOs.Add(new PhotoDTO
+				{
+					Id = photo.Id,
+					PhotoImage = photo.PhotoImage,
+					AlbumId = photo.AlbumId,
+					UploadDate = photo.UploadDate
+				});
+			}
+
+			return Ok(photoDTOs);
+		}
+		[HttpGet("get-mini-album/{userId}")]
 		public async Task<ActionResult<IEnumerable<AlbumWithFirstPhoto>>> GetMiniAlbum(int userId)
 		{
 			User? user = await _userRepository.GetUserById(userId);
@@ -148,32 +165,49 @@ namespace capstone_backend.Controllers
 				return NotFound(new { result = "no_albums_found" });
 			}
 
+			List<AlbumDTO>? albumDTOs = new List<AlbumDTO>();
+
+			foreach(Album album in albums)
+			{
+				albumDTOs.Add(new AlbumDTO
+				{
+					AlbumId = album.Id,
+					AlbumName = album.AlbumName,
+					UserId = album.UserId
+				});
+			}
+
 			// Create a new list to store AlbumWithFirstPhoto objects
-			List<AlbumWithFirstPhoto> albumsWithFirstPhoto = new List<AlbumWithFirstPhoto>();
+			List<AlbumWithFirstPhoto> albumsWithFirstPhotoList = new List<AlbumWithFirstPhoto>();
 
 			// Iterate through each album to fetch the first photo and create AlbumWithFirstPhoto objects
-			foreach (Album album in albums)
+			foreach (AlbumDTO albumDTO in albumDTOs)
 			{
 				// Fetch the first photo for the current album
-				Photo? firstPhoto = await _photoRepository.GetFirstPhotoForAlbum(album.Id);
+				Photo? firstPhoto = await _photoRepository.GetFirstPhotoForAlbum(albumDTO.AlbumId);
+
+				PhotoDTO firstPhotoDTO = new PhotoDTO
+				{
+					Id = firstPhoto.Id,
+					PhotoImage = firstPhoto.PhotoImage,
+					AlbumId = firstPhoto.AlbumId,
+					UploadDate = firstPhoto.UploadDate,
+				};
 
 				// Create an AlbumWithFirstPhoto object that includes album information and the first photo
 				AlbumWithFirstPhoto albumWithFirstPhoto = new AlbumWithFirstPhoto
 				{
-					Album = album,
-					FirstPhoto = firstPhoto
+					AlbumDTO = albumDTO,
+					FirstPhoto = firstPhotoDTO
 				};
 
 				// Add the AlbumWithFirstPhoto object to the list
-				albumsWithFirstPhoto.Add(albumWithFirstPhoto);
+				albumsWithFirstPhotoList.Add(albumWithFirstPhoto);
 			}
 
-			return Ok(albumsWithFirstPhoto);
+			return Ok(albumsWithFirstPhotoList);
 		}
-
-		
-
-
+		//*******************ALBUM GETTER END******************************//
 
 	}
 }

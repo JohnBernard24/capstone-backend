@@ -1,14 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Mvc;
 using capstone_backend.Data;
 using capstone_backend.Models;
 using capstone_backend.Service;
-using NuGet.Protocol.Plugins;
 using System.Net;
 using System.Net.Mail;
 
@@ -21,13 +14,19 @@ namespace capstone_backend.Controllers
 		private readonly UserRepository _userRepository;
 		private readonly ApplicationDbContext _context;
 		private readonly BcryptPasswordHasher _passwordHasher;
+		private readonly TimelineRepository _timelineRepository;
+		private readonly AlbumRepository _albumRepository;
 
-		public AuthenticationController(ApplicationDbContext context, UserRepository userRepository, BcryptPasswordHasher passwordHasher)
+		public AuthenticationController(ApplicationDbContext context, UserRepository userRepository, BcryptPasswordHasher passwordHasher, TimelineRepository timelineRepository, AlbumRepository albumRepository)
 		{
 			_context = context;
 			_userRepository = userRepository;
 			_passwordHasher = passwordHasher;
+			_timelineRepository = timelineRepository;
+			_albumRepository = albumRepository;
 		}
+
+
 
 		[HttpPost("login")]
 		public async Task<IActionResult> Login([FromBody] UserLoginDTO userLoginDTO)
@@ -53,11 +52,10 @@ namespace capstone_backend.Controllers
 			{
 				UserId = user.Id,
 				Email = user.Email,
-				Token = "haha"
+				Token = "haha" //TO BE CHANGED ONCE TOKEN GENERATORS WERE IMPLEMENTED
 			};
 
 			return Ok(loginResponse);
-
 		}
 
 		[HttpPost("register")]
@@ -74,7 +72,7 @@ namespace capstone_backend.Controllers
 				return Conflict(new { result = "email_already_exist" });
 			}
 
-			var newUser = new User
+			User newUser = new User
 			{
 				FirstName = userRegisterDTO.FirstName,
 				LastName = userRegisterDTO.LastName,
@@ -85,40 +83,103 @@ namespace capstone_backend.Controllers
 				PhoneNumber = userRegisterDTO.PhoneNumber
 			};
 
-			var newTimeline = new Timeline
+			Timeline newTimeline = new Timeline
 			{
 				UserId = newUser.Id,
 				User = newUser
 			};
 
-			_context.TimeLine.Add(newTimeline);
-			_context.SaveChanges();
+			Album newAlbum = new Album
+			{
+				AlbumName = "Uploads",
+				UserId = newUser.Id,
+				User = newUser
+			};
 
 			_userRepository.InsertUser(newUser);
+			_timelineRepository.InsertTimeline(newTimeline);
+			_albumRepository.InsertAlbum(newAlbum);
+
 			return Ok(new {result = "user_registered_successfully"});
 		}
 
-		[HttpPost("verify-email")]
-		public async Task<IActionResult> SendEmail([FromBody] EmailVerifyDTO emailVerifyDTO)
+		[HttpPost("verify-email/{recipientEmail}")]
+		public async Task<IActionResult> SendEmail(string recipientEmail)
 		{
 			var senderEmail = "teametivacpastebook@gmail.com";
 			var senderPassword = "nbci cmzt wqds krbv";
 
-			var message = new MailMessage(senderEmail, emailVerifyDTO.RecipientEmail)
+			User? user = await _userRepository.GetUserByEmail(recipientEmail);
+			if (user == null)
 			{
-				Subject = $"Verify your email, {emailVerifyDTO.RecipientEmail}!",
+				return BadRequest(new { result = "no_account_with_that_email" });
+			}
+
+			var message = new MailMessage(senderEmail, recipientEmail)
+			{
+				Subject = $"Verify your email, {user.Email}!",
 				IsBodyHtml = true, 
-				Body = $@"
+				Body = 
+				$@"
 					<html>
 					<head>
-						<title>Pastebook Email Verification</title>
+					<title>Pastebook Email Confirmation</title>
+					<style>
+					body {{
+					  font-family: sans-serif;
+					  margin: 0;
+					  padding: 0;
+					}}
+
+					.container {{
+					  width: 600px;
+					  margin: 0 auto;
+					}}
+
+					h1 {{
+					  text-align: center;
+					  font-size: 30px;
+					  margin-top: 40px;
+					}}
+
+					p {{
+					  font-size: 16px;
+					  line-height: 1.5;
+					}}
+
+					a {{
+					  color: #fff;
+					  background-color: #f9a113;
+					  padding: 10px 20px;
+					  border-radius: 4px;
+					  text-decoration: none;
+					}}
+
+					.footer {{
+					  text-align: center;
+					  font-size: 12px;
+					  margin-top: 40px;
+					}}
+					</style>
 					</head>
 					<body>
-						<h2>Hello! {emailVerifyDTO.RecipientEmail}</h2>
-						<p>Click the button below to verify your email:</p>
-						<a href=""http://localhost:4200/forgot-password/{emailVerifyDTO.UserId}"" style=""display:inline-block;padding:10px 20px;background-color:#007BFF;color:#ffffff;text-decoration:none;border-radius:5px;"">Confirm Email</a>
+					  <div class=""container"">
+						<img style='width: 100;' src = 'https://cdn.discordapp.com/attachments/1174240282951303239/1176866765209337886/Logo1_dark.PNG?ex=65706d95&is=655df895&hm=62cdfca8d61e6fd565803260716f0493e37f4d764e82c5b5d8e11f9e861783e3&' alt = 'Pastebook Logo'>
+						<h1>Email Confirmation</h1>
+						<p>
+						  Hey {user.FirstName + " " + user.LastName}, you're almost ready!
+						</p>
+						<p>
+						  Simply click the big button below to verify your email address.
+						</p>
+						<a href=""http://localhost:4200/forgot-password/{user.Id}"" style=""display:inline-block;padding:10px 20px;background-color:#007BFF;color:#ffffff;text-decoration:none;border-radius:5px;"">Confirm Email</a>
+						<div class=""footer"">
+						  Copyright © 2023 Team Etivac. All rights reserved. Email sent by Pastebook.com.
+						</div>
+					  </div>
 					</body>
-					</html>"
+					</html>
+				"
 			};
 
 			var smtpClient = new SmtpClient("smtp.gmail.com")
@@ -135,7 +196,7 @@ namespace capstone_backend.Controllers
 			}
 			catch (Exception)
 			{
-				return BadRequest(new { result = $"Error sending email." });
+				return BadRequest(new { result = "Error sending email." });
 			}
 		}
 	}

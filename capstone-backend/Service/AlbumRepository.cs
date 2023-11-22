@@ -13,7 +13,7 @@ namespace capstone_backend.Service
             _context = dbContext;
         }
         // Specific album
-        public Task<Album?> GetAlbumByAlbumId(int albumId)
+        public Task<Album?> GetAlbumByAlbumId(int? albumId)
         {
             return Task.FromResult(_context.Album.FirstOrDefault(a => a.Id == albumId));
         }
