@@ -133,7 +133,7 @@ namespace capstone_backend.Controllers
 				await smtpClient.SendMailAsync(message);
 				return Ok(new { result = "Email sent successfully!" });
 			}
-			catch (Exception ex)
+			catch (Exception)
 			{
 				return BadRequest(new { result = $"Error sending email." });
 			}
