@@ -20,11 +20,13 @@ namespace capstone_backend.Models
 
 	public class PostDTO
 	{
+		public int? Id { get; set; }
 		[Required]
 		public string PostTitle { get; set; } = null!;
 
 		[Required]
 		public string Description { get; set; } = null!;
+		public DateTime DatePosted { get; set; } = DateTime.Now;
 
 
 

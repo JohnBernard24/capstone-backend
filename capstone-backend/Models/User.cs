@@ -81,6 +81,7 @@ namespace capstone_backend.Models
 
 	public class MiniProfileDTO
 	{
+		public int? Id { get; set; }
 		public string FirstName { get; set; } = null!;
 		public string LastName { get; set; } = null!;
 		public Photo? Photo { get; set; }

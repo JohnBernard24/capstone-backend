@@ -6,6 +6,7 @@ using capstone_backend.Data;
 using capstone_backend.Models;
 using capstone_backend.Service;
 using NuGet.Protocol.Plugins;
+using System.ComponentModel.DataAnnotations;
 
 namespace capstone_backend.Controllers
 {
@@ -26,6 +27,8 @@ namespace capstone_backend.Controllers
 			_notificationRepository = notificationRepository;
 		}
 
+
+		//*******************CRUD FUNCTION START******************************//
 		[HttpPost("add-post/{userId}")]
 		public async Task<IActionResult> AddPost(int userId, [FromBody] PostDTO postDTO)
 		{
@@ -58,8 +61,6 @@ namespace capstone_backend.Controllers
 				Poster = poster
 			};
 
-			
-
 			_postRepository.InsertPost(post);
 
 			var postResponse = new PostViewResponse
@@ -74,9 +75,7 @@ namespace capstone_backend.Controllers
 			};
 
 			return Ok(postResponse);
-
 		}
-
 
 		[HttpPut("update-post/{postId}")]
 		public async Task<IActionResult> UpdatePost(int postId, [FromBody] PostDTO postDTO)
@@ -113,7 +112,6 @@ namespace capstone_backend.Controllers
 			return Ok(postResponse);
 		}
 
-
 		[HttpDelete("delete-post/{postId}")]
 		public async Task<IActionResult> DeletePost(int postId)
 		{
@@ -128,10 +126,13 @@ namespace capstone_backend.Controllers
 
 			return Ok(new { result = "post_deleted" });
 		}
+		//*******************CRUD FUNCTION END******************************//
 
 
+
+		//*******************GETTERS FUNCTION START******************************//
 		[HttpGet("get-post-likes/{postId}")]
-		public async Task<ActionResult<IEnumerable<User>>> GetPostLikesByPostId(int postId)
+		public async Task<ActionResult<IEnumerable<MiniProfileDTO>>> GetPostLikesByPostId(int postId)
 		{
 			List<Like> likes = await _postRepository.GetLikesByPostId(postId);
 
@@ -140,13 +141,21 @@ namespace capstone_backend.Controllers
 				return NotFound(new { result = "no_post_likes_found" });
 			}
 
-			List<User?> users = new List<User?>();
+			List<MiniProfileDTO?> users = new List<MiniProfileDTO?>();
 
 			foreach(Like like in likes)
 			{
 				User? user = await _userRepository.GetUserById(like.LikerId);
 
-				users.Add(user);
+				MiniProfileDTO MiniProfileDTO = new MiniProfileDTO
+				{
+					Id = user.Id,
+					FirstName = user.FirstName,
+					LastName = user.LastName,
+					Photo = user.Photo
+				};
+
+				users.Add(MiniProfileDTO);
 			}
 
 			if(users.Count == 0)
@@ -156,7 +165,10 @@ namespace capstone_backend.Controllers
 
 			return Ok(users);
 		}
+		//*******************GETTERS FUNCTION END******************************//
 
+
+		//*******************LIKE FUNCTION START******************************//
 		[HttpPost("like-post")]
 		public async Task<IActionResult> LikePost([FromBody] LikeDTO likeDTO)
 		{
@@ -210,6 +222,7 @@ namespace capstone_backend.Controllers
 			return Ok(new { result = "like_deleted" });
 
 		}
+		//*******************LIKE FUNCTION END******************************//
 
 
 

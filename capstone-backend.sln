@@ -3,7 +3,12 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.6.33717.318
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "capstone-backend", "capstone-backend\capstone-backend.csproj", "{18EC80B1-2186-4780-B901-DBA9565AC491}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "capstone-backend", "capstone-backend\capstone-backend.csproj", "{18EC80B1-2186-4780-B901-DBA9565AC491}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{E83DF388-C570-432B-924D-8326C953CFB6}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
