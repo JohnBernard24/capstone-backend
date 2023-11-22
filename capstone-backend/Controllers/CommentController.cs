@@ -24,6 +24,8 @@ namespace capstone_backend.Controllers
 			_userRepository = userRepository;
 		}
 
+
+		//*******************CRUD FUNCTION START******************************//
 		[HttpPost("add-comment")]
 		public async Task<IActionResult> AddComment([FromBody] CommentDTO commentDTO)
 		{
@@ -51,9 +53,11 @@ namespace capstone_backend.Controllers
 			};
 
 			_commentRepository.InsertComment(comment);
+
+			commentDTO.Id = comment.Id;
 			
 			
-			var commentNotif = new Notification
+			Notification commentNotif = new Notification
 			{
 				NotificationType = "comment",
 				NotifiedUserId = comment.Post.PosterId,
@@ -64,21 +68,18 @@ namespace capstone_backend.Controllers
 
 			_notificationRepository.InsertNotification(commentNotif);
 
-			
-
-
-			return Ok(new { result = "comment_added"});
+			return Ok(commentDTO);
 		}
 
-		[HttpPut("update-comment/{commentId}")]
-		public async Task<IActionResult> UpdateComment(int commentId, [FromBody] CommentDTO commentDTO)
+		[HttpPut("update-comment")]
+		public async Task<IActionResult> UpdateComment([FromBody] CommentDTO commentDTO)
 		{
 			if (!ModelState.IsValid)
 			{
 				return BadRequest(new { result = "invalid_comment" });
 			}
 
-			Comment? existingComment = await _commentRepository.GetCommentById(commentId);
+			Comment? existingComment = await _commentRepository.GetCommentById(commentDTO.Id);
 
 			if (existingComment == null)
 			{
@@ -87,10 +88,11 @@ namespace capstone_backend.Controllers
 
 			existingComment.CommentContent = commentDTO.CommentContent;
 
-
 			_commentRepository.UpdateComment(existingComment);
 
-			return Ok(existingComment);
+			commentDTO.DateCommented = existingComment.DateCommented;
+
+			return Ok(commentDTO);
 		}
 
 		[HttpDelete("delete-comment/{commentId}")]
@@ -107,7 +109,10 @@ namespace capstone_backend.Controllers
 
 			return Ok(new { result = "comment_deleted" });
 		}
+		//*******************CRUD FUNCTION END******************************//
 
+
+		//*******************GETTERS FUNCTION START******************************//
 		[HttpGet("get-post-comments/{postId}")]
 		public async Task<IActionResult> GetCommentsByPostId(int postId)
 		{
@@ -118,17 +123,30 @@ namespace capstone_backend.Controllers
 				return NotFound(new { result = "invalid_post_id" });
 			}
 
-			List<Comment> commentList = await _commentRepository.GetAllCommentsByPostId(postId);
+			List<Comment> commentList = await _commentRepository.GetAllCommentsByPostId(post.Id);
 
 			if(commentList == null)
 			{
 				return NotFound(new { result = "no_comments_found" });
 			}
 
-			return Ok(commentList);
+			List<CommentDTO> commentDTOList = new List<CommentDTO>();
+			foreach(Comment comment in commentList)
+			{
+				commentDTOList.Add(new CommentDTO
+				{
+					Id = comment.Id,
+					CommentContent = comment.CommentContent,
+					DateCommented = comment.DateCommented,
+					PostId = comment.PostId,
+					CommenterId = comment.CommenterId
+				});
+			}
 
-
+			return Ok(commentDTOList);
 		}
+		//*******************GETTERS FUNCTION END******************************//
+
 
 	}
 }

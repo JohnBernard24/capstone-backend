@@ -18,7 +18,7 @@ namespace capstone_backend.Service
 		}
 
 
-		public Task<Comment?> GetCommentById(int id)
+		public Task<Comment?> GetCommentById(int? id)
 		{
 			return Task.FromResult(_context.Comment.FirstOrDefault(x => x.Id == id));
 		}

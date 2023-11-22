@@ -186,6 +186,11 @@ namespace capstone_backend.Controllers
 				// Fetch the first photo for the current album
 				Photo? firstPhoto = await _photoRepository.GetFirstPhotoForAlbum(albumDTO.AlbumId);
 
+				if(firstPhoto == null)
+				{
+					continue;
+				}
+
 				PhotoDTO firstPhotoDTO = new PhotoDTO
 				{
 					Id = firstPhoto.Id,
