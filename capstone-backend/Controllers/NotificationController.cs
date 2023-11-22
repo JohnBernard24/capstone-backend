@@ -7,85 +7,96 @@ namespace capstone_backend.Controllers
 {
 
 
-    [Route("api/notification")]
-    [ApiController]
-    public class NotificationController : Controller
-    {
-        
-        private readonly NotificationRepository _notificationRepository;
-        
+	[Route("api/notification")]
+	[ApiController]
+	public class NotificationController : Controller
+	{
+		
+		private readonly NotificationRepository _notificationRepository;
+		
 
-        public NotificationController(NotificationRepository notificationRepository)
-        {
-            _notificationRepository = notificationRepository;
-        }
+		public NotificationController(NotificationRepository notificationRepository)
+		{
+			_notificationRepository = notificationRepository;
+		}
 
-        [HttpGet("get-notifications/{userId}")]
-        public async Task<ActionResult<IEnumerable<Notification>>> GetAllNotifications(int userId)
-        {
-            List<Notification>? notifications = await _notificationRepository.GetAllNotificationsByUserId(userId);
+		[HttpGet("get-notifications/{userId}")]
+		public async Task<ActionResult<IEnumerable<NotificationDTO>>> GetAllNotifications(int userId)
+		{
+			List<Notification>? notifications = await _notificationRepository.GetAllNotificationsByUserId(userId);
 
-            if (notifications == null)
-            {
-                return NotFound(new { result = "no_notifications_found" });
-            }
+			if (notifications == null)
+			{
+				return NotFound(new { result = "no_notifications_found" });
+			}
 
-            return notifications;
+			List<NotificationDTO> notificationDTOs = new List<NotificationDTO>();
+			foreach(Notification notification in notifications)
+			{
+				if(notification.NotifiedUser == null)
+				{
+					continue;
+				}
+				notificationDTOs.Add(new NotificationDTO
+				{
+					Id = notification.Id,
+					NotifiedUserId = notification.NotifiedUserId,
+					NotifiedUser = new MiniProfileDTO
+					{
+						FirstName = notification.NotifiedUser.FirstName,
+						LastName = notification.NotifiedUser.LastName,
+						Photo = notification.NotifiedUser.Photo
+					},
+					NotificationType = notification.NotificationType,
+					ContextId = notification.ContextId,
+					IsRead = notification.IsRead
+				});
+			}
 
-            
-        }
-
-        [HttpGet("get-notification-context/{userId}")]
-        public async Task<ActionResult<Object>> GetNotificationContext(int notificationId)
-        {
-            Notification? notification = await _notificationRepository.GetNotificationByNotificationId(notificationId);
-
-
-            if(notification == null)
-            {
-                return BadRequest(new { result = "no_notification_found" });
-            }
-
-
-            if (notification.NotificationType.Equals("like"))
-            {
-                // Looks for the like the notification is connected to using the contextId.
-                var like = await _notificationRepository.GetLikeByContextId(notification.ContextId);
-                
-                // Returns the Post the like is from (the "liked post")
-                return Ok(like?.Post);
-            }
-
-            else if (notification.NotificationType.Equals("comment"))
-            {
-                var comment = await _notificationRepository.GetCommentByContextId(notification.ContextId);
-
-                return Ok(comment?.Post);
-            }
-
-            else if (notification.NotificationType.Equals("add-friend-request") || notification.NotificationType.Equals("accept-friend-request"))
-            {
-                var friend = await _notificationRepository.GetFriendRequestByContextId(notification.ContextId);
-
-                return Ok(friend);
-            }
-            
-
-            return BadRequest(new { result = "notification_type_invalid" });
+			return notificationDTOs;
+		}
 
 
-
-        }
-
-
-
-        
-
+		//might need a revision, not working in swagger or postman
+		[HttpGet("get-notification-context/{notificationId}")]
+		public async Task<ActionResult<Object>> GetNotificationContext(int notificationId)
+		{
+			Notification? notification = await _notificationRepository.GetNotificationByNotificationId(notificationId);
 
 
+			if(notification == null)
+			{
+				return BadRequest(new { result = "no_notification_found" });
+			}
+
+
+			if (notification.NotificationType.Equals("like"))
+			{
+				// Looks for the like the notification is connected to using the contextId.
+				Like? like = await _notificationRepository.GetLikeByContextId(notification.ContextId);
+				
+				// Returns the Post the like is from (the "liked post")
+				return Ok(like?.Post);
+			}
+
+			else if (notification.NotificationType.Equals("comment"))
+			{
+				Comment? comment = await _notificationRepository.GetCommentByContextId(notification.ContextId);
+
+				return Ok(comment?.Post);
+			}
+
+			else if (notification.NotificationType.Equals("add-friend-request") || notification.NotificationType.Equals("accept-friend-request"))
+			{
+				Friend? friend = await _notificationRepository.GetFriendRequestByContextId(notification.ContextId);
+
+				return Ok(friend);
+			}
+			return BadRequest(new { result = "notification_type_invalid" });
+		}
 
 
 
 
-    }
+	}
 }

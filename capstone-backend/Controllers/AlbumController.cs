@@ -36,7 +36,7 @@ namespace capstone_backend.Controllers
 				return BadRequest(new { result = "invalid_user_id" });
 			}
 
-			var album = new Album
+			Album album = new Album
 			{
 				AlbumName = albumDTO.AlbumName,
 				UserId = user.Id,

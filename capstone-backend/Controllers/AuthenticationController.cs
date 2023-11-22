@@ -48,7 +48,7 @@ namespace capstone_backend.Controllers
 				return Unauthorized(new { result = "invalid_credentials" });
 			}
 
-			var loginResponse = new LoginResponse
+			LoginResponse loginResponse = new LoginResponse
 			{
 				UserId = user.Id,
 				Email = user.Email,
