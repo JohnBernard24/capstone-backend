@@ -98,15 +98,15 @@ namespace capstone_backend.Controllers
 			return Ok(new {result = "user_registered_successfully"});
 		}
 
-		[HttpGet("verify-email/{userId}")]
-		public async Task<IActionResult> SendEmail(int userId, string recipientEmail)
+		[HttpPost("verify-email")]
+		public async Task<IActionResult> SendEmail([FromBody] EmailVerifyDTO emailVerifyDTO)
 		{
 			var senderEmail = "teametivacpastebook@gmail.com";
 			var senderPassword = "nbci cmzt wqds krbv";
 
-			var message = new MailMessage(senderEmail, recipientEmail)
+			var message = new MailMessage(senderEmail, emailVerifyDTO.RecipientEmail)
 			{
-				Subject = $"Verify your email, {recipientEmail}!",
+				Subject = $"Verify your email, {emailVerifyDTO.RecipientEmail}!",
 				IsBodyHtml = true, 
 				Body = $@"
 					<html>
@@ -114,9 +114,9 @@ namespace capstone_backend.Controllers
 						<title>Pastebook Email Verification</title>
 					</head>
 					<body>
-						<h2>Hello! {recipientEmail}</h2>
+						<h2>Hello! {emailVerifyDTO.RecipientEmail}</h2>
 						<p>Click the button below to verify your email:</p>
-						<a href=""http://localhost:4200/forgot-password/{userId}"" style=""display:inline-block;padding:10px 20px;background-color:#007BFF;color:#ffffff;text-decoration:none;border-radius:5px;"">Confirm Email</a>
+						<a href=""http://localhost:4200/forgot-password/{emailVerifyDTO.UserId}"" style=""display:inline-block;padding:10px 20px;background-color:#007BFF;color:#ffffff;text-decoration:none;border-radius:5px;"">Confirm Email</a>
 					</body>
 					</html>"
 			};
@@ -130,13 +130,12 @@ namespace capstone_backend.Controllers
 
 			try
 			{
-				// Send the email
 				await smtpClient.SendMailAsync(message);
-				return Ok("Email sent successfully!");
+				return Ok(new {message = "Email sent successfully!" });
 			}
 			catch (Exception ex)
 			{
-				return BadRequest($"Error sending email: {ex.Message}");
+				return BadRequest(new {message = $"Error sending email: {ex.Message}"});
 			}
 		}
 	}

@@ -130,7 +130,7 @@ namespace capstone_backend.Controllers
 		}
 
 
-		[HttpPost("get-post-likes/{postId}")]
+		[HttpGet("get-post-likes/{postId}")]
 		public async Task<ActionResult<IEnumerable<User>>> GetPostLikesByPostId(int postId)
 		{
 			List<Like> likes = await _postRepository.GetLikesByPostId(postId);
