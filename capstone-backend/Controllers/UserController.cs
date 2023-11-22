@@ -27,14 +27,14 @@ namespace capstone_backend.Controllers
         {
             if (!ModelState.IsValid)
             {
-                return BadRequest("invalid_user");
+                return BadRequest(new { result = "invalid_user" });
             }
 
             User? checkingForUser = await _userRepository.GetUserById(userId);
 
             if (checkingForUser == null)
             {
-                return BadRequest("user_DNE");
+                return BadRequest(new { result = "user_DNE" });
             }
 
             return Ok(checkingForUser);
@@ -45,14 +45,14 @@ namespace capstone_backend.Controllers
         {
             if (!ModelState.IsValid)
             {
-                return BadRequest("invalid_user");
+                return BadRequest(new { result = "invalid_user" });
             }
 
             User? checkingForUser = await _userRepository.GetUserById(userId);
 
             if (checkingForUser == null)
             {
-                return BadRequest("user_DNE");
+                return BadRequest(new { result = "user_DNE" });
             }
 
             int friendCount = await _friendRepository.GetFriendCountByUserId(userId);
@@ -73,14 +73,14 @@ namespace capstone_backend.Controllers
         {
             if (!ModelState.IsValid)
             {
-                return BadRequest("invalid_post");
+                return BadRequest(new { result = "invalid_post" });
             }
 
             User? existingUser = await _userRepository.GetUserById(userId);
 
             if (existingUser == null)
             {
-                return NotFound("user_not_found");
+                return NotFound(new { result = "user_not_found" });
             }
 
             existingUser.FirstName = profileDTO.FirstName;
@@ -103,14 +103,14 @@ namespace capstone_backend.Controllers
         {
             if (!ModelState.IsValid)
             {
-                return BadRequest("invalid_user");
+                return BadRequest(new { result = "invalid_user" });
             }
 
             User? existingUser = await _userRepository.GetUserById(userId);
 
             if (existingUser == null)
             {
-                return NotFound("user_not_found");
+                return NotFound(new { result = "user_not_found" });
             }
 
             existingUser.Email = editEmailDTO.Email;
@@ -128,14 +128,14 @@ namespace capstone_backend.Controllers
         {
             if (!ModelState.IsValid)
             {
-                return BadRequest("invalid_user");
+                return BadRequest(new { result = "invalid_user" });
             }
 
             User? existingUser = await _userRepository.GetUserById(userId);
 
             if (existingUser == null)
             {
-                return NotFound("user_not_found");
+                return NotFound(new { result = "user_not_found" });
             }
 
             existingUser.HashedPassword = _passwordHasher.HashPassword(editPasswordDTO.Password);
@@ -153,14 +153,14 @@ namespace capstone_backend.Controllers
         {
             if (!ModelState.IsValid)
             {
-                return BadRequest("invalid_user");
+                return BadRequest(new { result = "invalid_user" });
             }
 
             User? existingUser = await _userRepository.GetUserById(userId);
 
             if (existingUser == null)
             {
-                return NotFound("user_not_found");
+                return NotFound(new { result = "user_not_found" });
             }
 
             existingUser.Photo = profilePicDTO.Photo;
@@ -182,7 +182,7 @@ namespace capstone_backend.Controllers
 
             if (matches == null)
             {
-                return BadRequest("no_matching_users_found");
+                return BadRequest(new { result = "no_matching_users_found" });
             }
 
             return Ok(matches);
@@ -194,14 +194,14 @@ namespace capstone_backend.Controllers
         {
             if (!ModelState.IsValid)
             {
-                return BadRequest("invalid_user");
+                return BadRequest(new { result = "invalid_user" });
             }
 
             User? existingUser = await _userRepository.GetUserById(userId);
 
             if (existingUser == null)
             {
-                return NotFound("user_not_found");
+                return NotFound(new { result = "user_not_found" });
             }
 
             existingUser.AboutMe = aboutMeDTO.AboutMe;

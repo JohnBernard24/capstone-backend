@@ -15,17 +15,15 @@ namespace capstone_backend.Controllers
 	[ApiController]
 	public class TimelineController : ControllerBase
 	{
-		private readonly UserRepository _userRepository;
-		private readonly ApplicationDbContext _context;
+		
 		private readonly TimelineRepository _timelineRepository;
 		private readonly FriendRepository _friendRepository;
 		private readonly PostRepository _postRepository;
 
 
-		public TimelineController(ApplicationDbContext context, UserRepository userRepository, TimelineRepository timelineRepository, FriendRepository friendRepository, PostRepository postRepository)
+		public TimelineController(TimelineRepository timelineRepository, FriendRepository friendRepository, PostRepository postRepository)
 		{
-			_context = context;
-			_userRepository = userRepository;
+			
 			_timelineRepository = timelineRepository;
 			_friendRepository = friendRepository;
 			_postRepository = postRepository;
@@ -38,14 +36,14 @@ namespace capstone_backend.Controllers
 
 			if(timeline == null)
 			{
-				return BadRequest("user_invalid");
+				return BadRequest(new { result = "user_invalid" });
 			}
 
 			List<Post>? posts = await _timelineRepository.GetPostsByTimelineId(timeline.Id);
 
 			if(posts == null)
 			{
-				return NotFound("no_posts_found");
+				return NotFound(new { result = "no_posts_found" });
 			}
 
 			return posts;
@@ -58,7 +56,7 @@ namespace capstone_backend.Controllers
 
 			if(friends == null)
 			{
-				return BadRequest("no_friends_found");
+				return BadRequest(new { result = "no_friends_found" });
 			}
 
 			List<Post> friendsPosts = new List<Post>();

@@ -29,14 +29,14 @@ namespace capstone_backend.Controllers
 		{
 			if (!ModelState.IsValid)
 			{
-				return BadRequest("invalid_comment");
+				return BadRequest(new { result = "invalid_comment" });
 			}
 
 			Post? post = await _postRepository.GetPostById(commentDTO.PostId);
 
 			if (post == null)
 			{
-				return BadRequest("invalid_post_id");
+				return BadRequest(new { result = "invalid_post_id" });
 			}
 
 			User? commenter = await _userRepository.GetUserById(commentDTO.CommenterId);
@@ -75,14 +75,14 @@ namespace capstone_backend.Controllers
 		{
 			if (!ModelState.IsValid)
 			{
-				return BadRequest("invalid_comment");
+				return BadRequest(new { result = "invalid_comment" });
 			}
 
 			Comment? existingComment = await _commentRepository.GetCommentById(commentId);
 
 			if (existingComment == null)
 			{
-				return NotFound("comment_not_found");
+				return NotFound(new { result = "comment_not_found" });
 			}
 
 			existingComment.CommentContent = commentDTO.CommentContent;
@@ -100,7 +100,7 @@ namespace capstone_backend.Controllers
 
 			if (existingComment == null)
 			{
-				return NotFound("comment_not_found");
+				return NotFound(new { result = "comment_not_found" });
 			}
 
 			_commentRepository.DeleteComment(existingComment);
@@ -115,14 +115,14 @@ namespace capstone_backend.Controllers
 
 			if(post == null)
 			{
-				return NotFound("invalid_post_id");
+				return NotFound(new { result = "invalid_post_id" });
 			}
 
 			List<Comment> commentList = await _commentRepository.GetAllCommentsByPostId(postId);
 
 			if(commentList == null)
 			{
-				return NotFound("no_comments_found");
+				return NotFound(new { result = "no_comments_found" });
 			}
 
 			return Ok(commentList);

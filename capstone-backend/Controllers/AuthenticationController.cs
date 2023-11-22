@@ -34,19 +34,19 @@ namespace capstone_backend.Controllers
 		{
 			if (!ModelState.IsValid)
 			{
-				return BadRequest("invalid_passed_user_login_");
+				return BadRequest(new { result = "invalid_passed_user_login_" });
 			}
 
 			User? user = await _userRepository.GetUserByEmail(userLoginDTO.Email);
 			if(user == null)
 			{
-				return Unauthorized("no_user_found");
+				return Unauthorized(new { result = "no_user_found" });
 			}
 
 			bool isCorrectPassword = _passwordHasher.VerifyPassword(userLoginDTO.Password, user.HashedPassword);
 			if (!isCorrectPassword)
 			{
-				return Unauthorized("invalid_credentials");
+				return Unauthorized(new { result = "invalid_credentials" });
 			}
 
 			var loginResponse = new LoginResponse
@@ -65,13 +65,13 @@ namespace capstone_backend.Controllers
 		{
 			if (!ModelState.IsValid)
 			{
-				return BadRequest("invalid_user_registration");
+				return BadRequest(new { result = "invalid_user_registration" });
 			}
 
 			User? existingUserByEmail = await _userRepository.GetUserByEmail(userRegisterDTO.Email);
 			if (existingUserByEmail != null)
 			{
-				return Conflict("email_already_exist");
+				return Conflict(new { result = "email_already_exist" });
 			}
 
 			var newUser = new User
@@ -132,11 +132,11 @@ namespace capstone_backend.Controllers
 			{
 				// Send the email
 				await smtpClient.SendMailAsync(message);
-				return Ok("Email sent successfully!");
+				return Ok(new { result = "Email sent successfully!" });
 			}
 			catch (Exception ex)
 			{
-				return BadRequest($"Error sending email: {ex.Message}");
+				return BadRequest(new { result = $"Error sending email." });
 			}
 		}
 	}
