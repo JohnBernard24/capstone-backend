@@ -81,13 +81,20 @@ namespace capstone_backend.Models
 		public string? AboutMe { get; set; }
 	}
 
+	public class EmailVerifyDTO
+	{
+		public int? UserId { get; set; }
+		public string RecipientEmail { get; set; } = null!;
+
+	}
+
 	public class MiniProfileDTO
 	{
-        public string FirstName { get; set; } = null!;
-        public string LastName { get; set; } = null!;
-        public Photo? Photo { get; set; }
+		public string FirstName { get; set; } = null!;
+		public string LastName { get; set; } = null!;
+		public Photo? Photo { get; set; }
 		public int FriendCount { get; set; }
-    }
+	}
 
 	public class EditEmailDTO
 	{
