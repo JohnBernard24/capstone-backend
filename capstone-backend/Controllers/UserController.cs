@@ -68,15 +68,15 @@ namespace capstone_backend.Controllers
             return Ok(miniProfile);
         }
 
-        [HttpPut("edit-profile/{userId}")]
-        public async Task<IActionResult> EditProfile(int userId, [FromBody] ProfileDTO profileDTO)
+        [HttpPut("edit-profile")]
+        public async Task<IActionResult> EditProfile([FromBody] ProfileDTO profileDTO)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(new { result = "invalid_post" });
             }
 
-            User? existingUser = await _userRepository.GetUserById(userId);
+            User? existingUser = await _userRepository.GetUserById(profileDTO.Id);
 
             if (existingUser == null)
             {
@@ -98,22 +98,22 @@ namespace capstone_backend.Controllers
         }
 
 
-        [HttpPut("edit-email/{userId}")]
-        public async Task<IActionResult> EditEmail(int userId, [FromBody] EditEmailDTO editEmailDTO)
+        [HttpPut("edit-email")]
+        public async Task<IActionResult> EditEmail([FromBody] EditEmailDTO editEmailDTO)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(new { result = "invalid_user" });
             }
 
-            User? existingUser = await _userRepository.GetUserById(userId);
+            User? existingUser = await _userRepository.GetUserById(editEmailDTO.UserId);
 
             if (existingUser == null)
             {
                 return NotFound(new { result = "user_not_found" });
             }
 
-            existingUser.Email = editEmailDTO.Email;
+            existingUser.Email = editEmailDTO.NewEmail;
 
 
             _userRepository.UpdateUser(existingUser);
@@ -123,22 +123,28 @@ namespace capstone_backend.Controllers
         }
 
 
-        [HttpPut("edit-password/{userId}")]
-        public async Task<IActionResult> EditPassword(int userId, [FromBody] EditPasswordDTO editPasswordDTO)
+        [HttpPut("edit-password")]
+        public async Task<IActionResult> EditPassword([FromBody] EditPasswordDTO editPasswordDTO)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(new { result = "invalid_user" });
             }
 
-            User? existingUser = await _userRepository.GetUserById(userId);
+
+            User? existingUser = await _userRepository.GetUserById(editPasswordDTO.UserId);
 
             if (existingUser == null)
             {
                 return NotFound(new { result = "user_not_found" });
             }
 
-            existingUser.HashedPassword = _passwordHasher.HashPassword(editPasswordDTO.Password);
+            if (!_passwordHasher.VerifyPassword(editPasswordDTO.CurrentPassword, existingUser.HashedPassword)) 
+            {
+                return BadRequest(new { result = "passwords_do_not_match" });
+            }
+
+            existingUser.HashedPassword = _passwordHasher.HashPassword(editPasswordDTO.NewPassword);
 
 
             _userRepository.UpdateUser(existingUser);
