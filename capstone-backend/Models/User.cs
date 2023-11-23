@@ -90,14 +90,17 @@ namespace capstone_backend.Models
 
 	public class EditEmailDTO
 	{
-		public string Email { get; set; } = null!;
+		public int UserId { get; set; }
+		public string NewEmail { get; set; } = null!;
 		
 	}
 
 
 	public class EditPasswordDTO
 	{
-		public string Password { get; set; } = null!;
+		public int UserId { get; set; }
+		public string CurrentPassword { get; set; } = null!;
+		public string NewPassword { get; set; } = null!;
 	}
 
 	public class ProfilePictureDTO
