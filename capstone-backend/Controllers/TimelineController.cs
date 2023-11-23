@@ -20,7 +20,6 @@ namespace capstone_backend.Controllers
 		private readonly FriendRepository _friendRepository;
 		private readonly PostRepository _postRepository;
 
-
 		public TimelineController(TimelineRepository timelineRepository, FriendRepository friendRepository, PostRepository postRepository)
 		{
 			
@@ -49,7 +48,7 @@ namespace capstone_backend.Controllers
 			return posts;
 		}
 
-		[HttpGet("get-newsfeed-posts/{userId}")]
+		[HttpGet("	/{userId}")]
 		public async Task<ActionResult<IEnumerable<Post>>> GetAllNewsfeedPostsByUserId(int userId)
 		{
 			List<Friend> friends = await _friendRepository.GetAllFriendsObjectByUserId(userId);

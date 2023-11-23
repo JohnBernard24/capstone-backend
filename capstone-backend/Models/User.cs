@@ -24,7 +24,7 @@ namespace capstone_backend.Models
 
 	public class UserRegisterDTO
 	{
-		[Required]
+		[Required(ErrorMessage = "First Name is required")]
 		public string FirstName { get; set; } = null!;
 
 		[Required]
@@ -56,7 +56,6 @@ namespace capstone_backend.Models
 		public string Password { get; set; } = null!;
 	}
 
-
 	public class LoginResponse
 	{
 		public int? UserId { get; set; }
@@ -64,10 +63,9 @@ namespace capstone_backend.Models
 		public string? Token { get; set; }
 	}
 
-
-
 	public class ProfileDTO
 	{
+		public int? Id { get; set; }
 		public string FirstName { get; set; } = null!;
 		public string LastName { get; set; } = null!;
 
@@ -81,19 +79,13 @@ namespace capstone_backend.Models
 		public string? AboutMe { get; set; }
 	}
 
-	public class EmailVerifyDTO
-	{
-		public int? UserId { get; set; }
-		public string RecipientEmail { get; set; } = null!;
-
-	}
-
 	public class MiniProfileDTO
 	{
+		public int? Id { get; set; }
 		public string FirstName { get; set; } = null!;
 		public string LastName { get; set; } = null!;
 		public Photo? Photo { get; set; }
-		public int FriendCount { get; set; }
+		public int? FriendCount { get; set; }
 	}
 
 	public class EditEmailDTO

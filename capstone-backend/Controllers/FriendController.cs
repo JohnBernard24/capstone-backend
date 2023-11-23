@@ -9,7 +9,7 @@ using Org.BouncyCastle.Asn1.Ocsp;
 
 namespace capstone_backend.Controllers
 {
-	[Route("api/[controller]")]
+	[Route("api/friend")]
 	[ApiController]
 	public class FriendController : ControllerBase
 	{
@@ -24,61 +24,32 @@ namespace capstone_backend.Controllers
 			_notificationRepository = notificationRepository;
 		}
 
-
-		[HttpGet("get-all-friends/{userId}")]
-		public async Task<ActionResult<IEnumerable<User>>> GetAllFriendsByUserId(int userId)
-		{
-
-			var friends = await _friendRepository.GetAllFriendsByUserId(userId);
-
-			if(friends == null)
-			{
-				return BadRequest(new { result = "no_friends_found" });
-			}
-			return Ok(friends);
-		}
-
-
-		[HttpGet("get-all-friend-request/{userId}")]
-		public async Task<ActionResult<IEnumerable<Friend>>> GetAllFriendRequests (int userId)
-		{
-			var friendRequests = await _friendRepository.GetFriendRequests(userId);
-
-			if(friendRequests == null)
-			{
-				return BadRequest(new { result = "no_friend_requests_found" });
-			}
-
-			return Ok(friendRequests);
-		}
-
-		
-
+		//*******************CRUD FUNCTION START******************************//
 		[HttpPost("add-friend")]
 		public async Task<IActionResult> AddFriendRequest([FromBody] FriendDTO friendDTO)
 		{
 			User? receiver = await _userRepository.GetUserById(friendDTO.ReceiverId);
 
-			if(receiver == null)
+			if (receiver == null)
 			{
 				return BadRequest(new { result = "receiver_not_valid" });
 			}
 
 			User? sender = await _userRepository.GetUserById(friendDTO.SenderId);
 
-			if(sender == null)
+			if (sender == null)
 			{
 				return BadRequest(new { result = "sender_not_valid" });
 			}
 
-			var exisitingRequest = await _friendRepository.FriendRequestExists(friendDTO.SenderId, friendDTO.ReceiverId);
+			bool exisitingRequest = await _friendRepository.FriendRequestExists(friendDTO.SenderId, friendDTO.ReceiverId);
 
 			if (exisitingRequest)
 			{
 				return BadRequest(new { result = "request_already_exists" });
 			}
 
-			var friendRequest = new Friend
+			Friend friendRequest = new Friend
 			{
 				SenderId = friendDTO.SenderId,
 				Sender = sender,
@@ -87,28 +58,26 @@ namespace capstone_backend.Controllers
 				FriendshipDate = null
 			};
 
-            _friendRepository.InsertFriend(friendRequest);
+			_friendRepository.InsertFriend(friendRequest);
 
+			Notification friendNotif = new Notification
+			{
+				NotificationType = "add-friend-request",
+				NotifiedUserId = friendRequest.ReceiverId,
+				NotifiedUser = friendRequest.Receiver,
+				ContextId = friendRequest.Id,
+				IsRead = false
+			};
 
-            var friendNotif = new Notification
-            {
-                NotificationType = "add-friend-request",
-                NotifiedUserId = friendRequest.ReceiverId,
-                NotifiedUser = friendRequest.Receiver,
-                ContextId = friendRequest.Id,
-                IsRead = false
-            };
-
-            _notificationRepository.InsertNotification(friendNotif);
+			_notificationRepository.InsertNotification(friendNotif);
 
 			return Ok(new { result = "friend_request_successfully" });
-
 		}
 
 		[HttpPost("accept-friend/{requestId}")]
 		public async Task<IActionResult> AcceptFriendRequest(int requestId)
 		{
-			var friendRequest = await _friendRepository.GetFriendRequestByFriendId(requestId);
+			Friend? friendRequest = await _friendRepository.GetFriendRequestByFriendId(requestId);
 
 			if (friendRequest == null)
 			{
@@ -126,26 +95,25 @@ namespace capstone_backend.Controllers
 			_friendRepository.UpdateFriend(friendRequest);
 
 
-            var friendNotif = new Notification
-            {
-                NotificationType = "accept-friend-request",
-                NotifiedUserId = friendRequest.SenderId,
-                NotifiedUser = friendRequest.Sender,
-                ContextId = friendRequest.Id,
-                IsRead = false
-            };
+			Notification friendNotif = new Notification
+			{
+				NotificationType = "accept-friend-request",
+				NotifiedUserId = friendRequest.SenderId,
+				NotifiedUser = friendRequest.Sender,
+				ContextId = friendRequest.Id,
+				IsRead = false
+			};
 
-            _notificationRepository.InsertNotification(friendNotif);
+			_notificationRepository.InsertNotification(friendNotif);
 
 
-            return Ok(new { result = "friend_request_accepted" });
+			return Ok(new { result = "friend_request_accepted" });
 		}
 
-
 		[HttpDelete("reject-friend/{requestId}")]
-		public async Task <IActionResult> RejectFriendRequest(int requestId)
+		public async Task<IActionResult> RejectFriendRequest(int requestId)
 		{
-			var friendRequest = await _friendRepository.GetFriendRequestByFriendId(requestId);
+			Friend? friendRequest = await _friendRepository.GetFriendRequestByFriendId(requestId);
 
 			if (friendRequest == null)
 			{
@@ -154,17 +122,47 @@ namespace capstone_backend.Controllers
 
 			_friendRepository.DeleteFriend(friendRequest);
 
-            Notification? notification = await _notificationRepository.GetNotificationByContextIdAndNotificationType(requestId, "add-friend-request");
+			Notification? notification = await _notificationRepository.GetNotificationByContextIdAndNotificationType(requestId, "add-friend-request");
 
-            if (notification == null)
-            {
-                return NotFound(new { result = "notification_not_found" });
-            }
+			if (notification == null)
+			{
+				return NotFound(new { result = "notification_not_found" });
+			}
 
-            _notificationRepository.DeleteNotification(notification);
+			_notificationRepository.DeleteNotification(notification);
 
-            return Ok(new { result = "friend_request_rejected"});
-
+			return Ok(new { result = "friend_request_rejected" });
 		}
+		//*******************CRUD FUNCTION END******************************//
+
+
+
+		//*******************GETTERS FUNCTION START******************************//
+		[HttpGet("get-all-friends/{userId}")]
+		public async Task<ActionResult<IEnumerable<User>>> GetAllFriendsByUserId(int userId)
+		{
+			List<User> friends = await _friendRepository.GetAllFriendsByUserId(userId);
+
+			if(friends == null)
+			{
+				return BadRequest(new { result = "no_friends_found" });
+			}
+			return Ok(friends);
+		}
+
+		[HttpGet("get-all-friend-request/{userId}")]
+		public async Task<ActionResult<IEnumerable<Friend>>> GetAllFriendRequests (int userId)
+		{
+			List<Friend> friendRequests = await _friendRepository.GetFriendRequests(userId);
+
+			if(friendRequests == null)
+			{
+				return BadRequest(new { result = "no_friend_requests_found" });
+			}
+
+			return Ok(friendRequests);
+		}
+		//*******************GETTERS FUNCTION END******************************//
+
 	}
 }

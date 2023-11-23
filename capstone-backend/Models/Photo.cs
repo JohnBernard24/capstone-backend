@@ -8,7 +8,7 @@ namespace capstone_backend.Models
 		public byte[] PhotoImage { get; set; } = null!;
 
 		[DataType(DataType.Date)]
-		public DateTime UploadDate { get; set; }
+		public DateTime UploadDate { get; set; } = DateTime.Now;
 
 
 
@@ -18,10 +18,10 @@ namespace capstone_backend.Models
 
 	public class PhotoDTO
 	{
-        public byte[] PhotoImage { get; set; } = null!;
+		public int? Id { get; set; }
+		public byte[] PhotoImage { get; set; } = null!;
+		public int? AlbumId { get; set; }
+		public DateTime UploadDate { get; set; } = DateTime.Now;
 
-        public int? AlbumId { get; set; }
-
-
-    }
+	}
 }

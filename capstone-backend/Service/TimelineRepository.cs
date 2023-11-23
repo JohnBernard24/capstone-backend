@@ -32,7 +32,11 @@ namespace capstone_backend.Service
 				.ToList());
 		}
 
-
+		public void InsertTimeline(Timeline timeline)
+		{
+			_context.TimeLine.Add(timeline);
+			_context.SaveChanges();
+		}
 
 	}
 }
