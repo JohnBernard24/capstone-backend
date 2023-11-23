@@ -2,6 +2,7 @@
 using capstone_backend.Models;
 using capstone_backend.Service;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 
 namespace capstone_backend.Controllers
 {
@@ -43,6 +44,7 @@ namespace capstone_backend.Controllers
 					NotifiedUserId = notification.NotifiedUserId,
 					NotifiedUser = new MiniProfileDTO
 					{
+						Id = notification.NotifiedUser.Id,
 						FirstName = notification.NotifiedUser.FirstName,
 						LastName = notification.NotifiedUser.LastName,
 						Photo = notification.NotifiedUser.Photo
@@ -59,41 +61,47 @@ namespace capstone_backend.Controllers
 
 		//might need a revision, not working in swagger or postman
 		[HttpGet("get-notification-context/{notificationId}")]
-		public async Task<ActionResult<Object>> GetNotificationContext(int notificationId)
+		public async Task<ActionResult> GetNotificationContext(int notificationId)
 		{
 			Notification? notification = await _notificationRepository.GetNotificationByNotificationId(notificationId);
 
-
-			if(notification == null)
+			if (notification == null)
 			{
-				return BadRequest(new { result = "no_notification_found" });
+				return NotFound(new { result = "no_notification_found" });
 			}
 
-
-			if (notification.NotificationType.Equals("like"))
+			switch (notification.NotificationType)
 			{
-				// Looks for the like the notification is connected to using the contextId.
-				Like? like = await _notificationRepository.GetLikeByContextId(notification.ContextId);
-				
-				// Returns the Post the like is from (the "liked post")
-				return Ok(like?.Post);
+				case "like":
+					Like? like = await _notificationRepository.GetLikeByContextId(notification.ContextId);
+					return SerializeAndReturn(like?.Post);
+
+				case "comment":
+					Comment? comment = await _notificationRepository.GetCommentByContextId(notification.ContextId);
+					return SerializeAndReturn(comment?.Post);
+
+				case "add-friend-request":
+				case "accept-friend-request":
+					Friend? friend = await _notificationRepository.GetFriendRequestByContextId(notification.ContextId);
+					return SerializeAndReturn(friend);
+
+				default:
+					return BadRequest(new { result = "notification_type_invalid" });
 			}
-
-			else if (notification.NotificationType.Equals("comment"))
-			{
-				Comment? comment = await _notificationRepository.GetCommentByContextId(notification.ContextId);
-
-				return Ok(comment?.Post);
-			}
-
-			else if (notification.NotificationType.Equals("add-friend-request") || notification.NotificationType.Equals("accept-friend-request"))
-			{
-				Friend? friend = await _notificationRepository.GetFriendRequestByContextId(notification.ContextId);
-
-				return Ok(friend);
-			}
-			return BadRequest(new { result = "notification_type_invalid" });
 		}
+
+		private ActionResult SerializeAndReturn(object data)
+		{
+			string jsonData = JsonConvert.SerializeObject(data);
+			return new ContentResult
+			{
+				Content = jsonData,
+				ContentType = "application/json",
+				StatusCode = 200
+			};
+		}
+
+
 
 
 

@@ -1,5 +1,6 @@
 ﻿using capstone_backend.Data;
 using capstone_backend.Models;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Threading.Tasks;
 
@@ -32,7 +33,14 @@ namespace capstone_backend.Service
 
 		public Task<List<Post>> GetAllPostsByUserId(int userId)
 		{
-			return Task.FromResult(_context.Post.Where(p => p.PosterId == userId).ToList());
+			/*return Task.FromResult(_context.Post.Where(p => p.PosterId == userId).ToList());*/
+
+			return Task.FromResult(_context.Post
+				.Where(post => post.PosterId == userId)
+				.Include(post => post.Poster)
+				.Include(post => post.Timeline)
+				.Include(post => post.Photo)
+				.ToList());
 		}
 
 		public Task<List<Like>> GetLikesByPostId(int postId)

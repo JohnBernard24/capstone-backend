@@ -12,14 +12,12 @@ namespace capstone_backend.Controllers
 	public class AuthenticationController : ControllerBase
 	{
 		private readonly UserRepository _userRepository;
-		private readonly ApplicationDbContext _context;
 		private readonly BcryptPasswordHasher _passwordHasher;
 		private readonly TimelineRepository _timelineRepository;
 		private readonly AlbumRepository _albumRepository;
 
-		public AuthenticationController(ApplicationDbContext context, UserRepository userRepository, BcryptPasswordHasher passwordHasher, TimelineRepository timelineRepository, AlbumRepository albumRepository)
+		public AuthenticationController(UserRepository userRepository, BcryptPasswordHasher passwordHasher, TimelineRepository timelineRepository, AlbumRepository albumRepository)
 		{
-			_context = context;
 			_userRepository = userRepository;
 			_passwordHasher = passwordHasher;
 			_timelineRepository = timelineRepository;
