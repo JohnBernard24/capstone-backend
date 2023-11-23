@@ -50,7 +50,7 @@ namespace capstone_backend
 
 
 
-            var app = builder.Build();
+			var app = builder.Build();
 
 			// Configure the HTTP request pipeline.
 			if (app.Environment.IsDevelopment())
@@ -70,8 +70,8 @@ namespace capstone_backend
 
 			app.MapControllers();
 
-			var context = app.Services.CreateScope().ServiceProvider.GetRequiredService<ApplicationDbContext>();
-			DataSeeder.SeedDatabase(context);
+			/*var context = app.Services.CreateScope().ServiceProvider.GetRequiredService<ApplicationDbContext>();
+			DataSeeder.SeedDatabase(context);*/
 
 			app.Run();
 		}

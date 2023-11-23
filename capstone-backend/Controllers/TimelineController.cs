@@ -48,7 +48,7 @@ namespace capstone_backend.Controllers
 			return posts;
 		}
 
-		[HttpGet("	/{userId}")]
+		[HttpGet("get-newsfeed-posts/{userId}")]
 		public async Task<ActionResult<IEnumerable<Post>>> GetAllNewsfeedPostsByUserId(int userId)
 		{
 			List<Friend> friends = await _friendRepository.GetAllFriendsObjectByUserId(userId);
