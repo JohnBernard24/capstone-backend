@@ -140,7 +140,7 @@ namespace capstone_backend.Controllers
 				photoDTOs.Add(new PhotoDTO
 				{
 					Id = photo.Id,
-					PhotoImage = photo.PhotoImage,
+					//PhotoImage = photo.PhotoImage,
 					AlbumId = photo.AlbumId,
 					UploadDate = photo.UploadDate
 				});
@@ -194,7 +194,7 @@ namespace capstone_backend.Controllers
 				PhotoDTO firstPhotoDTO = new PhotoDTO
 				{
 					Id = firstPhoto.Id,
-					PhotoImage = firstPhoto.PhotoImage,
+					//PhotoImage = firstPhoto.PhotoImage,
 					AlbumId = firstPhoto.AlbumId,
 					UploadDate = firstPhoto.UploadDate,
 				};
