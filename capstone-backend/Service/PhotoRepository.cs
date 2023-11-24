@@ -17,7 +17,6 @@ namespace capstone_backend.Service
         {
             return Task.FromResult(_context.Photo.FirstOrDefault(p => p.Id == id));
         }
-
         public async Task<Photo?> GetFirstPhotoForAlbum(int? albumId)
         {
             // Assuming you have a DbSet<YourPhotoEntity> in YourDbContext
