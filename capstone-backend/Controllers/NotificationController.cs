@@ -59,9 +59,10 @@ namespace capstone_backend.Controllers
 		}
 
 
-		//might need a revision, not working in swagger or postman
+
+		
 		[HttpGet("get-notification-context/{notificationId}")]
-		public async Task<ActionResult> GetNotificationContext(int notificationId)
+		public async Task<IActionResult> GetNotificationContext(int notificationId)
 		{
 			Notification? notification = await _notificationRepository.GetNotificationByNotificationId(notificationId);
 
