@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using capstone_backend.Models;
+using capstone_backend.AuthenticationService.Models;
 
 namespace capstone_backend.Data
 {
@@ -18,6 +19,7 @@ namespace capstone_backend.Data
 		public DbSet<Friend> Friend { get; set; } = default!;
 		public DbSet<Album> Album { get; set; } = default!;
 		public DbSet<Notification> Notification { get; set; } = default!;
+		public DbSet<AccessToken> AccessToken { get; set; } = default!;
 
 
 		public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
