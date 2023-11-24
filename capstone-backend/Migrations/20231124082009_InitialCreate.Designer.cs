@@ -11,7 +11,7 @@ using capstone_backend.Data;
 namespace capstone_backend.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20231121080449_InitialCreate")]
+    [Migration("20231124082009_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -21,6 +21,23 @@ namespace capstone_backend.Migrations
             modelBuilder
                 .HasAnnotation("ProductVersion", "7.0.5")
                 .HasAnnotation("Relational:MaxIdentifierLength", 64);
+
+            modelBuilder.Entity("capstone_backend.AuthenticationService.Models.AccessToken", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("char(36)");
+
+                    b.Property<string>("Token")
+                        .HasColumnType("longtext");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("AccessToken");
+                });
 
             modelBuilder.Entity("capstone_backend.Models.Album", b =>
                 {

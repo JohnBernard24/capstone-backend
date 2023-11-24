@@ -4,6 +4,8 @@ using capstone_backend.Models;
 using capstone_backend.Service;
 using System.Net;
 using System.Net.Mail;
+using capstone_backend.AuthenticationService.Authenticator;
+using capstone_backend.AuthenticationService.Repository;
 
 namespace capstone_backend.Controllers
 {
@@ -15,13 +17,17 @@ namespace capstone_backend.Controllers
 		private readonly BcryptPasswordHasher _passwordHasher;
 		private readonly TimelineRepository _timelineRepository;
 		private readonly AlbumRepository _albumRepository;
+		private readonly Authenticator _authenticator;
+		private readonly AccessTokenRepository _accessTokenRepository;
 
-		public AuthenticationController(UserRepository userRepository, BcryptPasswordHasher passwordHasher, TimelineRepository timelineRepository, AlbumRepository albumRepository)
+		public AuthenticationController(UserRepository userRepository, BcryptPasswordHasher passwordHasher, TimelineRepository timelineRepository, AlbumRepository albumRepository, Authenticator authenticator, AccessTokenRepository accessTokenRepository)
 		{
 			_userRepository = userRepository;
 			_passwordHasher = passwordHasher;
 			_timelineRepository = timelineRepository;
 			_albumRepository = albumRepository;
+			_authenticator = authenticator;
+			_accessTokenRepository = accessTokenRepository;
 		}
 
 
@@ -46,11 +52,12 @@ namespace capstone_backend.Controllers
 				return Unauthorized(new { result = "invalid_credentials" });
 			}
 
+			string token = _authenticator.Authenticate(user);
 			LoginResponse loginResponse = new LoginResponse
 			{
 				UserId = user.Id,
 				Email = user.Email,
-				Token = "haha" //TO BE CHANGED ONCE TOKEN GENERATORS WERE IMPLEMENTED
+				Token = token
 			};
 
 			return Ok(loginResponse);
@@ -116,8 +123,8 @@ namespace capstone_backend.Controllers
 			var message = new MailMessage(senderEmail, recipientEmail)
 			{
 				Subject = $"Verify your email, {user.Email}!",
-				IsBodyHtml = true, 
-				Body = 
+				IsBodyHtml = true,
+				Body =
 				$@"
 					<html>
 					<head>
@@ -196,6 +203,30 @@ namespace capstone_backend.Controllers
 			{
 				return BadRequest(new { result = "Error sending email." });
 			}
+		}
+
+		[HttpPost("logout")]
+		public async Task<IActionResult> Logout()
+		{
+			string token = Request.Headers["Authorization"];
+			User? user = await _userRepository.GetUserByToken(token);
+
+			if(user == null)
+			{
+				return BadRequest(new { result = "no_user_found" });
+			}
+
+			_accessTokenRepository.DeleteAllToken(user.Id);
+
+			return Ok(new { result = "logout_successfully" });
+		}
+
+		[HttpGet("validate-token")]
+		public async Task<ActionResult<bool>> Validate()
+		{
+			string token = Request.Headers["Authorization"];
+
+			return Ok(_authenticator.Validate(token));
 		}
 	}
 }

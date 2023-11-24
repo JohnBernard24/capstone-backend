@@ -16,6 +16,20 @@ namespace capstone_backend.Migrations
                 .Annotation("MySQL:Charset", "utf8mb4");
 
             migrationBuilder.CreateTable(
+                name: "AccessToken",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "char(36)", nullable: false),
+                    Token = table.Column<string>(type: "longtext", nullable: true),
+                    UserId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AccessToken", x => x.Id);
+                })
+                .Annotation("MySQL:Charset", "utf8mb4");
+
+            migrationBuilder.CreateTable(
                 name: "Album",
                 columns: table => new
                 {
@@ -325,6 +339,9 @@ namespace capstone_backend.Migrations
             migrationBuilder.DropForeignKey(
                 name: "FK_Album_User_UserId",
                 table: "Album");
+
+            migrationBuilder.DropTable(
+                name: "AccessToken");
 
             migrationBuilder.DropTable(
                 name: "Comment");

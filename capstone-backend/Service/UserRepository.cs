@@ -1,4 +1,5 @@
-﻿using capstone_backend.Data;
+﻿using capstone_backend.AuthenticationService.Models;
+using capstone_backend.Data;
 using capstone_backend.Models;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -28,6 +29,14 @@ namespace capstone_backend.Service
 		public Task<User?> GetUserByEmail(string email)
 		{
 			return Task.FromResult(_context.User.FirstOrDefault(u => u.Email == email));
+		}
+
+		public Task<User?> GetUserByToken(string token)
+		{
+			AccessToken? tokenEntity = _context.AccessToken.FirstOrDefault(t => t.Token == token);
+			int userId = tokenEntity.UserId;
+
+			return Task.FromResult(_context.User.FirstOrDefault(u => u.Id == userId));
 		}
 
 		public Task<List<User>> GetUsersBySearchName(string name)

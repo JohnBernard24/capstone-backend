@@ -19,6 +19,23 @@ namespace capstone_backend.Migrations
                 .HasAnnotation("ProductVersion", "7.0.5")
                 .HasAnnotation("Relational:MaxIdentifierLength", 64);
 
+            modelBuilder.Entity("capstone_backend.AuthenticationService.Models.AccessToken", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("char(36)");
+
+                    b.Property<string>("Token")
+                        .HasColumnType("longtext");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("AccessToken");
+                });
+
             modelBuilder.Entity("capstone_backend.Models.Album", b =>
                 {
                     b.Property<int>("Id")

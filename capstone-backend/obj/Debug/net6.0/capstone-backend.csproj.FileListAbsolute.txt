@@ -772,3 +772,16 @@ C:\Users\User\Desktop\CAPSTONE\capstone-backend\capstone-backend\obj\Debug\net6.
 C:\Users\User\Desktop\CAPSTONE\capstone-backend\capstone-backend\obj\Debug\net6.0\capstone-backend.pdb
 C:\Users\User\Desktop\CAPSTONE\capstone-backend\capstone-backend\obj\Debug\net6.0\capstone-backend.genruntimeconfig.cache
 C:\Users\User\Desktop\CAPSTONE\capstone-backend\capstone-backend\obj\Debug\net6.0\ref\capstone-backend.dll
+C:\Users\User\Desktop\CAPSTONE\capstone-backend\capstone-backend\bin\Debug\net6.0\Microsoft.AspNetCore.Authentication.JwtBearer.dll
+C:\Users\User\Desktop\CAPSTONE\capstone-backend\capstone-backend\bin\Debug\net6.0\Microsoft.AspNetCore.Cryptography.Internal.dll
+C:\Users\User\Desktop\CAPSTONE\capstone-backend\capstone-backend\bin\Debug\net6.0\Microsoft.AspNetCore.Cryptography.KeyDerivation.dll
+C:\Users\User\Desktop\CAPSTONE\capstone-backend\capstone-backend\bin\Debug\net6.0\Microsoft.AspNetCore.Identity.EntityFrameworkCore.dll
+C:\Users\User\Desktop\CAPSTONE\capstone-backend\capstone-backend\bin\Debug\net6.0\Microsoft.Extensions.Identity.Core.dll
+C:\Users\User\Desktop\CAPSTONE\capstone-backend\capstone-backend\bin\Debug\net6.0\Microsoft.Extensions.Identity.Stores.dll
+C:\Users\User\Desktop\CAPSTONE\capstone-backend\capstone-backend\bin\Debug\net6.0\Microsoft.IdentityModel.Abstractions.dll
+C:\Users\User\Desktop\CAPSTONE\capstone-backend\capstone-backend\bin\Debug\net6.0\Microsoft.IdentityModel.JsonWebTokens.dll
+C:\Users\User\Desktop\CAPSTONE\capstone-backend\capstone-backend\bin\Debug\net6.0\Microsoft.IdentityModel.Logging.dll
+C:\Users\User\Desktop\CAPSTONE\capstone-backend\capstone-backend\bin\Debug\net6.0\Microsoft.IdentityModel.Protocols.dll
+C:\Users\User\Desktop\CAPSTONE\capstone-backend\capstone-backend\bin\Debug\net6.0\Microsoft.IdentityModel.Protocols.OpenIdConnect.dll
+C:\Users\User\Desktop\CAPSTONE\capstone-backend\capstone-backend\bin\Debug\net6.0\Microsoft.IdentityModel.Tokens.dll
+C:\Users\User\Desktop\CAPSTONE\capstone-backend\capstone-backend\bin\Debug\net6.0\System.IdentityModel.Tokens.Jwt.dll
