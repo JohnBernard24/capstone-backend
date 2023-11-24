@@ -18,10 +18,9 @@ namespace capstone_backend.Models
 
 	public class PhotoDTO
 	{
-		public int? Id { get; set; }
-		public byte[] PhotoImage { get; set; } = null!;
+		public int Id { get; set; }
+		public string PhotoImage { get; set; } = null!;
 		public int? AlbumId { get; set; }
 		public DateTime UploadDate { get; set; } = DateTime.Now;
-
-	}
+    }
 }

@@ -18,31 +18,57 @@ namespace capstone_backend.Controllers
         }
 
         [HttpPost("add-photo")]
-        public async Task<IActionResult> AddPhoto([FromBody] PhotoDTO photoDTO)
+        public async Task<IActionResult> AddPhoto([FromForm] int albumId, [FromForm] IFormFile file)
         {
-            if (!ModelState.IsValid)
+            if (file == null || file.Length == 0)
             {
-                return BadRequest(new { result = "invalid_photo" });
+                return BadRequest(new { result = "invalid_file" });
             }
 
-            Album? album = await _albumRepository.GetAlbumByAlbumId(photoDTO.AlbumId);
+            Album? album = await _albumRepository.GetAlbumByAlbumId(albumId);
             if (album == null)
             {
                 return BadRequest(new { result = "album_not_found" });
             }
 
-            Photo photo = new Photo
+            using (var memoryStream = new MemoryStream())
             {
-                PhotoImage = photoDTO.PhotoImage,
-                AlbumId = album.Id,
-                Album = album
+                await file.CopyToAsync(memoryStream);
+
+                Photo photo = new Photo
+                {
+                    PhotoImage = memoryStream.ToArray(),
+                    UploadDate = DateTime.Now,
+                    AlbumId = album.Id,
+                    Album = album
+                };
+
+                _photoRepository.InsertPhoto(photo);
+
+                return Ok(new { result = "success", PhotoId = photo.Id });
+            }
+        }
+        [HttpGet("get-photo/{photoId}")]
+        public async Task<IActionResult> GetPhoto(int photoId)
+        {
+            Photo? existingPhoto = await _photoRepository.GetPhotoById(photoId);
+
+            if (existingPhoto == null)
+            {
+                return NotFound(new { result = "photo_not_found" });
+            }
+
+            var photo = new PhotoDTO()
+            {
+                Id = existingPhoto.Id,
+                PhotoImage = $"data:image/png;base64,{Convert.ToBase64String(existingPhoto.PhotoImage)}",
+                UploadDate = existingPhoto.UploadDate,
+                AlbumId = existingPhoto.AlbumId
             };
 
-            _photoRepository.InsertPhoto(photo);
 
-            return Ok(photoDTO);
+            return Ok(photo);
         }
-
         [HttpDelete("delete-photo/{photoId}")]
         public async Task<IActionResult> DeletePhoto(int photoId)
         {
@@ -57,5 +83,7 @@ namespace capstone_backend.Controllers
 
             return Ok(new { result = "photo_deleted" });
         }
+
+
     }
 }
