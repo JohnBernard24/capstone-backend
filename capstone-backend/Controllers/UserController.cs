@@ -41,22 +41,23 @@ namespace capstone_backend.Controllers
 			return Ok(checkingForUser);
 		}
 
-		[HttpGet("get-mini-profile/{userId}")]
-		public async Task<IActionResult> GetMiniProfile(int userId)
+		[HttpGet("get-mini-profile")]
+		public async Task<IActionResult> GetMiniProfile()
 		{
 			if (!ModelState.IsValid)
 			{
 				return BadRequest(new { result = "invalid_user" });
 			}
 
-			User? checkingForUser = await _userRepository.GetUserById(userId);
+			string token = Request.Headers["Authorization"];
+			User? checkingForUser = await _userRepository.GetUserByToken(token);
 
 			if (checkingForUser == null)
 			{
 				return BadRequest(new { result = "user_not_found" });
 			}
 
-			int friendCount = await _friendRepository.GetFriendCountByUserId(userId);
+			int friendCount = await _friendRepository.GetFriendCountByUserId(checkingForUser.Id);
 
 			var miniProfile = new MiniProfileDTO
 			{

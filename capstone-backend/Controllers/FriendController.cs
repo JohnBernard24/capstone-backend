@@ -138,10 +138,14 @@ namespace capstone_backend.Controllers
 
 
 		//*******************GETTERS FUNCTION START******************************//
-		[HttpGet("get-all-friends/{userId}")]
-		public async Task<ActionResult<IEnumerable<User>>> GetAllFriendsByUserId(int userId)
+		[HttpGet("get-all-friends")]
+		public async Task<ActionResult<IEnumerable<User>>> GetAllFriendsByUserId()
+
 		{
-			List<User> friends = await _friendRepository.GetAllFriendsByUserId(userId);
+			string token = Request.Headers["Authorization"];
+			User? checkingForUser = await _userRepository.GetUserByToken(token);
+
+			List<User> friends = await _friendRepository.GetAllFriendsByUserId(checkingForUser.Id);
 
 			if(friends == null)
 			{
@@ -150,10 +154,12 @@ namespace capstone_backend.Controllers
 			return Ok(friends);
 		}
 
-		[HttpGet("get-all-friend-request/{userId}")]
-		public async Task<ActionResult<IEnumerable<Friend>>> GetAllFriendRequests (int userId)
+		[HttpGet("get-all-friend-request")]
+		public async Task<ActionResult<IEnumerable<Friend>>> GetAllFriendRequests ()
 		{
-			List<Friend> friendRequests = await _friendRepository.GetFriendRequests(userId);
+			string token = Request.Headers["Authorization"];
+			User? checkingForUser = await _userRepository.GetUserByToken(token);
+			List<Friend> friendRequests = await _friendRepository.GetFriendRequests(checkingForUser.Id);
 
 			if(friendRequests == null)
 			{
