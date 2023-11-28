@@ -41,22 +41,22 @@ namespace capstone_backend.Controllers
 			return Ok(checkingForUser);
 		}
 
-		[HttpGet("get-mini-profile/{userId}")]
-		public async Task<IActionResult> GetMiniProfile(int userId)
+		[HttpGet("get-mini-profile")]
+		public async Task<IActionResult> GetMiniProfile()
 		{
 			if (!ModelState.IsValid)
 			{
 				return BadRequest(new { result = "invalid_user" });
 			}
-
-			User? checkingForUser = await _userRepository.GetUserById(userId);
+            string token = Request.Headers["Authorization"];
+            User? checkingForUser = await _userRepository.GetUserByToken(token);
 
 			if (checkingForUser == null)
 			{
 				return BadRequest(new { result = "user_not_found" });
 			}
 
-			int friendCount = await _friendRepository.GetFriendCountByUserId(userId);
+			int friendCount = await _friendRepository.GetFriendCountByUserId(checkingForUser.Id);
 
 			var miniProfile = new MiniProfileDTO
 			{
@@ -159,7 +159,7 @@ namespace capstone_backend.Controllers
 		}
 
 
-		[HttpPut("edit-profile-pic/{userId}")]
+		[HttpPut("edit-profile-pic")]
 		public async Task<IActionResult> EditProfilePic(int userId, [FromBody] ProfilePictureDTO profilePicDTO)
 		{
 			if (!ModelState.IsValid)
@@ -167,7 +167,8 @@ namespace capstone_backend.Controllers
 				return BadRequest(new { result = "invalid_user" });
 			}
 
-			User? existingUser = await _userRepository.GetUserById(userId);
+            string token = Request.Headers["Authorization"];
+            User? existingUser = await _userRepository.GetUserByToken(token);
 
 			if (existingUser == null)
 			{
@@ -200,15 +201,16 @@ namespace capstone_backend.Controllers
 
 		}
 
-		[HttpPut("edit-about-me/{userId}")]
-		public async Task<IActionResult> EditAboutMe(int userId, [FromBody] AboutMeDTO aboutMeDTO)
+		[HttpPut("edit-about-me")]
+		public async Task<IActionResult> EditAboutMe([FromBody] AboutMeDTO aboutMeDTO)
 		{
 			if (!ModelState.IsValid)
 			{
 				return BadRequest(new { result = "invalid_user" });
 			}
 
-			User? existingUser = await _userRepository.GetUserById(userId);
+            string token = Request.Headers["Authorization"];
+            User? existingUser = await _userRepository.GetUserByToken(token);
 
 			if (existingUser == null)
 			{

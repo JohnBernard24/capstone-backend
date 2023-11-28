@@ -19,13 +19,14 @@ namespace capstone_backend.Controllers
 		private readonly TimelineRepository _timelineRepository;
 		private readonly FriendRepository _friendRepository;
 		private readonly PostRepository _postRepository;
-
-		public TimelineController(TimelineRepository timelineRepository, FriendRepository friendRepository, PostRepository postRepository)
+		private readonly UserRepository _userRepository;
+		public TimelineController(TimelineRepository timelineRepository, FriendRepository friendRepository, PostRepository postRepository, UserRepository userRepository)
 		{
 			
 			_timelineRepository = timelineRepository;
 			_friendRepository = friendRepository;
 			_postRepository = postRepository;
+			_userRepository = userRepository;
 		}
 
 		[HttpGet("get-all-posts/{userId}")]
@@ -48,10 +49,12 @@ namespace capstone_backend.Controllers
 			return posts;
 		}
 
-		[HttpGet("get-newsfeed-posts/{userId}")]
-		public async Task<ActionResult<IEnumerable<Post>>> GetAllNewsfeedPostsByUserId(int userId)
+		[HttpGet("get-newsfeed-posts")]
+		public async Task<ActionResult<IEnumerable<Post>>> GetAllNewsfeedPostsByUserId()
 		{
-			List<Friend> friends = await _friendRepository.GetAllFriendsObjectByUserId(userId);
+            string token = Request.Headers["Authorization"];
+            User? user = await _userRepository.GetUserByToken(token);
+            List<Friend> friends = await _friendRepository.GetAllFriendsObjectByUserId(user.Id);
 
 			if(friends == null)
 			{
@@ -70,7 +73,7 @@ namespace capstone_backend.Controllers
 				}
 			}
 
-			List<Post> usersPosts = await _postRepository.GetAllPostsByUserId(userId);
+			List<Post> usersPosts = await _postRepository.GetAllPostsByUserId(user.Id);
 
 			List<Post> allPosts = friendsPosts.Concat(usersPosts).ToList();
 

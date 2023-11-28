@@ -90,10 +90,11 @@ namespace capstone_backend.Controllers
 
 
 		//*******************ALBUM GETTER START******************************//
-		[HttpGet("get-all-albums/{userId}")]
-		public async Task<ActionResult<IEnumerable<AlbumDTO>>> GetAllAlbumsByUserId(int userId)
+		[HttpGet("get-all-albums")]
+		public async Task<ActionResult<IEnumerable<AlbumDTO>>> GetAllAlbumsByUserId()
 		{
-			User? user = await _userRepository.GetUserById(userId);
+            string token = Request.Headers["Authorization"];
+            User? user = await _userRepository.GetUserByToken(token);
 			if (user == null)
 			{
 				return BadRequest(new { result = "user_id_invalid" });
@@ -148,10 +149,13 @@ namespace capstone_backend.Controllers
 
 			return Ok(photoDTOs);
 		}
-		[HttpGet("get-mini-album/{userId}")]
-		public async Task<ActionResult<IEnumerable<AlbumWithFirstPhoto>>> GetMiniAlbum(int userId)
+		[HttpGet("get-mini-album")]
+		public async Task<ActionResult<IEnumerable<AlbumWithFirstPhoto>>> GetMiniAlbum()
 		{
-			User? user = await _userRepository.GetUserById(userId);
+
+
+            string token = Request.Headers["Authorization"];
+            User? user = await _userRepository.GetUserByToken(token);
 
 			if (user == null)
 			{

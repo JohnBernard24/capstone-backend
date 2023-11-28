@@ -14,17 +14,23 @@ namespace capstone_backend.Controllers
 	{
 		
 		private readonly NotificationRepository _notificationRepository;
+		private readonly UserRepository _userRepository;
 		
 
-		public NotificationController(NotificationRepository notificationRepository)
+		public NotificationController(NotificationRepository notificationRepository, UserRepository userRepository)
 		{
 			_notificationRepository = notificationRepository;
+			_userRepository = userRepository;
 		}
 
-		[HttpGet("get-notifications/{userId}")]
-		public async Task<ActionResult<IEnumerable<NotificationDTO>>> GetAllNotifications(int userId)
+		[HttpGet("get-notifications")]
+		public async Task<ActionResult<IEnumerable<NotificationDTO>>> GetAllNotifications()
 		{
-			List<Notification>? notifications = await _notificationRepository.GetAllNotificationsByUserId(userId);
+            string token = Request.Headers["Authorization"];
+            User? user = await _userRepository.GetUserByToken(token);
+
+
+            List<Notification>? notifications = await _notificationRepository.GetAllNotificationsByUserId(user.Id);
 
 			if (notifications == null)
 			{

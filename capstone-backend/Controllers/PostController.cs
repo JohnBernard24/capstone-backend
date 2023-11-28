@@ -31,10 +31,12 @@ namespace capstone_backend.Controllers
 
 
 		//*******************CRUD FUNCTION START******************************//
-		[HttpPost("add-post/{userId}")]
+		[HttpPost("add-post")]
 		public async Task<IActionResult> AddPost(int userId, [FromBody] PostDTO postDTO)
 		{
-			if (!ModelState.IsValid)
+            string token = Request.Headers["Authorization"];
+            User? user = await _userRepository.GetUserByToken(token);
+            if (!ModelState.IsValid)
 			{
 				return BadRequest(new { result = "invalid_post" });
 			}
@@ -45,7 +47,7 @@ namespace capstone_backend.Controllers
 				return BadRequest(new { result = "invalid_user_id" });
 			}
 
-			Timeline? timeline = await _timelineRepository.GetTimelineByUserId(userId);
+			Timeline? timeline = await _timelineRepository.GetTimelineByUserId(user.Id);
 			if (timeline == null)
 			{
 				return BadRequest(new { result = "timeline_not_found" });
