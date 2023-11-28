@@ -18,8 +18,8 @@ namespace capstone_backend.Service
 		public async Task<List<User>> GetAllFriendsByUserId(int userId)
 		{
 			var friendIds = await _context.Friend
-				.Where(f => (f.ReceiverId == userId || f.SenderId == userId) && f.isFriend == true)
-				.Select(f => f.SenderId)
+				.Where(f => (f.ReceiverId == userId || f.SenderId == userId) && f.isFriend)
+				.Select(f => f.SenderId == userId ? f.ReceiverId : f.SenderId) 
 				.Distinct()
 				.ToListAsync();
 
@@ -29,6 +29,7 @@ namespace capstone_backend.Service
 
 			return friends;
 		}
+
 
 		public Task<List<Friend>> GetAllFriendsObjectByUserId(int userId)
 		{

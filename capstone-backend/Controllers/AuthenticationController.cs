@@ -208,7 +208,7 @@ namespace capstone_backend.Controllers
 		[HttpPost("logout")]
 		public async Task<IActionResult> Logout()
 		{
-			string?token = Request.Headers["Authorization"];
+			string? token = Request.Headers["Authorization"];
 			User? user = await _userRepository.GetUserByToken(token);
 
 			if(user == null)
