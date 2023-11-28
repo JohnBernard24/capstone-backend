@@ -34,9 +34,9 @@ namespace capstone_backend.Service
 		public Task<User?> GetUserByToken(string token)
 		{
 			AccessToken? tokenEntity = _context.AccessToken.FirstOrDefault(t => t.Token == token);
-			int userId = tokenEntity.UserId;
+			User? user = _context.User.FirstOrDefault(u => u.Id == tokenEntity.UserId);
 
-			return Task.FromResult(_context.User.FirstOrDefault(u => u.Id == userId));
+			return Task.FromResult(user);
 		}
 
 		public Task<List<User>> GetUsersBySearchName(string name)

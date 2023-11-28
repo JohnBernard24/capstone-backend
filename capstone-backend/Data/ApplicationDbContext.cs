@@ -9,7 +9,7 @@ using capstone_backend.AuthenticationService.Models;
 namespace capstone_backend.Data
 {
 	public class ApplicationDbContext : DbContext
-	{	
+	{
 		public DbSet<User> User { get; set; } = default!;
 		public DbSet<Timeline> TimeLine { get; set; } = default!;
 		public DbSet<Post> Post { get; set; } = default!;

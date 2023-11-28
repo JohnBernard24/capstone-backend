@@ -11,6 +11,7 @@ using capstone_backend.AuthenticationService.Models;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using Microsoft.AspNetCore.Http.Features;
 
 namespace capstone_backend
 {
@@ -24,11 +25,35 @@ namespace capstone_backend
 			// Add services to the container.
 
 			builder.Services.AddControllers();
+			builder.Services.AddCors(options =>
+			{
+				options.AddPolicy("AllowAllOrigins",
+					builder =>
+					{
+						builder.AllowAnyOrigin()
+							   .AllowAnyMethod()
+							   .AllowAnyHeader();
+					});
+			});
+
 
 			/*builder.Services.Configure<IISServerOptions>(options =>
 			{
 				options.AllowSynchronousIO = true;
 			});*/
+
+			builder.Services.Configure<FormOptions>(options =>
+			{
+				options.ValueLengthLimit = int.MaxValue;
+				options.MultipartBodyLengthLimit = 512 * 1024 * 1024;
+				options.MultipartHeadersLengthLimit = int.MaxValue;
+			});
+			builder.WebHost.ConfigureKestrel(options =>
+			{
+				options.Limits.MaxRequestBodySize = 512 * 1024 * 1024;
+			});
+
+
 
 			AuthenticationConfiguration authenticationConfiguration = new AuthenticationConfiguration();
 
@@ -55,6 +80,12 @@ namespace capstone_backend
 			builder.Services.AddScoped<AccessTokenGenerator>();
 			builder.Services.AddScoped<TokenGenerator>();
 			builder.Services.AddScoped<Authenticator>();
+
+			builder.Services.AddLogging(builder => builder.SetMinimumLevel(LogLevel.Debug));
+
+			
+
+
 			builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(o =>
 			{
 
@@ -71,20 +102,17 @@ namespace capstone_backend
 				};
 			});
 
-			builder.Services.AddCors(options =>
-			{
-				options.AddPolicy("AllowAllOrigins",
-					builder =>
-					{
-						builder.AllowAnyOrigin()
-							   .AllowAnyMethod()
-							   .AllowAnyHeader();
-					});
-			});
-
+			
 			string connectionString = "Server=localhost;port=3306;Database=pastebookdb;User=root;";
 			builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseMySQL(connectionString));
 
+
+			/*builder.Services.AddDbContext<ApplicationDbContext>(options =>
+				options.UseSqlServer(builder.Configuration.GetConnectionString("capstone_backendContext")));*/
+			builder.Services.AddLogging(logging =>
+			{
+				logging.AddConsole(options => options.LogToStandardErrorThreshold = LogLevel.Debug);
+			});
 
 			var app = builder.Build();
 
@@ -94,6 +122,9 @@ namespace capstone_backend
 				app.UseSwagger();
 				app.UseSwaggerUI();
 			}
+			// Logging configuration added here
+			
+
 
 			app.UseHttpsRedirection();
 

@@ -4,86 +4,89 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace capstone_backend.Controllers
 {
-    [Route("api/photo")]
-    [ApiController]
-    public class PhotoController : ControllerBase
-    {
-        private readonly PhotoRepository _photoRepository;
-        private readonly AlbumRepository _albumRepository;
+	[Route("api/photo")]
+	[ApiController]
+	public class PhotoController : ControllerBase
+	{
+		private readonly PhotoRepository _photoRepository;
+		private readonly AlbumRepository _albumRepository;
 
-        public PhotoController(PhotoRepository photoRepository, AlbumRepository albumRepository)
-        {
-            _photoRepository = photoRepository;
-            _albumRepository = albumRepository;
-        }
+		public PhotoController(PhotoRepository photoRepository, AlbumRepository albumRepository)
+		{
+			_photoRepository = photoRepository;
+			_albumRepository = albumRepository;
+		}
 
-        [HttpPost("add-photo")]
-        public async Task<IActionResult> AddPhoto([FromForm] int albumId, [FromForm] IFormFile file)
-        {
-            if (file == null || file.Length == 0)
-            {
-                return BadRequest(new { result = "invalid_file" });
-            }
+		[HttpPost("add-photo")]
+		public async Task<IActionResult> AddPhoto([FromForm] int albumId, [FromForm] IFormFile file)
+		{
+			Console.WriteLine(file);
 
-            Album? album = await _albumRepository.GetAlbumByAlbumId(albumId);
-            if (album == null)
-            {
-                return BadRequest(new { result = "album_not_found" });
-            }
+			if (file == null || file.Length == 0)
+			{
+				return BadRequest(new { result = "invalid_file" });
+			}
 
-            using (var memoryStream = new MemoryStream())
-            {
-                await file.CopyToAsync(memoryStream);
+			Album? album = await _albumRepository.GetAlbumByAlbumId(albumId);
+			if (album == null)
+			{
+				return BadRequest(new { result = "album_not_found" });
+			}
 
-                Photo photo = new Photo
-                {
-                    PhotoImage = memoryStream.ToArray(),
-                    UploadDate = DateTime.Now,
-                    AlbumId = album.Id,
-                    Album = album
-                };
+			using (var memoryStream = new MemoryStream())
+			{
+				await file.CopyToAsync(memoryStream);
 
-                _photoRepository.InsertPhoto(photo);
+				Photo photo = new Photo
+				{
+					PhotoImage = memoryStream.ToArray(),
+					UploadDate = DateTime.Now,
+					AlbumId = album.Id,
+					Album = album
+				};
 
-                return Ok(new { result = "success", PhotoId = photo.Id });
-            }
-        }
-        [HttpGet("get-photo/{photoId}")]
-        public async Task<IActionResult> GetPhoto(int photoId)
-        {
-            Photo? existingPhoto = await _photoRepository.GetPhotoById(photoId);
+				_photoRepository.InsertPhoto(photo);
 
-            if (existingPhoto == null)
-            {
-                return NotFound(new { result = "photo_not_found" });
-            }
+				return Ok(new { result = "success", PhotoId = photo.Id });
+			}
+		}
 
-            var photo = new PhotoDTO()
-            {
-                Id = existingPhoto.Id,
-                PhotoImage = $"data:image/png;base64,{Convert.ToBase64String(existingPhoto.PhotoImage)}",
-                UploadDate = existingPhoto.UploadDate,
-                AlbumId = existingPhoto.AlbumId
-            };
+		[HttpGet("get-photo/{photoId}")]
+		public async Task<IActionResult> GetPhoto(int photoId)
+		{
+			Photo? existingPhoto = await _photoRepository.GetPhotoById(photoId);
 
+			if (existingPhoto == null)
+			{
+				return NotFound(new { result = "photo_not_found" });
+			}
 
-            return Ok(photo);
-        }
-        [HttpDelete("delete-photo/{photoId}")]
-        public async Task<IActionResult> DeletePhoto(int photoId)
-        {
-            Photo? existingPhoto = await _photoRepository.GetPhotoById(photoId);
-
-            if (existingPhoto == null)
-            {
-                return NotFound(new { result = "photo_not_found" });
-            }
-
-            _photoRepository.DeletePhoto(existingPhoto);
-
-            return Ok(new { result = "photo_deleted" });
-        }
+			var photo = new PhotoDTO()
+			{
+				Id = existingPhoto.Id,
+				PhotoImage = $"data:image/png;base64,{Convert.ToBase64String(existingPhoto.PhotoImage)}",
+				UploadDate = existingPhoto.UploadDate,
+				AlbumId = existingPhoto.AlbumId
+			};
 
 
-    }
+			return Ok(photo);
+		}
+		[HttpDelete("delete-photo/{photoId}")]
+		public async Task<IActionResult> DeletePhoto(int photoId)
+		{
+			Photo? existingPhoto = await _photoRepository.GetPhotoById(photoId);
+
+			if (existingPhoto == null)
+			{
+				return NotFound(new { result = "photo_not_found" });
+			}
+
+			_photoRepository.DeletePhoto(existingPhoto);
+
+			return Ok(new { result = "photo_deleted" });
+		}
+
+
+	}
 }
