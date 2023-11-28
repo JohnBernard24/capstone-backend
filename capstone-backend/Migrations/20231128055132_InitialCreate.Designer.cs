@@ -11,8 +11,8 @@ using capstone_backend.Data;
 namespace capstone_backend.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20231128035114_InitalCreate")]
-    partial class InitalCreate
+    [Migration("20231128055132_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
