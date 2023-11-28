@@ -18,13 +18,15 @@ namespace capstone_backend.Controllers
 		private readonly PostRepository _postRepository;
 		private readonly TimelineRepository _timelineRepository;
 		private readonly NotificationRepository _notificationRepository;
+		private readonly PhotoRepository _photoRepository;
 
-		public PostController(UserRepository userRepository, PostRepository postRepository, TimelineRepository timelineRepository, NotificationRepository notificationRepository)
+		public PostController(UserRepository userRepository, PostRepository postRepository, TimelineRepository timelineRepository, NotificationRepository notificationRepository, PhotoRepository photoRepository )
 		{
 			_userRepository = userRepository;
 			_postRepository = postRepository;
 			_timelineRepository = timelineRepository;
 			_notificationRepository = notificationRepository;
+			_photoRepository = photoRepository;
 		}
 
 
@@ -49,14 +51,16 @@ namespace capstone_backend.Controllers
 				return BadRequest(new { result = "timeline_not_found" });
 			}
 
+			Photo? photo = await _photoRepository.GetPhotoById(postDTO.PhotoId);
+
 			Post post = new Post
 			{
 				PostTitle = postDTO.PostTitle,
 				Description = postDTO.Description,
 				TimelineId = timeline.Id,
 				Timeline = timeline,
-				PhotoId = postDTO.Photo?.Id,
-				Photo = postDTO.Photo,
+				PhotoId = postDTO.PhotoId,
+				Photo = photo,
 				PosterId = poster.Id,
 				Poster = poster
 			};
@@ -94,7 +98,8 @@ namespace capstone_backend.Controllers
 
 			existingPost.PostTitle = postDTO.PostTitle;
 			existingPost.Description = postDTO.Description;
-			existingPost.Photo = postDTO.Photo;
+			Photo? photo = await _photoRepository.GetPhotoById(postDTO.PhotoId);
+			existingPost.Photo = photo;
 
 			_postRepository.UpdatePost(existingPost);
 

@@ -30,7 +30,8 @@ namespace capstone_backend.Models
 
 
 
-		public Photo? Photo { get; set; }
+		/*public Photo? Photo { get; set; }*/
+		public int? PhotoId { get; set; }
 		public int PosterId { get; set; }
 	}
 

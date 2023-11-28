@@ -13,7 +13,7 @@ namespace capstone_backend.Service
             _context = dbContext;
         }
 
-        public Task<Photo?> GetPhotoById(int id)
+        public Task<Photo?> GetPhotoById(int? id)
         {
             return Task.FromResult(_context.Photo.FirstOrDefault(p => p.Id == id));
         }

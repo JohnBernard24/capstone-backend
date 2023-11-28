@@ -11,7 +11,7 @@ using capstone_backend.Data;
 namespace capstone_backend.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20231124082009_InitialCreate")]
+    [Migration("20231127101736_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />

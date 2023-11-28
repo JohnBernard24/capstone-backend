@@ -9,7 +9,7 @@ namespace capstone_backend.Data
 
 		public static void SeedDatabase(ApplicationDbContext context)
 		{
-			context.Database.Migrate();
+			/*context.Database.Migrate();
 
 
 			if (!context.User.Any())
@@ -72,7 +72,7 @@ namespace capstone_backend.Data
 				);
 
 				context.SaveChanges();
-			}
+			}*/
 
 			
 		}

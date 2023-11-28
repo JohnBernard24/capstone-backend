@@ -208,7 +208,7 @@ namespace capstone_backend.Controllers
 		[HttpPost("logout")]
 		public async Task<IActionResult> Logout()
 		{
-			string token = Request.Headers["Authorization"];
+			string?token = Request.Headers["Authorization"];
 			User? user = await _userRepository.GetUserByToken(token);
 
 			if(user == null)
@@ -222,11 +222,11 @@ namespace capstone_backend.Controllers
 		}
 
 		[HttpGet("validate-token")]
-		public async Task<ActionResult<bool>> Validate()
+		public Task<ActionResult<bool>> Validate()
 		{
-			string token = Request.Headers["Authorization"];
+			string? token = Request.Headers["Authorization"];
 
-			return Ok(_authenticator.Validate(token));
+			return Task.FromResult<ActionResult<bool>>(Ok(_authenticator.Validate(token)));
 		}
 	}
 }
